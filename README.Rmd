@@ -1,0 +1,255 @@
+---
+output: github_document
+fig_caption: yes
+---
+
+
+```{r setup, out.width='100%', include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, 
+                      comment = "#>", 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      eval = TRUE,
+                      echo=FALSE)
+library("tidyverse")
+library("lubridate")
+library("readxl")
+library("tibble")
+library("dataDownloader")
+library("vegan")
+#library("ggvegan")
+library("patchwork")
+
+
+theme_set(theme_bw(base_size = 12))
+
+
+# Data
+#source("R/data_dic/data_dic.R")
+
+
+
+```
+
+This is the git repository for the FunCaB and FUNDER projects and base for the data paper:
+xxx et al. (not written yet). FunCaB & FUNDER
+
+
+# INTRODUCTION
+
+...
+
+```{r proposal_figure, fig.cap= "Figure 1. Climate, Functional groups and soil-foodweb."}
+knitr::include_graphics("Figures/Figure_1.jpg")
+```
+
+
+The specific research questions of the projects are:
+
+...
+
+
+# METHODS
+
+## Research site
+
+
+
+```{r exp_design, eval = FALSE, fig.cap= "Figure 2: ..."}
+knitr::include_graphics('Pics/ExperimentalDesign.jpg')
+```
+
+
+
+
+
+## Experimental design and treatments (FunCaB)
+
+
+
+
+
+### Field site maintenance
+To simulate the natural grazing regime at each site, and to avoid accumulation of biomass, all biomass within the fence was removed at the end of each field season.
+Note that the biomass removal, is not the same as the grazing treatment (see above) and biomass harvesting (see below).
+The grazing treatment is applied to each plot (50 x 50 cm) in early and peak season, while the biomass harvesting occurs at the end of the last field season (25 x 25cm plot).
+The site maintenance has to be done after biomass harvesting.
+
+Climate data was downloaded at start and the end of each field season.
+ 
+ 
+
+## Data management
+
+### Location of data and supporting information 
+
+**Project description**, **data dictionaries**, and the overview of all **data sets** are in this readme file you are reading, available on GitHub: https://github.com/Between-the-Fjords/funder_data
+
+The **data** from the project is stored and available on OSF: https://osf.io/tx9r2/
+
+All R code for the analyses from the Norwegian project is on GitHub: https://github.com/Between-the-Fjords/funder_data
+
+General information about the project are available on the project webpage:
+https://betweenthefjords.w.uib.no/three-d/
+
+
+### Naming conventions used for the data
+
+| Data or file  | Description of naming convention  |
+|:---|:---|
+| Readme files  | Project_Experiment_Dataset_Year_Readme.extension  |
+| species  | Vascular plant taxon names follow for Norway Lid & Lid(Lid J & Lid, 2010). The full taxa is written using genus and species with a blank. |
+| Project  | FunCaB or FUNDER  |
+| Datasets  | Project_Experiment_Dataset_Year: FunCaB_plant_community_2019  |
+| siteID  | Name of the site; Vikesland, Alrust,... |
+| blockID  | block number, numeric value  |
+| treatment  | Treatment of functional group removal indicating which groups have been removed; F = forbs, G = graminoids, B = Bryophytes |
+| removal_fg  | Functional group that has been removed; F = forbs, G = graminoids, B = Bryophytes  |
+| responses  | response variable, e.g. cover, biomass, Reco, etc. |
+
+
+
+## Data collection and measurements
+
+The following datasets were collected and are available : https://osf.io/tx9r2/
+
+| Variable  | Time period  | Level | Data file  |
+|:---|:---|:---|:---|
+| **Site** |  |  |  |
+| .. | ..  | ..  | ...  |
+| **Vegetation** |  |  |  |
+| Species cover  | 2015 - 2019  | Plot  | ...  |
+| Species presence  | 2015 - 2019  | Subplot  | ...  |
+| Vegetation height  | 2015 - 2019  | Plot  | ...  |
+| Functional group biomass  | 2015 - 2021  | Plot  | FunCaB_Biomass_22015-020.csv  |
+| Reflectance  | 2021  | Plot  | ...  |
+| **C-flux** |  |  |  |
+| Ecosystem fluxes  | 2015-2018  | Plot  | ...  |
+| **Soil** |  |  |  |
+| Soil depth  | 2019  | Plot  | THREE-D_PlotLevel_Depth_2019.csv  |
+| Soil texture  | 2019  | Site  | THREE-D_Soil_2019-2020.csv  |
+| Bulk density  | 2019  | Plot  | THREE-D_Soil_2019-2020.csv  |
+| Soil pH  | 2019  | Site  | THREE-D_Soil_2019-2020.csv  |
+| Soil organic matter  | 2019  | Block  | THREE-D_Soil_2019-2020.csv  |
+| Soil C and N stocks  | 2019 - 2020  | Site  | THREE-D_Soil_2019-2020.csv  |
+| Soil nutrients  | 2021  | Site  | xxx  |
+| Decomposition | 2021  | Plot  | xxx  |
+| **Climate** |  |  |  |
+| Air, ground and soil temperature  | 2019 - 2020  | Plot  | THREE-D_TomstLogger_2019_2020.csv  |
+| Soil moisture  | 2019 - 2020  | Plot  | THREE-D_TomstLogger_2019_2020.csv  |
+| Gridded climate  | 2009 - 2019  | Site  | THREE_D_Gridded_DailyClimate_2009-2019.csv  |
+
+
+
+### Plant species composition
+Plant species composition was recorded annually at peak growing season, in 2019 and 2021.
+In 2020, not all the plots were surveyed due to fieldwork restrictions related to the corona pandemic.
+Each 25 x 25 cm plots was divided into 25 subplots (Figure 3).
+The recording started in the upper left corner, and went row by row, from left to the right.
+In each subplot and for each species we recorded presence as sterile (1), dominant (D; covered more than 50% of the sub-plot), fertile (F; bud, flower, seeds), juvenile (J; not yet adult), or a seedling (S; cotyledons still attached; S).
+For each species, the highest level was recorded, i.e. if there was a seedling and an adult, the adult was recorded.
+So, the number of juveniles and seedlings were only consistently recorded if these were the only individuals present in the subplot of that species.
+We also noted the presence of seedlings in each subplot, but they were not identified to species.
+In addition, we recorded the percentage cover of vascular plants (only total), bryophytes, lichen, litter, bare ground and bare rock in each subplot.
+
+In 2020, species composition was recorded fully only for the control and warmed plots receiving no nitrogen (block 1, 4, and 10).
+For the rest of the plots, only percentage cover by functional group was recorded.
+
+In each 25 x 25 cm plot, the total percentage cover of each vascular plant species was estimated visually.
+At 4 points in the grid, average vegetation height and moss layer depth was measured using a ruler.
+For each turf, date, originSite, originBlockID, originPlotID, weather, scribe and recorder and remarks were noted down. A picture was taken from each plot.
+
+For the Norwegian data, the nomenclature follows Lid & Lid(2010).
+Each species of vascular plant was classified by functional type (graminoid, forb, woody) and biogeographic affinity based on information given in Lid & Lid(2010).
+Specifically, species reported to be present in the Nemoral but lacking from the Low- Mid- or High Alpine are classified as “lowland”, species present in the Alpine but lacking from the Nemoral to South Boreal are classified as “alpine”, whereas all other species (i.e., species that span the gradient from Nemoral to Alpine zones) are classified as “generalist”. 
+Write something about China…
+
+*Data handling:* After each field season the data was checked vizually by plotting the cover of each species per plot over time.
+This allowed to compare change in species composition over time and check for errors.
+Obvious errors in species identification was corrected after comparing these plots.
+
+
+
+
+### Reflectance
+Reflectance (greenness) was measured several times during the season in each plot from 2020-2021 (2022).
+The greenseeker measures in an elliptical shape, and the light source and receiver should be located in the middle of the plot.
+The green seeker is placed 60 cm above the plot and parallel to the ground, using a ruler.
+Two measurements are done per plot perpendicular to each other to account for the elliptical shape.
+
+*Data handling:* The data was visually checked for unrealistic values, which were corrected or removed if there was a valid reason (e.g. shade or snow on the plot).
+Unrealistic values, where the comma was forgotten, were divided by 100.
+
+
+
+### Aboveground biomass
+
+Biomass was harvested 1-2 times per growing season....
+
+
+The biomass was then dried at 65°C for 72 hours and weighed.
+
+*Data handling:* The data was visually checked for unrealistic values, which were corrected or removed if there was a valid reason.
+
+
+### Decomposition
+
+
+
+
+### Ecosystem fluxes
+Net ecosystem exchange (NEE) and ecosystem respiration (ER) were measured on the field while gross ecosystem production (GEP) is calculated as GEP = NEE - ER.
+Carbon fluxes are measured with a closed loop chamber system connected to an infrared gaz analyser (INGRA; Li-840A, Li-cor).
+The plexiglas chamber (25x25x40 cm) is connected to the INGRA with plastic tubes (inlet and outlet, 3m long and 4mm diameter each).
+A filter prevents water droplets and small particules from entering the INGRA and an air pump ensures a flow of 1L/mn.
+The chamber is equiped with a fan to mix the air, a thermocouple (Pt1000, Delta-T) to measure air temperature and a PAR sensor.
+In 2020 the air temperature was measured with an iButton.
+Airtightness is ensured by laying a heavy chain on the "skirt" of the chamber (a piece of tarp taped to the lower part of the chamber).
+NEE is measured with a transparent chamber.
+ER is measured with a dark chamber, in our case the transparent chamber was covered with a thick dark tarp.
+The CO~2~ concentration was measured every seconds and logged in a datalogger (Squirrel 2010).
+The chamber was put on the plot during two minutes for each measurements and then aired during one minute.
+Since the logger was logging continuesly, the start and end time of each measurement was noted (it is necessary to precisely synchronise the logger clock with the watch used on the field and to regularly check it).
+The function `match.flux()` is matching the time in the logger file with the plot being measured at that time (using the time recorded on the field).
+It attributes the concentration of CO~2~ measured every seconds to the correct measurement.
+A linear regression is fitted to every measurements and the slope is used to calculated the flux.
+
+<img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}">
+
+where
+flux: the flux of CO~2~ at the surface of the plot (mmol/m^2^/h)
+slope: slope of linear regression fitting the CO~2~ concentration versus time (ppm^-1^)
+P: pressure, assumed 1 atm
+V: volume of the chamber and tubing (L)
+R: gas constant (0.082057 L\*atm\*K^-1^\*mol^-1^)
+T: chamber air temperature (K)
+A: area of chamber frame base (m^2^)
+
+
+
+### Soil
+
+
+
+
+#### Climate data
+
+**Climate stations**
+
+**iButtons**
+
+**Gridded climate data** Gridded data are daily climate values for three sites from 2009 - 2019 from The Norwegian Meteorological Institute (from Ole Einar Tveito, 16.12.2019).
+The climate variables are:
+ - Mean daily temperature (°C, Temperature)  
+ - Relative air moisture (%, RelAirMoisture)  
+ - Mean wind (meter / second, Wind)  
+ - Mean cloud cover (in 8 parts, no dimension, CloudCover)  
+ - Precipitation (mm, Precipitation)
+
+
+### Data dictionary
+
+#### Biomass
+```{r biomassdic, eval=FALSE}
+ knitr::kable(biomass_dic)
+```
