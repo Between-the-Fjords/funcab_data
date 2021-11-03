@@ -21,6 +21,7 @@ biomass_raw <- path %>%
   set_names() %>%
   map_df(read_excel, path = path, col_types = c("numeric", "text", "numeric", "text", "text", "date", "text", "numeric", "text", "text"))
 
+
 # impute missing rounds
 impute_round = tribble(
   ~year, ~site, ~block, ~round_new,
@@ -41,7 +42,12 @@ biomass <- biomass_raw %>%
          round = str_sub(round, start = -1)) %>%
   # impute missing info on round
   left_join(impute_round, by = c("year", "site", "block")) %>%
-  mutate(round = if_else(is.na(round), round_new, round))
+  mutate(round = if_else(is.na(round), round_new, round)) %>%
+  select(-round_new) %>%
+  # remove RTCs
+  filter(treatment != "RTC") %>%
+  # add missing block
+  mutate(block = if_else(year == 2019 & site == "ARH" & is.na(block), 4,   block))
 
 
 # find duplicates
