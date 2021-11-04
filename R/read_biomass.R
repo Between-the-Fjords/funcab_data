@@ -64,6 +64,8 @@ biomass <- biomass_raw %>%
          treatment = if_else(year == 2019 & site == "SKJ" & block == 2 & biomass %in% c(0.43, 1.84) & name == "sari", "FB", treatment))
 
 
+write_csv(biomass, file = "data/biomass/FunCaB_biomass_clean_2015-2021.csv")
+
 ### DATA VALIDATION
 # find duplicates
 # rule <- validator(is_unique(year, site, block, treatment, removed_fg, round))
@@ -76,11 +78,9 @@ biomass <- biomass_raw %>%
 #biomass %>% count(year, site, block, round) %>% filter(n < 12) %>% View()
 
 ### missing data
-biomass %>% filter(is.na(biomass)) %>% View()
+#biomass %>% filter(is.na(biomass)) %>% View()
 # 2016 round 1 /2 ALR 5 values missing
 
-
-biomass %>% filter(year == 2019, site == "SKJ", block %in% c(2), round == 1) %>% arrange(block, treatment, removed_fg) %>% pn
 
 # Data viz
 biomass %>%
