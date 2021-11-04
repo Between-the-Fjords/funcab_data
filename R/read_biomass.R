@@ -14,7 +14,7 @@ source("R/load_packages.R")
 
 
 
-path <- "data/biomass/FunCaB_raw_biomass.xlsx"
+path <- "data/biomass/FunCaB_raw_biomass_2021-11-02.xlsx"
 
 biomass_raw <- path %>%
   excel_sheets() %>%
@@ -47,29 +47,42 @@ biomass <- biomass_raw %>%
   # remove RTCs
   filter(treatment != "RTC") %>%
   # add missing block
-  mutate(block = if_else(year == 2019 & site == "ARH" & is.na(block), 4,   block))
+  mutate(block = if_else(year == 2019 & site == "ARH" & is.na(block), 4,   block)) %>%
+  # fix wrong blocks and duplicates
+  mutate(block = if_else(year == 2015 & site == "ALR" & block == 4, 5, block),
+         block = if_else(year == 2016 & site == "ALR" & block == 1 & name == "Olav", 2, block),
+         block = if_else(year == 2017 & site == "ALR" & block == 1 & name == "Anja Petek", 2, block),
+         block = if_else(year == 2019 & site == "HOG" & block == 3 & treatment == "F" & name == "PS", 4, block),
+         block = if_else(year == 2019 & site == "ULV" & block %in% c(4, 5, 6) & name == "IA", 3, block),
+         block = if_else(year == 2019 & site == "VES" & block == 3 & treatment == "FGB" & name == "PS", 4, block)) %>%
+  # wrong treatment and removed_fg
+  mutate(treatment = if_else(year == 2019 & site == "VIK" & block == 5 & biomass == 0.57 & name == "VG", "FB", treatment),
+         removed_fg = if_else(year == 2019 & site == "VIK" & block == 2 & biomass == 1.77 & name == "sari", "F", removed_fg),
+         removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.56 & name == "PS", "G", removed_fg),
+         removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.17 & name == "PS", "B", removed_fg),
+         removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.89 & name == "PS", "G", removed_fg),
+         treatment = if_else(year == 2019 & site == "SKJ" & block == 2 & biomass %in% c(0.43, 1.84) & name == "sari", "FB", treatment))
 
 
+write_csv(biomass, file = "data/biomass/FunCaB_biomass_clean_2015-2021.csv")
+
+### DATA VALIDATION
 # find duplicates
-rule <- validator(is_unique(year, site, block, treatment, removed_fg, round))
-out <- confront(biomass, rule)
-# showing 7 columns of output for readability
-summary(out)
-violating(biomass, out) %>% View()
-# FIX DUPLICATES!!! Needs checking of the raw data!
+# rule <- validator(is_unique(year, site, block, treatment, removed_fg, round))
+# out <- confront(biomass, rule)
+# # showing 7 columns of output for readability
+# summary(out)
+# violating(biomass, out) %>% View()
 
+# missing treatment or removed_fg
+#biomass %>% count(year, site, block, round) %>% filter(n < 12) %>% View()
 
 ### missing data
-# 2015 round 1 Arh RTC 4
+#biomass %>% filter(is.na(biomass)) %>% View()
 # 2016 round 1 /2 ALR 5 values missing
-# 2017 round 2 FAU, VIK, ARH missing data, probably not weighed. FOUND!!!
-# 2017 missing biomass and other info from ALR 2 (FOUND!!!), HOG 2 (FOUND!!!), LAV 2, ULV 2, GUD 2
-# 2018, 2020 some missing, but already indicated
-# 2019 all data missing
-# 2021 some sites missing
 
-biomass %>% filter(is.na(biomass), !year %in% c(2021)) %>% View()
 
+# Data viz
 biomass %>%
   mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "FG", "FGB"))) %>%
   filter(year != 2019, removed_fg != "C") %>%
