@@ -62,9 +62,22 @@ SM2017_raw %>%
   mutate(Treatment = if_else(is.na(Treatment) & grepl("TTC", turfID), "C", Treatment)) %>%
   filter(!is.na(soilmoisture),
          !is.na(Treatment)) %>%
-
-  #select(date = Date, siteID = Site)
-
+  mutate(Site = recode(Site, "ULV" = "Ulvehaugen",
+                       "LAV" = "Lavisdalen",
+                       "GUD" = "Gudmedalen",
+                       "SKJ" = "Skjelingahaugen",
+                       "ALR" = "Alrust",
+                       "HOG" = "Hogsete",
+                       "RAM" = "Rambera",
+                       "VES" = "Veskre",
+                       "FAU" = "Fauske",
+                       "VIK" = "Vikesland",
+                       "ARH" = "Arhelleren",
+                       "OVS" = "Ovstedalen"),
+         block = coalesce(SCBlock...5, SCBlock...6),
+         blockID = paste0(substr(Site, 1, 3)), block,
+         plotID = paste0(blockID, Treatment)) %>%
+  select(date = Date, siteID = Site, blockID, plotID, treatment = Treatment, soilmoisture, weather = Weather, recorder = Recorder, turfID)
 
 
 ### 2018 data
