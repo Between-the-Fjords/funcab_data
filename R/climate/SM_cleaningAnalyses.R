@@ -84,10 +84,8 @@ SM2018 <- SM2018_raw %>%
          blockID = substr(siteID, 1, 3)) %>%
   filter(!is.na(Treatment)) %>%
   # add missing date
-  # mutate(date = if_else(is.na(Date) & siteID == "Arhelleren", as.Date("2018-07-02",format = "%YYYY-%mm-%dd"), Date))
-  # mutate(date = if_else(is.na(Date) & siteID == "Arhelleren", ymd("2018-07-02"), Date))
-  #
-  #        date = if_else(is.na(Date) & siteID == "Ovstedal", "2018-07-02", Date)) %>%
+  mutate(Date = if_else(is.na(Date) & siteID == "Arhelleren", ymd_h("2018-07-02", truncated = 1), Date),
+         Date = if_else(is.na(Date) & siteID == "Ovstedal", ymd_h("2018-07-02", truncated = 1), Date)) %>%
   # recode site names
   mutate(siteID = recode(siteID,
                          "Ulvhaugen" = "Ulvehaugen",
