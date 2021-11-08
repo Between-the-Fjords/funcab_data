@@ -47,7 +47,7 @@ SM201516 <- SM201516_raw %>%
 
 
 # 2017 data
-SM2017_raw %>%
+SM2017 <- SM2017_raw %>%
   mutate(Date = if_else(str_detect(Date, fixed(".")), dmy(Date, quiet = TRUE), as.Date(as.numeric(Date), origin = "1899-12-30"))) %>%
   rename("turfID" = `Turf ID`) %>%
   filter(!grepl("TT1", turfID),
@@ -75,9 +75,10 @@ SM2017_raw %>%
                        "ARH" = "Arhelleren",
                        "OVS" = "Ovstedalen"),
          block = coalesce(SCBlock...5, SCBlock...6),
-         blockID = paste0(substr(Site, 1, 3)), block,
+         blockID = paste0(substr(Site, 1, 3), block),
          plotID = paste0(blockID, Treatment)) %>%
   select(date = Date, siteID = Site, blockID, plotID, treatment = Treatment, soilmoisture, weather = Weather, recorder = Recorder, turfID)
+
 
 
 ### 2018 data
@@ -123,6 +124,7 @@ SM2018 <- SM2018_raw %>%
   select(date = Date, siteID, blockID, treatment = Treatment, soilmoisture = SM, weather = Weather,  recorder = Recorder, turfID)
 
 
+soilmoisture <- bind_rows(SM201516, SM2017, SM2018)
 
-write_csv(SM2018, file = "data/climate/FunCaB_clean_soilMoisture_2016-2018.csv")
+write_csv(soilmoisture, file = "data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
 
