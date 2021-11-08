@@ -5,12 +5,16 @@
 source("R/load_packages.R")
 
 #Download data from OSF
-# run the code from L10-L13 if you need to download the data from OSF
+# run the code from L10-L17 if you need to download the data from OSF
+
+# install.packages("remotes")
+# remotes::install_github("Between-the-Fjords/dataDownloader")
+# library(dataDownloader)
 
 # get_file(node = "4c5v2",
-#          file = "FunCaB_raw_biomass_2015_2021.csv",
+#          file = "FunCaB_raw_biomass_2021-11-02.xlsx",
 #          path = "data/biomass",
-#          remote_path = "Vegetation data/Functional Group Biomass Removals")
+#          remote_path = "Vegetation/Functional Group Biomass Removals")
 
 
 

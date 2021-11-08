@@ -7,7 +7,7 @@ node <- "4c5v2"
 
 # 1 Biomass
 get_file(node = node,
-         file = "FunCaB_biomass_2015-2021.csv",
-         path = "clean_data/vegetation",
-         remote_path = "Vegetation")
+         file = "FunCaB_raw_biomass_2021-11-02.xlsx",
+         path = "data/biomass",
+         remote_path = "Vegetation/Functional Group Biomass Removals")
 
