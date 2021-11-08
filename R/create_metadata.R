@@ -9,6 +9,6 @@ blockID = c(1:4)
 treatment = c("C", "F", "G", "B", "FB", "GB", "GF", "FGB")
 
 funder_metadata <- crossing(siteID, blockID, treatment) %>%
-  mutate(plotID = paste(str_sub(siteID, 1, 3), blockID, treatment, sep = "_"))
+  mutate(plotID = paste0(str_sub(siteID, 1, 3), blockID, treatment))
 
 write_csv(funder_metadata, "Funder_2021_metadata.csv")
