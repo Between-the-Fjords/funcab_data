@@ -62,7 +62,8 @@ biomass <- biomass_raw %>%
   rename(year = Year, date = Date, site = Site, block = Block, treatment = Treatment, removed_fg = "Removed functional group", round = Round, biomass = Biomass, name = Name, remark = Remark) %>%
   select(year, date, site, block, treatment, removed_fg, round, biomass, name, remark) %>%
   mutate(site = recode(site, "OVSen" = "OVS"),
-         round = str_sub(round, start = -1)) %>%
+         round = str_sub(round, start = -1),
+         date = as.Date(date)) %>%
   # impute missing info on round
   left_join(impute_round, by = c("year", "site", "block")) %>%
   mutate(round = if_else(is.na(round), round_new, round)) %>%
