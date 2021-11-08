@@ -47,7 +47,23 @@ SM201516 <- SM201516_raw %>%
 
 
 # 2017 data
-SM2017_raw
+SM2017_raw %>%
+  mutate(Date = if_else(str_detect(Date, fixed(".")), dmy(Date, quiet = TRUE), as.Date(as.numeric(Date), origin = "1899-12-30"))) %>%
+  rename("turfID" = `Turf ID`) %>%
+  filter(!grepl("TT1", turfID),
+         !grepl("TT2", turfID),
+         !grepl("TT3", turfID),
+         !grepl("TT4", turfID),
+         !grepl("RTC", turfID),
+         !grepl("P", turfID)) %>%
+  mutate_at(vars(Measurement1, Measurement2, Measurement3, Measurement4), as.numeric) %>%
+  rowwise() %>%
+  mutate(soilmoisture = mean(c(Measurement1, Measurement2, Measurement3, Measurement4), na.rm = TRUE)) %>%
+  mutate(Treatment = if_else(is.na(Treatment) & grepl("TTC", turfID), "C", Treatment)) %>%
+  filter(!is.na(soilmoisture),
+         !is.na(Treatment)) %>%
+
+  #select(date = Date, siteID = Site)
 
 
 
