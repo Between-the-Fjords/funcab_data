@@ -38,6 +38,25 @@ impute_round = tribble(
   unchop(block) %>%
   mutate(block = unlist(block))
 
+# add missing dates in 2018
+missing_dates = tribble(
+  ~year, ~site, ~newdate,
+  2018, "OVS", "2018-07-03",
+  2018, "ARH", "2018-07-04",
+  2018, "ULV", "2018-08-09",
+  2018, "SKJ", "2018-08-16",
+  2018, "FAU", "2018-07-10",
+  2018, "LAV", "2018-08-14",
+  2018, "HOG", "2018-07-05",
+  2018, "VES", "2018-08-06",
+  2018, "RAM", "2018-08-07",
+  2018, "ALR", "2018-07-12",
+  2018, "GUD", "2018-08-15",
+  2018, "OVS", "2018-07-03",
+  2018, "VIK", "2018-07-05"
+) %>%
+  mutate(newdate = ymd(newdate))
+
 
 biomass <- biomass_raw %>%
   rename(year = Year, date = Date, site = Site, block = Block, treatment = Treatment, removed_fg = "Removed functional group", round = Round, biomass = Biomass, name = Name, remark = Remark) %>%
@@ -65,7 +84,26 @@ biomass <- biomass_raw %>%
          removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.56 & name == "PS", "G", removed_fg),
          removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.17 & name == "PS", "B", removed_fg),
          removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.89 & name == "PS", "G", removed_fg),
-         treatment = if_else(year == 2019 & site == "SKJ" & block == 2 & biomass %in% c(0.43, 1.84) & name == "sari", "FB", treatment))
+         treatment = if_else(year == 2019 & site == "SKJ" & block == 2 & biomass %in% c(0.43, 1.84) & name == "sari", "FB", treatment)) %>%
+  # add missing dates
+  left_join(missing_dates, by = c("year", "site")) %>%
+  mutate(date = if_else(is.na(date), newdate, date)) %>%
+  # change site names
+  mutate(site = recode(site, "ULV" = "Ulvehaugen",
+                         "LAV" = "Lavisdalen",
+                         "GUD" = "Gudmedalen",
+                         "SKJ" = "Skjelingahaugen",
+                         "ALR" = "Alrust",
+                         "HOG" = "Hogsete",
+                         "RAM" = "Rambera",
+                         "VES" = "Veskre",
+                         "FAU" = "Fauske",
+                         "VIK" = "Vikesland",
+                         "ARH" = "Arhelleren",
+                         "OVS" = "Ovstedalen")) %>%
+  mutate(block = paste0(substr(site, 1, 3), block),
+         plotID = paste0(block, treatment)) %>%
+  select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
 
 
 write_csv(biomass, file = "data/biomass/FunCaB_biomass_clean_2015-2021.csv")
