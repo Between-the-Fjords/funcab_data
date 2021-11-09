@@ -103,7 +103,8 @@ biomass <- biomass_raw %>%
                          "ARH" = "Arhelleren",
                          "OVS" = "Ovstedalen")) %>%
   mutate(block = paste0(substr(site, 1, 3), block),
-         plotID = paste0(block, treatment)) %>%
+         plotID = paste0(block, treatment),
+         treatment = recode(treatment, "GF" = "FG")) %>%
   select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
 
 
@@ -127,7 +128,7 @@ write_csv(biomass, file = "data/biomass/FunCaB_biomass_clean_2015-2021.csv")
 
 # Data viz
 biomass_plot <- biomass %>%
-  mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "FG", "FGB")),
+  mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB")),
          biogeographic_zone = recode(siteID,
                              Ulvehaugen = "alpine",
                              Lavisdalen = "alpine",
