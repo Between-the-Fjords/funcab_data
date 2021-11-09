@@ -74,7 +74,7 @@ soilmoisture_dic <- make_data_dictionary(data = soilmoisture,
 
 ##merge all dics together to one xlsx, with each parameter as a single sheet
 
-write_xlsx(list(biomass = biomass_dic,community = community_dic, soil_temperature = soil_temperature_dic, soil_moisture = soilmoisture_dic),"data_dic.xlsx")
+write_xlsx(list(biomass = biomass_dic,community = community_dic, soil_temperature = soil_temperature_dic, soil_moisture = soilmoisture_dic),"R/data_dic/data_dictionary.xlsx")
 
 
 
