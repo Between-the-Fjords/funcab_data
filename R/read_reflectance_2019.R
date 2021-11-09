@@ -66,6 +66,10 @@ unique(fundat$blockID)
 fundat$plotID <- paste0(fundat$blockID, fundat$Treatment)
 unique(fundat$plotID)
 
+######################################################
+# TODO: Change TTC column to match seedclim dictionary
+######################################################
+
 # Standardize dates to data dictionary
 fundat$date <- as.Date(fundat$Date, "%m/%d/%y")
 
@@ -77,11 +81,13 @@ hist(logit(fundat$m_ndvi))
 
 # Add column to specify when reflectance was taken relative to cutting
 fundat$pre_post_cut <- "post_cut"
+fundat$Time <- fundat$Time
 
 # Remove columns no longer required
 NDVI_2019 <- fundat %>%
-  select(siteID, blockID, plotID, Treatment, TTC_ID, pre_post_cut,
-         date, Time, m_ndvi, notes)
+  select(date, time, siteID, blockID, plotID, treatment, TTC_ID, pre_post_cut,
+         m_ndvi, notes)
+
 
 # Write file
 write_csv(NDVI_2019, "./data/NDVI_2019.csv")
@@ -147,7 +153,7 @@ fundat_wk2_3$plotID <- paste0(fundat_wk2_3$blockID,
 unique(fundat_wk2_3$plotID)
 
 # Rename plot as Treatment
-fundat_wk2_3$Treatment <- fundat_wk2_3$Plot
+fundat_wk2_3$treatment <- fundat_wk2_3$Plot
 
 # For each plot we took two reflectance values, perpindicular to each other to account for the different radius for the greenseeker sensor area, and the 25cm plot size. Average these.
 fundat_wk2_3$m_ndvi_after <- (fundat_wk2_3$After.1+ fundat_wk2_3$After.2)/2 # average the two values
@@ -173,17 +179,17 @@ fundat_wk2_3$pre_post_cut <- recode(fundat_wk2_3$pre_post_cut,
 # It is duplicated across both before and after cutting
 
 fundat_wk2_3 <- fundat_wk2_3 %>%
-  mutate(Weather = ifelse(pre_post_cut == 'pre_cut', Weather.before, Weather.after))
+  mutate(weather = ifelse(pre_post_cut == 'pre_cut', Weather.before, Weather.after))
 fundat_wk2_3 <- fundat_wk2_3 %>%
-  mutate(Time = ifelse(pre_post_cut == 'pre_cut', Before.time, After.time))
+  mutate(time = ifelse(pre_post_cut == 'pre_cut', Before.time, After.time))
 
 # Add notes column if necessary later on
 fundat_wk2_3$notes <- NA
 
 # Only select relevant columns
 NDVI_2021 <- fundat_wk2_3 %>%
-  select(siteID, blockID, plotID, Treatment, pre_post_cut,
-         date, Time, Weather, m_ndvi,notes)
+  select(date, time, siteID, blockID, plotID, treatment, pre_post_cut, m_ndvi,
+          weather, notes)
 
 # Write file
 write_csv(NDVI_2021, "./data/NDVI_2021.csv")
