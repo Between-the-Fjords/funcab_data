@@ -10,7 +10,8 @@ source(file = "R/load_packages.R")
 source("R/data_dic/make_data_dictionary.R")
 
 # read in data description table
-description_table <- read_excel("R/data_dic/data_description.xlsx")
+description_table <- read_excel("R/data_dic/data_description.xlsx") %>%
+  mutate(TableID = as.character(TableID))
 
 #************************************************************************
 #************************************************************************
@@ -21,7 +22,7 @@ biomass <- read_csv("data/biomass/FunCaB_biomass_clean_2015-2021.csv")
 
 biomass_dic <- make_data_dictionary(data = biomass,
                                       description_table = description_table,
-                                      table_ID = "")
+                                      table_ID = NA_character_)
 
 
 #************************************************************************
@@ -33,7 +34,7 @@ community <- read_csv("data/vegetation_community/FunCaB_clean_composition_21-11-
 
 community_dic <- make_data_dictionary(data = community,
                                       description_table = description_table,
-                                      table_ID = "community")
+                                      table_ID = NA_character_)
 
 
 #************************************************************************
@@ -49,22 +50,6 @@ phenology_dic <- make_data_dictionary(data = phenology,
 
 
 
-#************************************************************************
-#### 6 ECOSYSTEM ####
-# Decomposition
-litter <- read_csv("decomposition/Decomposition_litter_2016_clean.csv")
-
-litter_dic <- make_data_dictionary(data = litter,
-                                   description_table = description_table,
-                                   table_ID = "litterbags")
-
-teabag <- read_csv("decomposition/Decomposition_teabag_2014_clean.csv")
-
-teabag_dic <- make_data_dictionary(data = teabag,
-                                   description_table = description_table,
-                                   table_ID = "teabag")
-
-
 
 #************************************************************************
 #************************************************************************
@@ -75,42 +60,14 @@ soil_temperature<-iButtonData
 
 soil_temperature_dic <- make_data_dictionary(data = soil_temperature,
                                        description_table = description_table,
-                                       table_ID = "soil_temperature")
+                                       table_ID = NA_character_)
 
 
-# Precipitation
-precipitation <- read_csv("climate/data/Precipitation.csv")
-
-precipitation_dic <- make_data_dictionary(data = precipitation,
-                                       description_table = description_table,
-                                       table_ID = "precipitation")
 
 # Soilmoisture
 soilmoisture <- read_csv("climate/data/SoilMoisture.csv")
 
 soilmoisture_dic <- make_data_dictionary(data = soilmoisture,
                                        description_table = description_table,
-                                       table_ID = "soilmoisture")
+                                       table_ID = NA_character_)
 
-# Soilmoisture
-soilmoisture_plot <- read_csv("climate/data/seedclim_soilmoisture_plotlevel.csv")
-
-soilmoisture_plot_dic <- make_data_dictionary(data = soilmoisture_plot,
-                                       description_table = description_table,
-                                       table_ID = "soilmoisture_plot")
-
-
-# Gridded climate data
-climate <- read_csv("climate/data/GriddedDailyClimateData2009-2019.csv")
-
-climate_plot_dic <- make_data_dictionary(data = climate,
-                                              description_table = description_table,
-                                              table_ID = "climate")
-
-
-# Soil structure
-soil_structure <- read_csv("soil_structure/Soil_structure_2013-2014_clean.csv")
-
-soilmoisture_plot_dic <- make_data_dictionary(data = soil_structure,
-                                              description_table = description_table,
-                                              table_ID = "soil_structure")
