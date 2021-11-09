@@ -101,7 +101,11 @@ biomass <- biomass_raw %>%
                          "FAU" = "Fauske",
                          "VIK" = "Vikesland",
                          "ARH" = "Arhelleren",
-                         "OVS" = "Ovstedalen")) %>%
+                         "OVS" = "Ovstedalen"),
+         # fix wrong block names in GUD and RAM
+         block = if_else(year %in% c(2018, 2020, 2021) & site == "Rambera" & block == 7, 8, block),
+         block = if_else(year %in% c(2019) & site == "Rambera" & block == 7, 6, block)
+         ) %>%
   mutate(block = paste0(substr(site, 1, 3), block),
          plotID = paste0(block, treatment)) %>%
   select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
