@@ -16,24 +16,24 @@ description_table <- read_excel("R/data_dic/data_description.xlsx")
 #************************************************************************
 ### 1 BIOMASS
 
-seed_pred <- read_csv("seed_predation/data/Seed_predation_2018.csv")
+biomass <- read_csv("data/biomass/FunCaB_biomass_clean_2015-2021.csv")
 
 
-seed_pred_dic <- make_data_dictionary(data = seed_pred,
+biomass_dic <- make_data_dictionary(data = biomass,
                                       description_table = description_table,
-                                      table_ID = "seed_predation")
+                                      table_ID = "")
 
 
 #************************************************************************
 
 ### 2 COMMUNITY DATA
 
-seed_pred <- read_csv("seed_predation/data/Seed_predation_2018.csv")
+community <- read_csv("data/vegetation_community/FunCaB_clean_composition_21-11-03.csv")
 
 
-seed_pred_dic <- make_data_dictionary(data = seed_pred,
+community_dic <- make_data_dictionary(data = community,
                                       description_table = description_table,
-                                      table_ID = "seed_predation")
+                                      table_ID = "community")
 
 
 #************************************************************************
@@ -70,11 +70,12 @@ teabag_dic <- make_data_dictionary(data = teabag,
 #************************************************************************
 #### 8 ENVIRONMENTAL DATA ####
 # Temperature
-temperature <- read_csv("climate/data/Temperature.csv")
+soil_temperature <- load("data/soil_temperature/iButton2016.RData")
+soil_temperature<-iButtonData
 
-temperature_dic <- make_data_dictionary(data = temperature,
+soil_temperature_dic <- make_data_dictionary(data = soil_temperature,
                                        description_table = description_table,
-                                       table_ID = "temperature")
+                                       table_ID = "soil_temperature")
 
 
 # Precipitation
