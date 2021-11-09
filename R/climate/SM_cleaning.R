@@ -126,7 +126,8 @@ SM2018 <- SM2018_raw %>%
 
 soilmoisture <- bind_rows(SM201516, SM2017, SM2018) %>%
   # remove plotID from seedclim turfID
-  mutate(turfID = if_else(!str_detect(turfID, "TT"), NA_character_, turfID))
+  mutate(turfID = if_else(!str_detect(turfID, "TT"), NA_character_, turfID),
+         date = ymd(date))
 
 write_csv(soilmoisture, file = "data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
 
