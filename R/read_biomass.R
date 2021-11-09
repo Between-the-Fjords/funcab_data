@@ -38,12 +38,32 @@ impute_round = tribble(
   unchop(block) %>%
   mutate(block = unlist(block))
 
+# add missing dates in 2018
+missing_dates = tribble(
+  ~year, ~site, ~newdate,
+  2018, "OVS", "2018-07-03",
+  2018, "ARH", "2018-07-04",
+  2018, "ULV", "2018-08-09",
+  2018, "SKJ", "2018-08-16",
+  2018, "FAU", "2018-07-10",
+  2018, "LAV", "2018-08-14",
+  2018, "HOG", "2018-07-05",
+  2018, "VES", "2018-08-06",
+  2018, "RAM", "2018-08-07",
+  2018, "ALR", "2018-07-12",
+  2018, "GUD", "2018-08-15",
+  2018, "OVS", "2018-07-03",
+  2018, "VIK", "2018-07-05"
+) %>%
+  mutate(newdate = ymd(newdate))
+
 
 biomass <- biomass_raw %>%
   rename(year = Year, date = Date, site = Site, block = Block, treatment = Treatment, removed_fg = "Removed functional group", round = Round, biomass = Biomass, name = Name, remark = Remark) %>%
   select(year, date, site, block, treatment, removed_fg, round, biomass, name, remark) %>%
   mutate(site = recode(site, "OVSen" = "OVS"),
-         round = str_sub(round, start = -1)) %>%
+         round = str_sub(round, start = -1),
+         date = as.Date(date)) %>%
   # impute missing info on round
   left_join(impute_round, by = c("year", "site", "block")) %>%
   mutate(round = if_else(is.na(round), round_new, round)) %>%
@@ -65,7 +85,26 @@ biomass <- biomass_raw %>%
          removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.56 & name == "PS", "G", removed_fg),
          removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.17 & name == "PS", "B", removed_fg),
          removed_fg = if_else(year == 2019 & site == "GUD" & block == 12 & biomass == 0.89 & name == "PS", "G", removed_fg),
-         treatment = if_else(year == 2019 & site == "SKJ" & block == 2 & biomass %in% c(0.43, 1.84) & name == "sari", "FB", treatment))
+         treatment = if_else(year == 2019 & site == "SKJ" & block == 2 & biomass %in% c(0.43, 1.84) & name == "sari", "FB", treatment)) %>%
+  # add missing dates
+  left_join(missing_dates, by = c("year", "site")) %>%
+  mutate(date = if_else(is.na(date), newdate, date)) %>%
+  # change site names
+  mutate(site = recode(site, "ULV" = "Ulvehaugen",
+                         "LAV" = "Lavisdalen",
+                         "GUD" = "Gudmedalen",
+                         "SKJ" = "Skjelingahaugen",
+                         "ALR" = "Alrust",
+                         "HOG" = "Hogsete",
+                         "RAM" = "Rambera",
+                         "VES" = "Veskre",
+                         "FAU" = "Fauske",
+                         "VIK" = "Vikesland",
+                         "ARH" = "Arhelleren",
+                         "OVS" = "Ovstedalen")) %>%
+  mutate(block = paste0(substr(site, 1, 3), block),
+         plotID = paste0(block, treatment)) %>%
+  select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
 
 
 write_csv(biomass, file = "data/biomass/FunCaB_biomass_clean_2015-2021.csv")
@@ -87,11 +126,42 @@ write_csv(biomass, file = "data/biomass/FunCaB_biomass_clean_2015-2021.csv")
 
 
 # Data viz
-biomass %>%
-  mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "FG", "FGB"))) %>%
-  filter(year != 2019, removed_fg != "C") %>%
+biomass_plot <- biomass %>%
+  mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "FG", "FGB")),
+         biogeographic_zone = recode(siteID,
+                             Ulvehaugen = "alpine",
+                             Lavisdalen = "alpine",
+                             Gudmedalen = "alpine",
+                             Skjelingahaugen = "alpine",
+                             Alrust = "sub.alpine",
+                             Hogsete = "sub.alpine",
+                             Rambera = "sub.alpine",
+                             Veskre = "sub.alpine",
+                             Fauske = "boreal",
+                             Vikesland = "boreal",
+                             Arhelleren = "boreal",
+                             Ovstedalen = "boreal"),
+        prep_level = recode(siteID,
+                               Ulvehaugen = 1,
+                               Lavisdalen = 2,
+                               Gudmedalen = 3,
+                               Skjelingahaugen = 4,
+                               Alrust = 1,
+                               Hogsete = 2,
+                               Rambera = 3,
+                               Veskre = 4,
+                               Fauske = 1,
+                               Vikesland = 2,
+                               Arhelleren = 3,
+                               Ovstedalen = 4),
+        climate = paste0(biogeographic_zone, prep_level),
+        climate = factor(climate, levels = c("boreal1", "boreal2", "boreal3", "boreal4", "sub.alpine1", "sub.alpine2", "sub.alpine3", "sub.alpine4", "alpine1", "alpine2", "alpine3", "alpine4"))) %>%
   ggplot(aes(x = treatment, y = biomass, fill = removed_fg)) +
   geom_col() +
-  facet_grid(year ~ site) +
-  theme_bw()
+  scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
+  labs(x = "Removed functional group", y = "Biomass in g") +
+  facet_grid(year ~ climate) +
+  theme_bw() +
+  theme(legend.position="top")
 
+#ggsave("biomass_plot.jpeg", biomass_plot, dpi = 150, width = 15, height = 10)
