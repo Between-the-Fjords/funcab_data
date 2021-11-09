@@ -11,7 +11,6 @@
 source("R/load_packages.R")
 
 library(DBI)
-library(SDMTools)
 library(RSQLite)
 
 # source required dictionaries
@@ -430,12 +429,14 @@ comp2 <- comp2 %>%
   )
 
 comp2 <- comp2 %>%
-  distinct(siteID, blockID, Treatment, turfID, Year, graminoidCov, forbCov, mossCov, vegetationHeight, mossHeight, litter, cover, species, functionalGroup, sumcover) %>%
+  distinct(Year, siteID, blockID, Treatment, turfID, graminoidCov, forbCov, mossCov, vegetationHeight, mossHeight, litter, species, cover, functionalGroup, sumcover) %>%
   # recode site names
   mutate(siteID = recode(siteID,
                          "Ulvhaugen" = "Ulvehaugen",
                          "Skjellingahaugen" = "Skjelingahaugen",
-                         "Ovstedal" = "Ovstedalen"))
+                         "Ovstedal" = "Ovstedalen"),
+         blockID = paste0(substr(siteID, 1, 3), blockID)) %>%
+  select(year = Year, siteID, blockID, treatment = Treatment, turfID:litter, species, cover, functionalGroup, sumcover)
 
 # save secondary/derived data
 write_csv(comp2, file = "data/community/FunCaB_clean_composition_21-11-03.csv")

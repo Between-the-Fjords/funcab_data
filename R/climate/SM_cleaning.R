@@ -8,9 +8,9 @@ library(broom)
 
 # use soil moisture differences!
 # read in soil moisture data FUNCAB point measurements
-SM201516_raw <- read_excel("data/climate/soilMoisture_2015-2016.xlsx")
-SM2018_raw <- read_excel("data/climate/Soilmoisture2018.xlsx")
-SM2017_raw <- read_excel(path = "data/climate/Soilmoisture2017.xlsx")
+SM201516_raw <- read_excel("data/climate/raw_soilmoisture/soilMoisture_2015-2016.xlsx")
+SM2018_raw <- read_excel("data/climate/raw_soilmoisture/Soilmoisture2018.xlsx")
+SM2017_raw <- read_excel(path = "data/climate/raw_soilmoisture/Soilmoisture2017.xlsx")
 
 source("R/community/dictionaries.R")
 
@@ -124,7 +124,9 @@ SM2018 <- SM2018_raw %>%
   select(date = Date, siteID, blockID, treatment = Treatment, soilmoisture = SM, weather = Weather,  recorder = Recorder, turfID)
 
 
-soilmoisture <- bind_rows(SM201516, SM2017, SM2018)
+soilmoisture <- bind_rows(SM201516, SM2017, SM2018) %>%
+  # remove plotID from seedclim turfID
+  mutate(turfID = if_else(!str_detect(turfID, "TT"), NA_character_, turfID))
 
 write_csv(soilmoisture, file = "data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
 
