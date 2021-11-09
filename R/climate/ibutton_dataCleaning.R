@@ -197,7 +197,21 @@ iButtonData <- iButtonData %>%
   select(year = Year, date_time = Date, siteID, blockID = Block, plotID = turfID, iButtonID = ID, treatment = Treatment, soiltemperature = Value, comments = Comments, turfID = TTtreat)
 
 
-iButtonData %>%
+##### save ibutton data #######
+write_csv(iButtonData, file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
+
+
+iButtonData <- read_csv(file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
+
+dailyTemperature <- iButtonData %>%
+  filter(!is.na(soiltemperature)) %>%
+  mutate(date = dmy(format(date_time, "%d.%b.%Y"))) %>%
+  group_by(date, siteID, treatment) %>%
+  summarise(n = n(),
+            soiltemperature = mean(soiltemperature),
+            max_temp = max(soiltemperature)) %>%
+  # filter(n > threshold) %>%
+  # select(-n, -sum)
   mutate(treatment = factor(treatment, levels = c("C", "B", "F", "G", "FB", "GB", "GF", "FGB")),
          biogeographic_zone = recode(siteID,
                                      Ulvehaugen = "alpine",
@@ -225,13 +239,16 @@ iButtonData %>%
                              Vikesland = 2,
                              Arhelleren = 3,
                              Ovstedalen = 4),
-         biogeographic_zone = factor(biogeographic_zone, levels = c("boreal", "sub.alpine", "alpine"))) %>%
-  filter(treatment %in% c("C", "B", "F", "G", "FGB")) %>%
-  ggplot(aes(x = date_time, y = soiltemperature, colour = treatment)) +
+         biogeographic_zone = factor(biogeographic_zone, levels = c("boreal", "sub.alpine", "alpine")))
+
+dailyTemperature %>%
+    filter(treatment %in% c("C", "FGB"),
+         prep_level == 4) %>%
+  ggplot(aes(x = date, y = max_temp, colour = treatment)) +
   geom_line() +
-  facet_grid(biogeographic_zone ~ prep_level)
+  scale_color_manual(values = c("limegreen", "darkgoldenrod4")) +
+  facet_wrap(~ biogeographic_zone) +
+  theme_bw()
 
 
-##### save and load ibutton data #######
-write_csv(iButtonData, file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
 
