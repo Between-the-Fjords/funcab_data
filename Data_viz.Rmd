@@ -12,6 +12,7 @@ source("R/load_packages.R")
 
 biomass <- read_csv("data/biomass/FunCaB_biomass_clean_2015-2021.csv")
 iButtonData <- read_csv("data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
+community <- read_csv("data/community/FunCaB_clean_composition_21-11-03.csv")
 
 
 meta <- biomass %>% 
@@ -94,9 +95,25 @@ dailyTemperature %>%
   facet_wrap(~ siteID) +
   theme_bw()
 
+```
+
+
+``` {r community}
+
+community %>% 
+  filter(treatment %in% c("C", "FB", "GB")) %>% 
+  group_by(year, siteID, treatment, functionalGroup) %>% 
+  summarise(sumcover = mean(sumcover, na.rm = TRUE)) %>% 
+  ggplot(aes(x = year, y = sumcover, colour = treatment, linetype = functionalGroup)) +
+  geom_line() +
+  facet_wrap(~ siteID)
+
+
 
 
 
 ```
+
+
 
 
