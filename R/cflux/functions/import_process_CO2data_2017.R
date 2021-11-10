@@ -1,5 +1,3 @@
-library(dplyr)
-library(lubridate)
 
 # import temperature data from Ibutton
 read.ibutton<-function(file){
@@ -231,7 +229,7 @@ check<-function(x){
 }
 #check(combine.data) #check if start and stop time is right
 
-metaFile <- sites$
+
 # importing combination of datafiles of specific day site time
 import.everything<-function(metaFile, loggerFile, tempFile){
   meta.data<-read.metadata(metaFile)
@@ -241,10 +239,15 @@ import.everything<-function(metaFile, loggerFile, tempFile){
 }
 
 
-file <- "data/cflux/Cflux data/datafiles_2017_Li1400.xlsx"
+#file <- "data/cflux/Cflux data/Li1400files2017new.xlsx"
+#r <- sites[1,]
 #importing all site file combination from a sitefile
 read.sitefiles<-function(file){
-  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) #read excel file
+  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) %>%  #read excel file
+    mutate(meta.data = str_replace(meta.data, "CO2\\/Data\\/CO2_metadata2017\\/", "data\\/cflux\\/Metadata\\/Metadata_2017\\/RawData\\/"),
+           logger.data = str_replace(logger.data, "CO2\\/Data\\/2017Li1400\\/", "data\\/cflux\\/Cflux data\\/Cfluxdata_Li1400_2017\\/"),
+           temp.data = str_replace(temp.data, "CO2\\/Data\\/2017TEMP\\/", "data\\/cflux\\/Temp data\\/Tempdata_2017\\/"),
+           temp.data = str_replace(temp.data, "LI14000T", "LI1400T"))
   sites$dates<- as.Date(sites$dates, format="%d.%m.%y")
   sites<-sites[!is.na(sites$site), ] # remove rows with no data
   #import data from files of site.files

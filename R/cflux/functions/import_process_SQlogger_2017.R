@@ -1,17 +1,14 @@
 # Import and process data from SQ logger
-library(dplyr)
-library(lubridate)
 
-
-# import temperature data from Ibutton 
-read.ibutton<-function(file){                             
+# import temperature data from Ibutton
+read.ibutton<-function(file){
   ibut<-read.csv(file, header=FALSE)
   names(ibut)<-c("datetime", "C", "temp", "temp2") #give names to columns
   ibut$temp<-ibut$temp+ibut$temp2/1000 # summing two temperature columns
   ibut$temp2<-NULL # setting temp2 column to null after it has been added to ibut$temp
-  ibut$C<-NULL # setting C column to null 
+  ibut$C<-NULL # setting C column to null
   ibut$datetime<- dmy_hms(ibut$datetime, tz = "Europe/Oslo") #right format for reading datetime
-  
+
   ibut
 }
 
@@ -25,26 +22,27 @@ meantemp<-function(ibut, start, stop){
 }
 #meantemp(temp.data,start=temp.data$datetime[1],stop=temp.data$datetime[2])
 
-# import CO2 and PAR data from datalogger 
+#file <- loggerFile
+# import CO2 and PAR data from datalogger
 read.SQlogger<-function(file){
   log<-read.table(file, header=TRUE,  sep="\t", dec=",", stringsAsFactors = FALSE, blank.lines.skip = TRUE, col.names=c("Date", "Time",	"Type",	"CO2_V",	"H20_V",	"Light_V",	"CO2_ppm",	"H20_ppt",	"PAR", "flag"))
   log$datetime<- as.POSIXct(paste(log$Date, log$Time), tz="", format="%d.%m.%Y %H:%M:%S")
-  
+
   log$CO2_ppm<-suppressWarnings(as.numeric(log$CO2_ppm))
   log<-log[!is.na(log$CO2_ppm),] #skips data is not numeric
-  
-  # leave out flagged values "x" (outliers) from 
+
+  # leave out flagged values "x" (outliers) from
   log$flag[is.na(log$flag)]<-""
   log$keep<-log$flag!="x"
-  
-  
-  
+
+
+
   data.frame(datetime=log$datetime, CO2=log$CO2_ppm, PAR=log$PAR, H2O=log$H20_ppt, flag=log$flag, keep=log$keep)
 }
 #test<- read.SQlogger("CO2/Data/Flux2016_SQ/20160621_SQ_ALR1new.txt")
 
 
-# import metadata of site 
+# import metadata of site
 read.metadata<-function(file){
   metdat<-read.table(file, header=TRUE, fill=TRUE, stringsAsFactors = FALSE)
   names(metdat)<-c("date", "site", "block", "treatment", "chamber", "starttime", "stoptime", "PAR", "cover", "soilT", "weather", "comment", "flag")
@@ -63,17 +61,17 @@ read.metadata<-function(file){
 
 process.SQdata <- function(meta, logger, temp){
   cleaner<-lapply(1:nrow(meta), function( i){
-    
-    metdat<-meta[i,]    
+
+    metdat<-meta[i,]
     if(!is.na(metdat$flag)&metdat$flag=="x" )return(NULL) # leave out measurements that are flagged "x"
-    
-    #linking start/stoptime from metadata to CO2, PAR and H2O data from logger  
+
+    #linking start/stoptime from metadata to CO2, PAR and H2O data from logger
     starttime<-which(logger$datetime==metdat$starttime)#or next
     if(length(starttime)==0){
       dif<-logger$datetime-metdat$starttime
       starttime<-which.max(dif>0)
     }
-    
+
     stoptime <- which(logger$datetime == metdat$stoptime)#or most recent
     #stopifnot(length(stopCO2)>0,length(stopCO2)>0)
     if (length(stoptime) == 0) {
@@ -81,21 +79,21 @@ process.SQdata <- function(meta, logger, temp){
       stoptime <- which.max(!dif < 0) - 1
       warning("taking most recent value")
     }
-    
+
     dat <- logger[starttime:stoptime, ]
-    
+
     time <- unclass(dat$datetime - dat$datetime[1])
     meanH2O<- mean(dat$H2O)
-    temp2<-meantemp(temp, metdat$starttime, metdat$stoptime) 
-    
+    temp2<-meantemp(temp, metdat$starttime, metdat$stoptime)
+
     dat$time <- time # add time column to logger data
     dat$H2O <- meanH2O # add mean H20 column to logger data
     dat$temp <- temp2 # link mean temp to logger data
-    
+
     list(dat = dat, meta=metdat)
   })
-  cleaner[!vapply(cleaner, is.null, FUN.VALUE = TRUE)]    
-}  
+  cleaner[!vapply(cleaner, is.null, FUN.VALUE = TRUE)]
+}
 
 
 #specifying data used in function process.data
@@ -106,7 +104,7 @@ process.SQdata <- function(meta, logger, temp){
 
 # function to reset start and stoptime for CO2 measurement, default is startHappy and endHappy is FALSE
 setStartEnd <- function(x){
-  startHappy <- FALSE 
+  startHappy <- FALSE
   endHappy <- FALSE
   tstart <- 0 #default is 0, otherwise give other starttime
   tfinish <- Inf
@@ -115,21 +113,21 @@ setStartEnd <- function(x){
     par(mar=c(4,5,2,2))
     plot.PAR(x)
     plot.CO2(x)
-    
-    
+
+
     tstart1 <- readline("Enter preferred start time for fitting. \n Round to nearest integer second. press 'return':")
     if(!grepl("^[0-9]+$", tstart1)){
-      
+
       startHappy <- TRUE
     } else {
       tstart <- as.integer(tstart1)
       startHappy <- FALSE
     }
-    
-    
+
+
     tfinish1 <- readline("Enter preferred finish time for fitting. \n Round to nearest integer second. original endtime is preferred, press 'return':")
     if(!grepl("^[0-9]+$", tfinish1)){
-      
+
       endHappy <- TRUE
     } else{
       tfinish <- as.integer(tfinish1)
@@ -138,10 +136,10 @@ setStartEnd <- function(x){
     x$dat$keep[x$dat$time < tstart | x$dat$time > tfinish] <- FALSE
     x$meta$tstart <- tstart
     x$meta$tfinish <- tfinish
-  }   
-  
+  }
+
   x
-  
+
 }
 
 #loop for setting new start and end times for all measurements in file
@@ -156,7 +154,7 @@ checkSQ<-function(x){
   CO2<-sapply(x, function(r){
     all(r$CO2$datetime>=r$meta$starttime&r$CO2$datetime<=r$meta$stoptime)
   })
-  
+
   CO2
 }
 #check(combine.data) #check if start and stop time is right
@@ -171,11 +169,15 @@ import.everything.SQ<-function(metaFile, loggerFile, tempFile){
 }
 
 
-
+#file <- "data/cflux/Cflux data/SQfiles2017new.xlsx"
+#r <- sites[1,]
 #importing all site file combination from a sitefile
 read.sitefiles.SQ<-function(file){
-  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) #read excel file
-  sites$dates<- as.Date(sites$dates, format="%d.%m.%y") 
+  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) %>%  #read excel file
+    mutate(meta.data = str_replace(meta.data, "CO2\\/Data\\/CO2_metadata2017\\/", "data\\/cflux\\/Metadata\\/Metadata_2017\\/RawData\\/"),
+           logger.data = str_replace(logger.data, "CO2\\/Data\\/2017SQ\\/", "data\\/cflux\\/Cflux data\\/Cfluxdata_SQ_2017\\/"),
+           temp.data = str_replace(temp.data, "CO2\\/Data\\/2017TEMP\\/", "data\\/cflux\\/Temp data\\/Tempdata_2017\\/"))
+  sites$dates<- as.Date(sites$dates, format="%d.%m.%y")
   sites<-sites[!is.na(sites$site), ] # remove rows with no data
   #import data from files of site.files
   sites.data<-lapply(1:nrow(sites), function(i){
@@ -191,13 +193,13 @@ read.sitefiles.SQ<-function(file){
 find.outlier<- function(x, outlier_threshold = 5){
   original.lm <- lm (CO2 ~ time, data = x$dat) # linear model for measurement including all datapoints
   x$dat$resid<- resid(original.lm)
-  
+
   # Identify and print only metadata of outliers
   outliers <- x$dat[abs(x$dat$resid) > outlier_threshold, ]
   print(outliers)
-  
+
   # check which measurements have outliers and compare that to outliers found manually!
-  
+
   #create threshold for identifying outliers within measurement and remove them from measurment
   #if (x$data$resid > outlier_threshold) {
   #x$data$co2<-NA
