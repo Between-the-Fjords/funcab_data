@@ -17,10 +17,10 @@ source("R/cflux/functions/import_process_SQlogger_2017.R")
 
 
 #import all pre removal datafiles from 2017
-sites.data.2017Li1400 <- read.sitefiles("data/cflux/Cflux data/datafiles_2017_Li1400.xlsx")#!Li1400 dataflagged outliers+new times
-#"CO2/Data/Li1400files2017new.xlsx"
-sites.data.2017SQ <- read.sitefiles.SQ("data/cflux/Cflux data/datafiles_2017_SQ.xlsx") #!SQ dataflagged outliers+new time
-#"CO2/Data/SQfiles2017new.xlsx"
+sites.data.2017Li1400 <- read.sitefiles("data/cflux/Cflux data/Li1400files2017new.xlsx") #!Li1400 dataflagged outliers+new times
+
+sites.data.2017SQ <- read.sitefiles.SQ("data/cflux/Cflux data/SQfiles2017new.xlsx") #!SQ dataflagged outliers+new time
+
 
 # check number of columns of metadata
 #sapply(sites.data.2017Li1400, function(x) ncol(x$meta))
