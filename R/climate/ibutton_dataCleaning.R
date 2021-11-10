@@ -197,41 +197,8 @@ iButtonData <- iButtonData %>%
   select(year = Year, date_time = Date, siteID, blockID = Block, plotID = turfID, iButtonID = ID, treatment = Treatment, soiltemperature = Value, comments = Comments, turfID = TTtreat)
 
 
-iButtonData %>%
-  mutate(treatment = factor(treatment, levels = c("C", "B", "F", "G", "FB", "GB", "GF", "FGB")),
-         biogeographic_zone = recode(siteID,
-                                     Ulvehaugen = "alpine",
-                                     Lavisdalen = "alpine",
-                                     Gudmedalen = "alpine",
-                                     Skjelingahaugen = "alpine",
-                                     Alrust = "sub.alpine",
-                                     Hogsete = "sub.alpine",
-                                     Rambera = "sub.alpine",
-                                     Veskre = "sub.alpine",
-                                     Fauske = "boreal",
-                                     Vikesland = "boreal",
-                                     Arhelleren = "boreal",
-                                     Ovstedalen = "boreal"),
-         prep_level = recode(siteID,
-                             Ulvehaugen = 1,
-                             Lavisdalen = 2,
-                             Gudmedalen = 3,
-                             Skjelingahaugen = 4,
-                             Alrust = 1,
-                             Hogsete = 2,
-                             Rambera = 3,
-                             Veskre = 4,
-                             Fauske = 1,
-                             Vikesland = 2,
-                             Arhelleren = 3,
-                             Ovstedalen = 4),
-         biogeographic_zone = factor(biogeographic_zone, levels = c("boreal", "sub.alpine", "alpine"))) %>%
-  filter(treatment %in% c("C", "B", "F", "G", "FGB")) %>%
-  ggplot(aes(x = date_time, y = soiltemperature, colour = treatment)) +
-  geom_line() +
-  facet_grid(biogeographic_zone ~ prep_level)
-
-
-##### save and load ibutton data #######
+##### save ibutton data #######
 write_csv(iButtonData, file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
 
+
+iButtonData <- read_csv(file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")

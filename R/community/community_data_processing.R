@@ -436,7 +436,10 @@ comp2 <- comp2 %>%
                          "Skjellingahaugen" = "Skjelingahaugen",
                          "Ovstedal" = "Ovstedalen"),
          blockID = paste0(substr(siteID, 1, 3), blockID)) %>%
+  # remove mossCov that should not be there
+  mutate(mossCov = if_else(Year != 2015 & Treatment %in% c("FGB", "FB", "GB", "B"), NA_real_, mossCov)) %>%
   select(year = Year, siteID, blockID, treatment = Treatment, turfID:litter, species, cover, functionalGroup, sumcover)
+
 
 # save secondary/derived data
 write_csv(comp2, file = "data/community/FunCaB_clean_composition_21-11-03.csv")

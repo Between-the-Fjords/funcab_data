@@ -2,9 +2,6 @@
 
 source("R/load_packages.R")
 
-library(lme4)
-library(broom)
-
 
 # use soil moisture differences!
 # read in soil moisture data FUNCAB point measurements
@@ -108,6 +105,10 @@ SM2018 <- SM2018_raw %>%
            turfID == "Fau4C" ~ 4,
            turfID == "Ulv2C" ~ 2,
            turfID == "Gud12C" ~ 12,
+           turfID == "Ovs1C" ~ 1,
+           turfID == "286 TTC" ~ 1,
+           turfID == "511 TTC" ~ 12,
+           is.na(blockID) & !is.na(SCBlock) ~ SCBlock,
            TRUE ~ blockID
          )) %>%
   mutate(plotID = if_else(turfID %in% c("C", "B", "G", "F", "GF", "GB", "FB", "FGB"), paste0(substr(siteID, 1, 3), blockID, Treatment), turfID),
@@ -121,13 +122,15 @@ SM2018 <- SM2018_raw %>%
                          "Ulvhaugen" = "Ulvehaugen",
                          "Skjellingahaugen" = "Skjelingahaugen",
                          "Ovstedal" = "Ovstedalen")) %>%
-  select(date = Date, siteID, blockID, treatment = Treatment, soilmoisture = SM, weather = Weather,  recorder = Recorder, turfID)
+  select(date = Date, siteID, blockID, plotID, treatment = Treatment, soilmoisture = SM, weather = Weather,  recorder = Recorder, turfID)
 
 
 soilmoisture <- bind_rows(SM201516, SM2017, SM2018) %>%
   # remove plotID from seedclim turfID
   mutate(turfID = if_else(!str_detect(turfID, "TT"), NA_character_, turfID),
-         date = ymd(date))
+         date = ymd(date),
+         turfID = if_else(turfID %in% c("C", "B", "G", "F", "GF", "GB", "FB", "FGB"), NA_character_, turfID)) %>%
+  filter(!is.na(soilmoisture))
 
 write_csv(soilmoisture, file = "data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
 
