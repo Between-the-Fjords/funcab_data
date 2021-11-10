@@ -49,6 +49,9 @@ meta <- biomass %>%
 
 ```
 
+### Biomass
+
+Total biomass removed in all years was `total_biomass`g
 
 
 ```{r biomass}
@@ -100,15 +103,39 @@ dailyTemperature %>%
 
 ``` {r community}
 
-community %>% 
-  filter(treatment %in% c("C", "FB", "GB")) %>% 
-  group_by(year, siteID, treatment, functionalGroup) %>% 
-  summarise(sumcover = mean(sumcover, na.rm = TRUE)) %>% 
-  ggplot(aes(x = year, y = sumcover, colour = treatment, linetype = functionalGroup)) +
+comm_data <- community %>%
+  select(year, siteID:mossCov, -turfID) %>%
+  filter(treatment %in% c("C", "FB", "GB", "GF"),
+         year != 2016) %>%
+  #filter(blockID == "Alr5") %>%
+  distinct() %>%
+  mutate(graminoidCov = if_else(year == 2015 & treatment %in% c("GB", "GF"), NA_real_, graminoidCov),
+         forbCov = if_else(year == 2015 & treatment %in% c("FB", "GF"), NA_real_, forbCov),
+         mossCov = if_else(year == 2015 & treatment %in% c("FB", "GB"), NA_real_, mossCov)) %>%
+  group_by(year, siteID, treatment) %>%
+  summarise_at(c("graminoidCov", "forbCov", "mossCov"), mean, na.rm = TRUE) %>%
+  pivot_longer(cols = c(graminoidCov, forbCov, mossCov), names_to = "fg", values_to = "fg_cover") %>%
+  pivot_wider(names_from = treatment, values_from = fg_cover) %>%
+  mutate(Forbs = GB - C,
+         Graminoids = FB - C,
+         Bryophytes = GF - C) %>%
+  select(-C, -FB, -GB, -GF) %>%
+  pivot_longer(cols = c(Forbs, Graminoids, Bryophytes), names_to = "FunctionalGroup", values_to = "Cover") %>%
+  filter(!is.na(Cover)) %>%
+  mutate(FunctionalGroup = factor(FunctionalGroup, levels = c("Graminoids", "Forbs", "Bryophytes")))
+
+community_plot <- comm_data %>%
+  left_join(meta %>% 
+              distinct(siteID, biogeographic_zone,prep_level), by = "siteID") %>% 
+  mutate(biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal"))) %>% 
+  ggplot(aes(x = year, y = Cover, colour = FunctionalGroup)) +
   geom_line() +
-  facet_wrap(~ siteID)
+  geom_hline(yintercept = 0, colour = "grey") +
+  scale_colour_manual(name = "Functional group", values = c("limegreen", "purple", "orange")) +
+  facet_grid(biogeographic_zone ~ prep_level) +
+  theme_set(theme_bw(base_size = 18))
 
-
+community_plot
 
 
 
