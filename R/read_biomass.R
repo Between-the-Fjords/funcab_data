@@ -106,6 +106,8 @@ biomass <- biomass_raw %>%
          plotID = paste0(block, treatment),
          treatment = recode(treatment, "FG" = "GF")
          ) %>%
+  # remove NAs
+  filter(!is.na(biomass)) %>%
   select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
 
 
