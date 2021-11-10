@@ -437,11 +437,7 @@ comp2 <- comp2 %>%
                          "Ovstedal" = "Ovstedalen"),
          blockID = paste0(substr(siteID, 1, 3), blockID)) %>%
   # remove mossCov that should not be there
-  mutate(mossCov = case_when(Year == 2017 & blockID == "Fau1" &Treatment == "FB" ~ NA_real_,
-                             Year == 2017 & blockID == "Hog3" &Treatment == "GB" ~ NA_real_,
-                             Year == 2017 & blockID == "Lav4" &Treatment == "FB" ~ NA_real_,
-                             Year == 2017 & blockID == "Ram5" &Treatment == "GB" ~ NA_real_,
-                             TRUE ~ mossCov)) %>%
+  mutate(mossCov = if_else(Year != 2015 & Treatment %in% c("FGB", "FB", "GB", "B"), NA_real_, mossCov)) %>%
   select(year = Year, siteID, blockID, treatment = Treatment, turfID:litter, species, cover, functionalGroup, sumcover)
 
 
