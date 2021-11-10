@@ -63,6 +63,7 @@ vignettes/*.pdf
 *.RData.Tmp1
 *.rds
 *.bib
+*.#00
 
 #rasters & shapefiles
 *.bil
