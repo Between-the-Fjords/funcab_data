@@ -198,4 +198,4 @@ iButtonData <- iButtonData %>%
 
 
 ##### save ibutton data #######
-write_csv(iButtonData, file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
+write_csv(iButtonData, file = "data/climate/FunCaB_clean_soiltemperature_2015-2016.csv")
