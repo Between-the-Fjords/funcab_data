@@ -17,7 +17,7 @@ description_table <- read_excel("R/data_dic/data_description.xlsx") %>%
 #************************************************************************
 ### 1 BIOMASS
 
-biomass <- read_csv("data/biomass/FunCaB_biomass_clean_2015-2021.csv")
+biomass <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv")
 
 
 biomass_dic <- make_data_dictionary(data = biomass,
@@ -28,7 +28,7 @@ biomass_dic <- make_data_dictionary(data = biomass,
 #************************************************************************
 #### 2 MICROCLIMATE DATA ####
 # Temperature
-soil_temperature <- read_csv(file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
+soil_temperature <- read_csv(file = "data/climate/FunCaB_clean_soiltemperature_2015-2016.csv")
 
 soil_temperature_dic <- make_data_dictionary(data = soil_temperature,
                                              description_table = description_table,
@@ -51,7 +51,7 @@ soilmoisture_dic <- make_data_dictionary(data = soilmoisture,
 
 ### 3 COMMUNITY DATA
 
-community <- read_csv("data/community/FunCaB_clean_composition_21-11-03.csv")
+community <- read_csv("data/community/FunCaB_clean_composition_.csv")
 
 
 community_dic <- make_data_dictionary(data = community,

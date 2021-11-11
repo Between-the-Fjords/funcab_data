@@ -98,6 +98,19 @@ dailyTemperature %>%
   facet_wrap(~ siteID) +
   theme_bw()
 
+
+
+# data checking
+soilmoisture %>%
+  left_join(meta, by = ) %>% 
+  mutate(climate = paste0(biogeographic_zone, prep_level),
+         climate = factor(climate, levels = c("boreal1", "boreal2", "boreal3", "boreal4", "sub.alpine1", "sub.alpine2", "sub.alpine3", "sub.alpine4", "alpine1", "alpine2", "alpine3", "alpine4"))) %>%
+  ggplot(aes(x = treatment, y = soilmoisture, colour = siteID)) +
+  geom_point() +
+  facet_grid(year(date) ~ climate)
+
+
+
 ```
 
 

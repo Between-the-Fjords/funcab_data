@@ -119,7 +119,7 @@ biomass <- biomass_raw %>%
   select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
 
 
-write_csv(biomass, file = "data/biomass/FunCaB_biomass_clean_2015-2021.csv")
+write_csv(biomass, file = "data/biomass/FunCaB_clean_biomass_2015-2021.csv")
 
 ### DATA VALIDATION
 # find duplicates
