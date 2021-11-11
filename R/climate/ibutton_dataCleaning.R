@@ -199,6 +199,3 @@ iButtonData <- iButtonData %>%
 
 ##### save ibutton data #######
 write_csv(iButtonData, file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
-
-
-iButtonData <- read_csv(file = "data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
