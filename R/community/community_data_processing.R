@@ -442,5 +442,5 @@ comp2 <- comp2 %>%
 
 
 # save secondary/derived data
-write_csv(comp2, file = "data/community/FunCaB_clean_composition_21-11-03.csv")
+write_csv(comp2, file = "data/community/FunCaB_clean_composition_2015-2018.csv")
 
