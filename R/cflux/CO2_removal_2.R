@@ -4,39 +4,10 @@
 source("R/load_packages.R")
 library(ggthemes)
 library(lattice)
-library(broom)
-
-#source functions for import/proces and calculation of CO2 flux
-source("R/cflux/functions/import_process_CO2data_2017.R")
-source("R/cflux/functions/CO2flux_calculation.R")
-source("R/cflux/functions/CO2_plot.R")
-source("R/cflux/functions/import_process_SQlogger_2017.R")
-
-#give exact location of R functions.R file
-#source("O:\\FunCab\\Data\\FunCaB\\Other\\R_functions\\Highstat_library.R")
 
 
-#import all pre removal datafiles from 2017
-sites.data.2017Li1400 <- read.sitefiles("data/cflux/Cflux data/Li1400files2017new.xlsx") #!Li1400 dataflagged outliers+new times
-
-sites.data.2017SQ <- read.sitefiles.SQ("data/cflux/Cflux data/SQfiles2017new.xlsx") #!SQ dataflagged outliers+new time
 
 
-# check number of columns of metadata
-#sapply(sites.data.2017Li1400, function(x) ncol(x$meta))
-#sapply(sites.data.2017Li1400, function(x) (x$meta$NA == NULL))
-
-# Run fluxcalculation on all datafiles of 2017
-#fluxcalc(sites.data.2017Li1400[[1]]) #calculate flux 1 plot
-CO2_Li1400_2017<-do.call(rbind, lapply(sites.data.2017Li1400, fluxcalc)) #calculate flux for all pre-removal data 2015
-CO2_SQ_2017<-do.call(rbind, lapply(sites.data.2017SQ, fluxcalc)) #calculate flux for all data 2016
-CO2_Li1400_2017$PAR_est<- as.numeric(CO2_Li1400_2017$PAR)
-CO2_SQ_2017$PAR_est<- as.numeric(CO2_SQ_2017$PAR)
-CO2_Li1400_2017$PAR<- NULL
-CO2_SQ_2017$PAR<- NULL
-
-# bind together 2015 and 2016 data
-CO2_2017<- rbind(CO2_Li1400_2017, CO2_SQ_2017)
 
 CO2_2017<- CO2_2017%>%
   mutate(ToD = format(starttime, format="%H"),
@@ -69,7 +40,7 @@ CO2_2017 <- CO2_2017 %>%
   mutate(Block = as.character(Block))
 
 #### load soilmoisture data 2017 ####
-Soil_moisture<- read.table("\\\\eir.uib.no\\home6\\ial008\\FunCab\\Data\\soil moisture\\Soilmoisture2017.txt", header = TRUE, dec = ",")
+Soil_moisture<- read.table("climate\\Data\\soil moisture\\Soilmoisture2017.txt", header = TRUE, dec = ",")
 
 Soil_moisture<- Soil_moisture %>%
   mutate(Site = recode(Site, ULV = "Ulv", ALR = "Alr", FAU = "Fau", LAV = "Lav", HOG = "Hog", VIK = "Vik", GUD = "Gud", RAM = "Ram", ARH =           "Arh", SKJ = "Skj", VES = "Ves", OVS = "Ovs"))%>%
@@ -85,13 +56,29 @@ CO2_2017<- left_join(CO2_2017, Soil_moisture, by = c("Date", "TurfID"))
 #seperate L and D measurements and merge them in new file with new column GPP, selecting data with r2>=.9
 CO2_2017_NEE<-subset(CO2_2017, cover== "L" & rsqd>=.8 | cover== "L" & rsqd<=.2 )
 CO2_2017_RECO<-subset(CO2_2017, cover== "D" & rsqd>=.8 | cover== "D" & rsqd<=.2 )
-CO2_2017_RECO$Reco<-CO2_2017_RECO$nee*-1
+CO2_2017_RECO<-subset(CO2_2017_RECO, nee > 0) #96 measurements removed
+CO2_2017_RECO$Reco<-CO2_2017_RECO$nee
 CO2_2017_RECO$tempK<-CO2_2017_RECO$temp+273.15
 CO2_2017_GPP<- inner_join(CO2_2017_NEE, CO2_2017_RECO, by=c("Date", "Site", "Block", "Treatment", "ToD", "Tlevel", "Plevel" ))
-CO2_2017_GPP$GPP<-CO2_2017_GPP$nee.x- CO2_2017_GPP$nee.y #NEE-Reco
-CO2_2017_GPP<-subset(CO2_2017_GPP, GPP>0 & PAR.correct.x >200)
+CO2_2017_GPP$GPP<-CO2_2017_GPP$nee.x- CO2_2017_GPP$nee.y #NEE-Reco = GPP
+CO2_2017_GPP<-subset(CO2_2017_GPP, GPP<0) # 164 measurements removed
 
 #write.csv(CO2_2017_GPP, file = "O:\\FunCab\\Data\\FunCaB\\CO2\\CO2_GPP_Removal2017.csv")
+
+CO2_2017_GPP$Treatment<- factor(CO2_2017_GPP$Treatment, levels = c("C", "B", "G", "F", "GB", "FB", "GF", "FGB"))
+
+Reco<-ggplot(CO2_2017_GPP, aes(Treatment, Reco, fill = Treatment))+
+  geom_boxplot()+
+  facet_grid(Tlevel~Plevel)+
+  theme(legend.position = "none")
+
+GPP<-ggplot(CO2_2017_GPP, aes(Treatment, GPP, fill = Treatment))+
+  geom_boxplot()+
+  facet_grid(Tlevel~Plevel)+
+  theme(legend.position = "none")
+
+cowplot::plot_grid(Reco, GPP)
+
 
 #### Keep all measurements
 CO2_2017_data<- CO2_2017_GPP%>%
