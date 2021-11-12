@@ -238,10 +238,10 @@ import.everything<-function(metaFile, loggerFile, tempFile){
 }
 
 
-
 #importing all site file combination from a sitefile
 read.sitefiles<-function(file){
-  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) #read excel file
+  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) %>%
+    mutate(across(ends_with(".data"), ~ paste0("data/cflux/", .x))) #read excel file
   sites$dates<- as.Date(sites$dates, format="%d.%m.%y")
   sites<-sites[!is.na(sites$site), ] # remove rows with no data
   #import data from files of site.files
