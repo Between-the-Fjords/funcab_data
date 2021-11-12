@@ -65,6 +65,7 @@ read.logger<-function(file){
 #plot(PAR$datetime, PAR$value)
 #plot(H2O$datetime, H2O$value)
 
+#file <- "CO2/Data/CO2_metadata2017/01082017_ULV_ch1_1.txt"
 # import metadata of site
 read.metadata<-function(file){
   metdat<-read.table(file, header=TRUE, fill=TRUE, stringsAsFactors = FALSE)
@@ -239,19 +240,16 @@ import.everything<-function(metaFile, loggerFile, tempFile){
 }
 
 
-#file <- "data/cflux/Cflux data/Li1400files2017new.xlsx"
-#r <- sites[1,]
+# file <- "CO2/Data/datafiles_2016_cleaned.xlsx"
+# r <- sites[1,]
 #importing all site file combination from a sitefile
 read.sitefiles<-function(file){
-  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) %>%  #read excel file
-    mutate(meta.data = str_replace(meta.data, "CO2\\/Data\\/CO2_metadata2017\\/", "data\\/cflux\\/Metadata\\/Metadata_2017\\/RawData\\/"),
-           logger.data = str_replace(logger.data, "CO2\\/Data\\/2017Li1400\\/", "data\\/cflux\\/Cflux data\\/Cfluxdata_Li1400_2017\\/"),
-           temp.data = str_replace(temp.data, "CO2\\/Data\\/2017TEMP\\/", "data\\/cflux\\/Temp data\\/Tempdata_2017\\/"),
-           temp.data = str_replace(temp.data, "LI14000T", "LI1400T"))
+  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) %>%
+    mutate(across(ends_with(".data"), ~ paste0("data/cflux/", .x)))  #read excel file
   sites$dates<- as.Date(sites$dates, format="%d.%m.%y")
   sites<-sites[!is.na(sites$site), ] # remove rows with no data
   #import data from files of site.files
-  sites.data<-lapply(1:nrow(sites), function(i){
+  sites.data<-lapply(1:nrow(sites), function(i){ print(i)
     r<-sites[i, ]
     #   print(r)
     import.everything(metaFile = r$meta.data, loggerFile = r$logger.data, tempFile = r$temp.data)

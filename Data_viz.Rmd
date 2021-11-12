@@ -13,12 +13,12 @@ source("R/load_packages.R")
 biomass <- read_csv("data/biomass/FunCaB_biomass_clean_2015-2021.csv")
 iButtonData <- read_csv("data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
 community <- read_csv("data/community/FunCaB_clean_composition_21-11-03.csv")
+CO2_final_1517 <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
 
 meta <- biomass %>% 
-  distinct(siteID, treatment) %>% 
-  mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB")),
-         biogeographic_zone = recode(siteID,
+  distinct(siteID) %>% 
+  mutate(biogeographic_zone = recode(siteID,
                              Ulvehaugen = "alpine",
                              Lavisdalen = "alpine",
                              Gudmedalen = "alpine",
@@ -58,6 +58,7 @@ Total biomass removed in all years was `total_biomass`g
 
 biomass_plot <-  biomass %>% 
   left_join(meta, by = c("siteID", "treatment")) %>% 
+   mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB"))) %>% 
   ggplot(aes(x = treatment, y = biomass, fill = removed_fg)) +
   geom_col() +
   scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
@@ -155,5 +156,21 @@ community_plot
 ```
 
 
+### Carbon Fluxes
 
+``` {r cflux}
+
+
+CO2_final_1517 %>%
+  filter(year == 2017) %>%
+  left_join(meta, by = c("siteID")) %>%
+  mutate(treatment = factor(treatment, levels = c("C", "B", "F", "G", "FB", "GB", "GF", "FGB")),
+         biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal"))) %>%
+  ggplot(aes(y = gpp, treatment)) +
+  geom_boxplot() +
+  facet_grid(biogeographic_zone ~ prep_level)
+
+
+
+```
 

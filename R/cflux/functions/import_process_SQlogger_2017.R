@@ -173,10 +173,8 @@ import.everything.SQ<-function(metaFile, loggerFile, tempFile){
 #r <- sites[1,]
 #importing all site file combination from a sitefile
 read.sitefiles.SQ<-function(file){
-  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) %>%  #read excel file
-    mutate(meta.data = str_replace(meta.data, "CO2\\/Data\\/CO2_metadata2017\\/", "data\\/cflux\\/Metadata\\/Metadata_2017\\/RawData\\/"),
-           logger.data = str_replace(logger.data, "CO2\\/Data\\/2017SQ\\/", "data\\/cflux\\/Cflux data\\/Cfluxdata_SQ_2017\\/"),
-           temp.data = str_replace(temp.data, "CO2\\/Data\\/2017TEMP\\/", "data\\/cflux\\/Temp data\\/Tempdata_2017\\/"))
+  sites<-read_excel(file, sheet=1, col_names=TRUE, col_type= NULL) %>%
+    mutate(across(ends_with(".data"), ~ paste0("data/cflux/", .x))) #read excel file
   sites$dates<- as.Date(sites$dates, format="%d.%m.%y")
   sites<-sites[!is.na(sites$site), ] # remove rows with no data
   #import data from files of site.files
