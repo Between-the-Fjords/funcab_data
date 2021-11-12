@@ -106,6 +106,42 @@ community %>%
   arrange(functionalGroup, mean) %>% print(n = Inf)
 
 
+CO2_final_1517 <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
+
+dim(CO2_final_1517)
+
+CO2_final_1517 %>% group_by(year) %>% count()
+
+CO2_final_1517 %>% group_by(year, plotID) %>% summarise(n = n()) %>% ungroup() %>% group_by(year) %>%  summarize(median(n), min(n), max(n))
+
+# Light measurements
+CO2_final_1517 %>%
+  summarize(min(gpp),
+            max(gpp),
+            se_gpp = sd(gpp)/sqrt(n()),
+            min(PAR),
+            max(PAR),
+            se_PAR = sd(PAR)/sqrt(n()),
+            min(tempK - 273.15),
+            max(tempK - 273.15),
+            se_tempK = sd(tempK - 273.15)/sqrt(n()))
 
 
+# Dark measurements
+CO2_final_1517 %>%
+  summarize(min(Reco),
+            max(Reco),
+            se_Reco = sd(Reco)/sqrt(n()),
+            min(tempK_Reco - 273.15),
+            max(tempK_Reco - 273.15),
+            se_tempK = sd(tempK_Reco - 273.15)/sqrt(n()))
+
+
+CO2_final_1517 %>%
+  group_by(treatment) %>%
+  summarize(mean(gpp),
+            se_gpp = sd(gpp)/sqrt(n()),
+            mean(Reco),
+            se_Reco = sd(Reco)/sqrt(n())) %>%
+  arrange(`mean(Reco)`)
 
