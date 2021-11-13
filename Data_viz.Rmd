@@ -10,8 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 source("R/load_packages.R")
 
-biomass <- read_csv("data/biomass/FunCaB_biomass_clean_2015-2021.csv")
-iButtonData <- read_csv("data/climate/FunCaB_clean_soiltemperature_2015-2017.csv")
+biomass <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv")
 community <- read_csv("data/community/FunCaB_clean_composition_21-11-03.csv")
 CO2_final_1517 <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
