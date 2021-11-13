@@ -34,9 +34,9 @@ get_file(node = node,
 #          remote_path = "4_Seedling_recruitment")
 
 # 5 Carbon fluxes
-# get_file(node = node,
-#          file = "FunCaB_clean_Cflux_2015-2017.csv",
-#          remote_path = "5_Carbon_fluxes")
+get_file(node = node,
+         file = "FunCaB_clean_Cflux_2015-2017.csv",
+         remote_path = "5_Carbon_fluxes")
 
 # 6 Reflectance
 # get_file(node = node,

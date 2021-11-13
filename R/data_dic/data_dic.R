@@ -51,7 +51,7 @@ soilmoisture_dic <- make_data_dictionary(data = soilmoisture,
 
 ### 3 COMMUNITY DATA
 
-community <- read_csv("data/community/FunCaB_clean_composition_.csv")
+community <- read_csv("data/community/FunCaB_clean_composition_2015-2018.csv")
 
 
 community_dic <- make_data_dictionary(data = community,
@@ -71,11 +71,22 @@ community_dic <- make_data_dictionary(data = community,
 
 #### 5 CARBON FLUX DATA ####
 
-#cflux <- read_csv("phenology/clean_data/Community_phenology_2014-2015.csv")
+cflux <- read_csv("data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
-#cflux_dic <- make_data_dictionary(data = cflux,
-    #                             description_table = description_table,
-     #                                 table_ID = NA_character_)
+cflux_dic <- make_data_dictionary(data = cflux,
+                                  description_table = description_table,
+                                  table_ID = "cflux")
+
+
+#************************************************************************
+
+#### 6 REFLECTANCE ####
+
+# reflectance <- read_csv("data/cflux/")
+#
+# reflectance_dic <- make_data_dictionary(data = reflectance,
+#                                   description_table = description_table,
+#                                   table_ID = NA_character_)
 
 
 
@@ -83,10 +94,11 @@ community_dic <- make_data_dictionary(data = community,
 
 ##merge all dics together to one xlsx, with each parameter as a single sheet
 
-write_xlsx(list(biomass = biomass_dic,
-                community = community_dic,
+write_xlsx(list(biomass_removal = biomass_dic,
+                plant_community = community_dic,
                 soil_temperature = soil_temperature_dic,
-                soil_moisture = soilmoisture_dic),
+                soil_moisture = soilmoisture_dic,
+                cflux = cflux_dic),
            path = "R/data_dic/data_dictionary.xlsx")
 
 
