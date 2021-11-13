@@ -106,6 +106,33 @@ CO2_SQ_2017$PAR <- NULL
 CO2data_2017 <- rbind(CO2_Li1400_2017, CO2_SQ_2017) %>%
   mutate(soilT = as.numeric(str_replace(soilT, ",", "\\.")),
          removal = "post") %>%
+  # fix flag, comment and weather that ended up in wrong column
+  mutate(comment = if_else(flag == "PAR", "correct_PAR", comment),
+         flag = if_else(flag == "PAR", NA_character_, flag),
+         comment = if_else(flag == "H2O", "ADJUST H2O", comment),
+         flag = if_else(flag == "H2O", NA_character_, flag),
+         comment = if_else(flag == "CO2", "START CO2", comment),
+         flag = if_else(flag == "CO2", NA_character_, flag),
+         weather = case_when(weather == "Almost" & comment == "night" ~ "Almost night",
+                             weather == "Light" & comment == "rain" ~ "Light rain",
+                             weather == "Slight" & comment == "sun" ~ "Slight sun",
+                             weather == "Sunny" & comment == "&Breezy" ~ "Sunny&Breezy",
+                             weather == "Partly" & comment == "cloudy" ~ "Partly cloudy",
+                             weather == "cloudy" & comment == "rain" ~ "cloudy rain",
+                             weather == "very" & comment == "windy" ~ "very windy",
+                             weather == "Partly" & comment == "cloudy" ~ "Partly cloudy",
+                             weather == "Partly" & comment == "cloudy" ~ "Partly cloudy",
+                             flag == "sun" ~ "Cloudy to sun",
+                             flag == "Clouds" ~ "Sunny with Clouds",
+                             flag == "breezy" ~ "Sunny and breezy",
+                             flag == "light_rain" ~ "very windy light_rain",
+                             TRUE ~ weather),
+         comment = case_when(flag == "low_battery" ~ "low_battery",
+                             flag == "check_PAR" ~ "check_PAR",
+                             flag == "light_rain" ~ "light_rain",
+                             TRUE ~ comment),
+         comment = if_else(comment %in% c("to", "and", "-->", "&Breezy", "with", "windy"), NA_character_, comment),
+         flag = if_else(flag %in% c("sun", "Clouds", "breezy"), NA_character_, flag)) %>%
   # Correct PAR values for measurements when PAR sensor was broken with estimated value based on recorded PAR value in metadata: chamber 1 dates 03.07-06.07
   # if cover = "L" & PAR > 200 then use PAR_est value, if cover D and high PAR, correct to estimated value
   mutate(PAR = if_else(chamber == "1" & site == "ALR" | chamber == "1" & site == "FAU", PAR_est, PAR)) %>%
@@ -214,8 +241,8 @@ CO2_final_1517 <- crossing(
   # nee - Reco = GPP, with GPP being negative for uptake
   mutate(gpp = nee - Reco) %>%
   # get rid off positive GPP values
-  filter(gpp < 0)
-
+  filter(gpp < 0) %>%
+  relocate(gpp, .after = nee)
 
 write_csv(CO2_final_1517, file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
