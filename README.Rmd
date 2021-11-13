@@ -1,6 +1,7 @@
 ---
 output: github_document
 fig_caption: yes
+always_allow_html: true
 ---
 
 
@@ -10,246 +11,222 @@ knitr::opts_chunk$set(collapse = TRUE,
                       message = FALSE, 
                       warning = FALSE, 
                       eval = TRUE,
-                      echo=FALSE)
+                      echo = FALSE)
 library("tidyverse")
 library("lubridate")
 library("readxl")
 library("tibble")
 library("dataDownloader")
-library("vegan")
-#library("ggvegan")
-library("patchwork")
+library("kableExtra")
 
 
 theme_set(theme_bw(base_size = 12))
 
 
 # Data
-#source("R/data_dic/data_dic.R")
+source("R/data_dic/data_dic.R")
+
+biomass <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv")
+community <- read_csv("data/community/FunCaB_clean_composition_2015-2018.csv")
+#cflux <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
 
+meta <- biomass %>% 
+  distinct(siteID) %>% 
+  mutate(biogeographic_zone = recode(siteID,
+                             Ulvehaugen = "alpine",
+                             Lavisdalen = "alpine",
+                             Gudmedalen = "alpine",
+                             Skjelingahaugen = "alpine",
+                             Alrust = "sub.alpine",
+                             Hogsete = "sub.alpine",
+                             Rambera = "sub.alpine",
+                             Veskre = "sub.alpine",
+                             Fauske = "boreal",
+                             Vikesland = "boreal",
+                             Arhelleren = "boreal",
+                             Ovstedalen = "boreal"),
+        prep_level = recode(siteID,
+                               Ulvehaugen = 1,
+                               Lavisdalen = 2,
+                               Gudmedalen = 3,
+                               Skjelingahaugen = 4,
+                               Alrust = 1,
+                               Hogsete = 2,
+                               Rambera = 3,
+                               Veskre = 4,
+                               Fauske = 1,
+                               Vikesland = 2,
+                               Arhelleren = 3,
+                               Ovstedalen = 4),
+        climate = paste0(biogeographic_zone, prep_level),
+        climate = factor(climate, levels = c("boreal1", "boreal2", "boreal3", "boreal4", "sub.alpine1", "sub.alpine2", "sub.alpine3", "sub.alpine4", "alpine1", "alpine2", "alpine3", "alpine4")))
 
 ```
 
-This is the git repository for the FunCaB and FUNDER projects and base for the data paper:
-xxx et al. (not written yet). FunCaB & FUNDER
+This is the git repository for the FunCaB project and base for the data paper:
+Vandvik et al. (2022). Data descriptor: The role of functional group interactions in mediating climate change impacts on the Carbon dynamics and biodiversity of alpine ecosystems.
 
 
-# INTRODUCTION
 
-...
+## Summary
 
-```{r proposal_figure, fig.cap= "Figure 1. Climate, Functional groups and soil-foodweb."}
-knitr::include_graphics("Figures/Figure_1.jpg")
+Removal experiments allow disentangling of direct effects of climate from indirect effects, resulting from changes in interactions among species or functional groups with climate.
+Across the Vestland Climate Grid (VCG), twelve sites in a climate grid spanning 4°C in growing season temperature and 2000 mm in mean annual precipitation in Western Norway, we conducted a fully factorial plant functional group removal experiment (graminoids, forbs, bryophytes).
+Over six years, we recorded biomass, soil microclimate, plant community composition, seedling recruitment, ecosystem carbon fluxes, and reflectance in 384 experimental treatment and control plots.
+The datasets consists of 5215 biomass records, 1,084,970 soil temperature records, 4,412 soil moisture records, 14,044 plant records covering 191 taxa,  3,696  carbon fluxes measurements, and XXX reflectance measurements.
+The data can be combined with other data collected within the VCG on longer-term climate data and plant population, community, ecosystem, and functional trait data. 
+
+
+## Datasets
+
+```{r datasets}
+
+tibble(Number = c("i", "ii", "", "iii", "iv", "v", "vi"),
+       Variable = c("Biomass removal", "Soil microclimate", "", "Plant community composition", "Seedling recruitment", "Ecosystem carbon fluxes", "Reflectance"),
+       Period = c("2015 - 2021", "2015 - 2018", "2015 - 2016", "2015 - 2019", "2018 - 2019", "2015 - 2017", "2019 - 2021"),
+       Filename = c("FunCaB_clean_biomass_2015-2021.csv", "FunCaB_clean_soilMoisture_2015-2018.csv", "FunCaB_clean_soiltemperature_2015-2016.csv", "FunCaB_clean_composition_2015-2018.csv", "FunCaB...", "FunCaB_clean_Cflux_2015-2017.csv", "FunCaB...")) %>% 
+  kbl()
 ```
 
 
-The specific research questions of the projects are:
 
-...
+**Project description**, **data dictionaries**, and the overview of all **data sets** are in the data paper (REF).
 
+The **raw** and **clean data** from the project are stored and available on **OSF**: https://osf.io/4c5v2/
 
-# METHODS
-
-## Research site
+All **R code** to clean and curate the data is on **GitHub repository**: https://github.com/Between-the-Fjords/funcab_data
 
 
 
-```{r exp_design, eval = FALSE, fig.cap= "Figure 2: ..."}
-knitr::include_graphics('Pics/ExperimentalDesign.jpg')
+### Naming conventions across datasets
+
+This is the naming convention used across the datasets and can be used to link the datasets.
+These variables are also used in the datasets from the Vestland Climate Grid (VCG) and can be used to join these datasets.
+Note that the turfID contains information about the control plots from the VCG.
+
+| Data or file  | Description of naming convention  | Example  |
+|:---|:---|:---|
+| File names  | Project_status_Dataset_Year.extension  | FunCaB_clean_biomass_2015-2021.csv  |
+| year  | Year of observation | 2015 |
+| date  | Date of observation | yyyy-mm--dd |
+| date_time  | Date and time of observation | yyyy-mm-dd hh-mm-ss |
+| siteID  | Unique siteID | Vikesland |
+| blockID  | Unique blockID as a combination of siteID and block number | Arh3  |
+| plotID  | Unique plotID as a combination of siteID, block and treatment | Arh3FGB  |
+| treatment  | Treatment of functional group removal indicating which groups have been removed; F = forbs, G = graminoids, B = Bryophytes | C, B, F, G, FB, GB, GF, FGB |
+| turfID  | Unique turfID corresponding to the Vestland Climate Grid control plots | Arh3FGB  |
+| species  | Vascular plant taxon names follow for Norway (Lid J & Lid, 2010). The full taxa is written using genus and species with a blank. | Rancunculus acris|
+| responses  | response variable | cover, biomass, Reco, etc. |
+
+
+
+## Data dictionaries
+
+### Biomass removal
+
+### Biomass
+
+
+```{r biomass}
+
+biomass_plot <-  biomass %>% 
+  left_join(meta, by = c("siteID")) %>% 
+   mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB"))) %>% 
+  ggplot(aes(x = treatment, y = biomass, fill = removed_fg)) +
+  geom_col() +
+  scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
+  labs(x = "Removed functional group", y = "Biomass in g") +
+  facet_grid(year ~ climate) +
+  theme_bw() +
+  theme(legend.position="top")
+
+biomass_plot
+
 ```
 
 
-
-
-
-## Experimental design and treatments (FunCaB)
-
-
-
-
-
-### Field site maintenance
-To simulate the natural grazing regime at each site, and to avoid accumulation of biomass, all biomass within the fence was removed at the end of each field season.
-Note that the biomass removal, is not the same as the grazing treatment (see above) and biomass harvesting (see below).
-The grazing treatment is applied to each plot (50 x 50 cm) in early and peak season, while the biomass harvesting occurs at the end of the last field season (25 x 25cm plot).
-The site maintenance has to be done after biomass harvesting.
-
-Climate data was downloaded at start and the end of each field season.
- 
- 
-
-## Data management
-
-### Location of data and supporting information 
-
-**Project description**, **data dictionaries**, and the overview of all **data sets** are in this readme file you are reading, available on GitHub: https://github.com/Between-the-Fjords/funder_data
-
-The **data** from the project is stored and available on OSF: https://osf.io/tx9r2/
-
-All R code for the analyses from the Norwegian project is on GitHub: https://github.com/Between-the-Fjords/funder_data
-
-General information about the project are available on the project webpage:
-https://betweenthefjords.w.uib.no/three-d/
-
-
-### Naming conventions used for the data
-
-| Data or file  | Description of naming convention  |
-|:---|:---|
-| Readme files  | Project_Experiment_Dataset_Year_Readme.extension  |
-| species  | Vascular plant taxon names follow for Norway Lid & Lid(Lid J & Lid, 2010). The full taxa is written using genus and species with a blank. |
-| Project  | FunCaB or FUNDER  |
-| Datasets  | Project_Experiment_Dataset_Year: FunCaB_plant_community_2019  |
-| siteID  | Name of the site; Vikesland, Alrust,... |
-| blockID  | block number, numeric value  |
-| treatment  | Treatment of functional group removal indicating which groups have been removed; F = forbs, G = graminoids, B = Bryophytes |
-| removal_fg  | Functional group that has been removed; F = forbs, G = graminoids, B = Bryophytes  |
-| responses  | response variable, e.g. cover, biomass, Reco, etc. |
-
-
-
-## Data collection and measurements
-
-The following datasets were collected and are available : https://osf.io/tx9r2/
-
-| Variable  | Time period  | Level | Data file  |
-|:---|:---|:---|:---|
-| **Site** |  |  |  |
-| .. | ..  | ..  | ...  |
-| **Vegetation** |  |  |  |
-| Species cover  | 2015 - 2019  | Plot  | ...  |
-| Species presence  | 2015 - 2019  | Subplot  | ...  |
-| Vegetation height  | 2015 - 2019  | Plot  | ...  |
-| Functional group biomass  | 2015 - 2021  | Plot  | FunCaB_Biomass_22015-020.csv  |
-| Reflectance  | 2021  | Plot  | ...  |
-| **C-flux** |  |  |  |
-| Ecosystem fluxes  | 2015-2018  | Plot  | ...  |
-| **Soil** |  |  |  |
-| Soil depth  | 2019  | Plot  | THREE-D_PlotLevel_Depth_2019.csv  |
-| Soil texture  | 2019  | Site  | THREE-D_Soil_2019-2020.csv  |
-| Bulk density  | 2019  | Plot  | THREE-D_Soil_2019-2020.csv  |
-| Soil pH  | 2019  | Site  | THREE-D_Soil_2019-2020.csv  |
-| Soil organic matter  | 2019  | Block  | THREE-D_Soil_2019-2020.csv  |
-| Soil C and N stocks  | 2019 - 2020  | Site  | THREE-D_Soil_2019-2020.csv  |
-| Soil nutrients  | 2021  | Site  | xxx  |
-| Decomposition | 2021  | Plot  | xxx  |
-| **Climate** |  |  |  |
-| Air, ground and soil temperature  | 2019 - 2020  | Plot  | THREE-D_TomstLogger_2019_2020.csv  |
-| Soil moisture  | 2019 - 2020  | Plot  | THREE-D_TomstLogger_2019_2020.csv  |
-| Gridded climate  | 2009 - 2019  | Site  | THREE_D_Gridded_DailyClimate_2009-2019.csv  |
-
-
-
-### Plant species composition
-Plant species composition was recorded annually at peak growing season, in 2019 and 2021.
-In 2020, not all the plots were surveyed due to fieldwork restrictions related to the corona pandemic.
-Each 25 x 25 cm plots was divided into 25 subplots (Figure 3).
-The recording started in the upper left corner, and went row by row, from left to the right.
-In each subplot and for each species we recorded presence as sterile (1), dominant (D; covered more than 50% of the sub-plot), fertile (F; bud, flower, seeds), juvenile (J; not yet adult), or a seedling (S; cotyledons still attached; S).
-For each species, the highest level was recorded, i.e. if there was a seedling and an adult, the adult was recorded.
-So, the number of juveniles and seedlings were only consistently recorded if these were the only individuals present in the subplot of that species.
-We also noted the presence of seedlings in each subplot, but they were not identified to species.
-In addition, we recorded the percentage cover of vascular plants (only total), bryophytes, lichen, litter, bare ground and bare rock in each subplot.
-
-In 2020, species composition was recorded fully only for the control and warmed plots receiving no nitrogen (block 1, 4, and 10).
-For the rest of the plots, only percentage cover by functional group was recorded.
-
-In each 25 x 25 cm plot, the total percentage cover of each vascular plant species was estimated visually.
-At 4 points in the grid, average vegetation height and moss layer depth was measured using a ruler.
-For each turf, date, originSite, originBlockID, originPlotID, weather, scribe and recorder and remarks were noted down. A picture was taken from each plot.
-
-For the Norwegian data, the nomenclature follows Lid & Lid(2010).
-Each species of vascular plant was classified by functional type (graminoid, forb, woody) and biogeographic affinity based on information given in Lid & Lid(2010).
-Specifically, species reported to be present in the Nemoral but lacking from the Low- Mid- or High Alpine are classified as “lowland”, species present in the Alpine but lacking from the Nemoral to South Boreal are classified as “alpine”, whereas all other species (i.e., species that span the gradient from Nemoral to Alpine zones) are classified as “generalist”. 
-Write something about China…
-
-*Data handling:* After each field season the data was checked vizually by plotting the cover of each species per plot over time.
-This allowed to compare change in species composition over time and check for errors.
-Obvious errors in species identification was corrected after comparing these plots.
-
-
-
-
-### Reflectance
-Reflectance (greenness) was measured several times during the season in each plot from 2020-2021 (2022).
-The greenseeker measures in an elliptical shape, and the light source and receiver should be located in the middle of the plot.
-The green seeker is placed 60 cm above the plot and parallel to the ground, using a ruler.
-Two measurements are done per plot perpendicular to each other to account for the elliptical shape.
-
-*Data handling:* The data was visually checked for unrealistic values, which were corrected or removed if there was a valid reason (e.g. shade or snow on the plot).
-Unrealistic values, where the comma was forgotten, were divided by 100.
-
-
-
-### Aboveground biomass
-
-Biomass was harvested 1-2 times per growing season....
-
-
-The biomass was then dried at 65°C for 72 hours and weighed.
-
-*Data handling:* The data was visually checked for unrealistic values, which were corrected or removed if there was a valid reason.
-
-
-### Decomposition
-
-
-
-
-### Ecosystem fluxes
-Net ecosystem exchange (NEE) and ecosystem respiration (ER) were measured on the field while gross ecosystem production (GEP) is calculated as GEP = NEE - ER.
-Carbon fluxes are measured with a closed loop chamber system connected to an infrared gaz analyser (INGRA; Li-840A, Li-cor).
-The plexiglas chamber (25x25x40 cm) is connected to the INGRA with plastic tubes (inlet and outlet, 3m long and 4mm diameter each).
-A filter prevents water droplets and small particules from entering the INGRA and an air pump ensures a flow of 1L/mn.
-The chamber is equiped with a fan to mix the air, a thermocouple (Pt1000, Delta-T) to measure air temperature and a PAR sensor.
-In 2020 the air temperature was measured with an iButton.
-Airtightness is ensured by laying a heavy chain on the "skirt" of the chamber (a piece of tarp taped to the lower part of the chamber).
-NEE is measured with a transparent chamber.
-ER is measured with a dark chamber, in our case the transparent chamber was covered with a thick dark tarp.
-The CO~2~ concentration was measured every seconds and logged in a datalogger (Squirrel 2010).
-The chamber was put on the plot during two minutes for each measurements and then aired during one minute.
-Since the logger was logging continuesly, the start and end time of each measurement was noted (it is necessary to precisely synchronise the logger clock with the watch used on the field and to regularly check it).
-The function `match.flux()` is matching the time in the logger file with the plot being measured at that time (using the time recorded on the field).
-It attributes the concentration of CO~2~ measured every seconds to the correct measurement.
-A linear regression is fitted to every measurements and the slope is used to calculated the flux.
-
-<img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}">
-
-where
-flux: the flux of CO~2~ at the surface of the plot (mmol/m^2^/h)
-slope: slope of linear regression fitting the CO~2~ concentration versus time (ppm^-1^)
-P: pressure, assumed 1 atm
-V: volume of the chamber and tubing (L)
-R: gas constant (0.082057 L\*atm\*K^-1^\*mol^-1^)
-T: chamber air temperature (K)
-A: area of chamber frame base (m^2^)
-
-
-
-### Soil
-
-
-
-
-#### Climate data
-
-**Climate stations**
-
-**iButtons**
-
-**Gridded climate data** Gridded data are daily climate values for three sites from 2009 - 2019 from The Norwegian Meteorological Institute (from Ole Einar Tveito, 16.12.2019).
-The climate variables are:
- - Mean daily temperature (°C, Temperature)  
- - Relative air moisture (%, RelAirMoisture)  
- - Mean wind (meter / second, Wind)  
- - Mean cloud cover (in 8 parts, no dimension, CloudCover)  
- - Precipitation (mm, Precipitation)
-
-
-### Data dictionary
-
-#### Biomass
-```{r biomassdic, eval=FALSE}
+```{r biomass-dic}
  knitr::kable(biomass_dic)
+```
+
+
+### Soil microclimate
+
+```{r soiltemp-dic}
+ knitr::kable(soil_temperature_dic)
+```
+
+```{r soilmoist-dic}
+ knitr::kable(soilmoisture_dic)
+```
+
+
+### Plant community composition
+
+``` {r community}
+
+comm_data <- community %>%
+  select(year, siteID:mossCov, -turfID) %>%
+  filter(treatment %in% c("C", "FB", "GB", "GF"),
+         year != 2016) %>%
+  #filter(blockID == "Alr5") %>%
+  distinct() %>%
+  mutate(graminoidCov = if_else(year == 2015 & treatment %in% c("GB", "GF"), NA_real_, graminoidCov),
+         forbCov = if_else(year == 2015 & treatment %in% c("FB", "GF"), NA_real_, forbCov),
+         mossCov = if_else(year == 2015 & treatment %in% c("FB", "GB"), NA_real_, mossCov)) %>%
+  group_by(year, siteID, treatment) %>%
+  summarise_at(c("graminoidCov", "forbCov", "mossCov"), mean, na.rm = TRUE) %>%
+  pivot_longer(cols = c(graminoidCov, forbCov, mossCov), names_to = "fg", values_to = "fg_cover") %>%
+  pivot_wider(names_from = treatment, values_from = fg_cover) %>%
+  mutate(Forbs = GB - C,
+         Graminoids = FB - C,
+         Bryophytes = GF - C) %>%
+  select(-C, -FB, -GB, -GF) %>%
+  pivot_longer(cols = c(Forbs, Graminoids, Bryophytes), names_to = "FunctionalGroup", values_to = "Cover") %>%
+  filter(!is.na(Cover)) %>%
+  mutate(FunctionalGroup = factor(FunctionalGroup, levels = c("Graminoids", "Forbs", "Bryophytes")))
+
+community_plot <- comm_data %>%
+  left_join(meta, by = "siteID") %>% 
+  mutate(biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal"))) %>% 
+  ggplot(aes(x = year, y = Cover, colour = FunctionalGroup)) +
+  geom_line() +
+  geom_hline(yintercept = 0, colour = "grey") +
+  scale_colour_manual(name = "Functional group", values = c("limegreen", "purple", "orange")) +
+  facet_grid(biogeographic_zone ~ prep_level) +
+  theme_set(theme_bw(base_size = 18))
+
+community_plot
+
+
+
+```
+
+```{r community-dic}
+ knitr::kable(community_dic)
+```
+
+
+### Ecosystem carbon fluxes
+
+``` {r cflux}
+
+
+cflux %>%
+  filter(year == 2017) %>%
+  left_join(meta, by = c("siteID")) %>%
+  mutate(treatment = factor(treatment, levels = c("C", "B", "F", "G", "FB", "GB", "GF", "FGB")),
+         biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal"))) %>%
+  ggplot(aes(y = gpp, treatment)) +
+  geom_boxplot() +
+  facet_grid(biogeographic_zone ~ prep_level)
+
+
+
+```
+
+
+```{r cflux-dic}
+ knitr::kable(cflux_dic)
 ```
