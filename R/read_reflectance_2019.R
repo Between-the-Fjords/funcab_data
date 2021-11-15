@@ -3,21 +3,21 @@
 # Code: Joshua Lynn and Sonya R. Geange
 
 # Required Packages
-require(coda)
-require(car)
-library(dplyr)
-library(tidyverse)
-library(readxl)
-library(stringr)
-source("R/load_packages.R")
+install.packages("pacman")
+pacman::p_load(coda, car, dpylr, readxl, tidyverse)
 
 # Download data from OSF
-# Run the code from L10-L13 if you need to download the data from the OSF repository
+# Run the code from L17-L24 if you need to download the data from the OSF repository
+
+# install.packages("remotes")
+# remotes::install_github("Between-the-Fjords/dataDownloader")
+# library(dataDownloader)
 
 # get_file(node = "4c5v2",
-#          file = "NDVI_FunCaB_2019.csv",
-#          path = "data",
-#          remote_path = "Vegetation data/Reflectance/Data")
+#          file = "FunCaB_raw_reflectance_2019-2021.zip",
+#          path = "data/reflectance",
+#          remote_path = "Vegetation data/Reflectance")
+
 
 # Read in 2019 reflectance data
 # Because of Norwegian characters, use UTF-8 encoding
@@ -80,8 +80,6 @@ fundat$date <- as.Date(fundat$Date, "%m/%d/%y")
 # For each plot we took two reflectance values, perpindicular to each other to account for the different radius for the greenseeker sensor area, and the 25cm plot size. Average these.
 fundat$m_ndvi <- (fundat$Value1+ fundat$Value2)/2 # average the two values
 
-# Check distributon of new NDVI values
-hist(logit(fundat$m_ndvi))
 
 # Add column to specify when reflectance was taken relative to cutting
 fundat$pre_post_cut <- "post_cut"
@@ -94,7 +92,7 @@ NDVI_2019 <- fundat %>%
 
 
 # Write file
-write_csv(NDVI_2019, "./data/NDVI_2019.csv")
+write_csv(NDVI_2019, "data/NDVI_2019.csv")
 
 #########################################
 # 2021 Data
@@ -199,11 +197,11 @@ NDVI_2021 <- fundat_wk1_2_3 %>%
           weather, notes)
 
 # Write file
-write_csv(NDVI_2021, "./data/NDVI_2021.csv")
+write_csv(NDVI_2021, "data/NDVI_2021.csv")
 
 
 ###########
 # Combine 2019 and 2021 together
 
 NDVI_FunCaB <- bind_rows(NDVI_2019, NDVI_2021)
-write_csv(NDVI_FunCaB, "./data/FunCaB_clean_reflectance_2019_2021.csv")
+write_csv(NDVI_FunCaB, "data/FunCaB_clean_reflectance_2019_2021.csv")
