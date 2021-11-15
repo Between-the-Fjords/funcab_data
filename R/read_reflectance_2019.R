@@ -206,4 +206,4 @@ write_csv(NDVI_2021, "./data/NDVI_2021.csv")
 # Combine 2019 and 2021 together
 
 NDVI_FunCaB <- bind_rows(NDVI_2019, NDVI_2021)
-write_csv(NDVI_FunCaB, "./data/NDVI_2019_2021.csv")
+write_csv(NDVI_FunCaB, "./data/FunCaB_clean_reflectance_2019_2021.csv")
