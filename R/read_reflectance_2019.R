@@ -66,6 +66,10 @@ unique(fundat$blockID)
 fundat$plotID <- paste0(fundat$blockID, fundat$Treatment)
 unique(fundat$plotID)
 
+# Rename Treatment
+fundat$treatment <- fundat$Treatment
+
+
 ######################################################
 # TODO: Change TTC column to match seedclim dictionary
 ######################################################
@@ -81,7 +85,7 @@ hist(logit(fundat$m_ndvi))
 
 # Add column to specify when reflectance was taken relative to cutting
 fundat$pre_post_cut <- "post_cut"
-fundat$Time <- fundat$Time
+fundat$time <- fundat$Time
 
 # Remove columns no longer required
 NDVI_2019 <- fundat %>%
@@ -97,6 +101,8 @@ write_csv(NDVI_2019, "./data/NDVI_2019.csv")
 #########################################
 
 # Read in Wk 28 and 29 (4sites each)
+fundat_wk1 <- read.delim("./data/NDVI_Wk27.csv", header = TRUE,
+                         sep = ";")
 fundat_wk2 <- read.delim("./data/NDVI_Wk28.csv", header = TRUE,
                        sep = ";")
 
@@ -104,15 +110,16 @@ fundat_wk3 <- read.delim("./data/NDVI_Wk29.csv", header = TRUE,
                        sep = ";")
 
 # As columns match, add rows together
-fundat_wk2_3 <- bind_rows(fundat_wk2, fundat_wk3)
+fundat_wk1_2_3 <- bind_rows(fundat_wk1, fundat_wk2, fundat_wk3)
 
 # Standardize dates to data dictionary
-head(fundat_wk2_3$Date)
-fundat_wk2_3$date <- format(as.Date(fundat_wk2_3$Date, format = "%d.%m.%Y"), "%Y-%m-%d")
+head(fundat_wk1_2_3$Date)
+fundat_wk1_2_3$date <- format(as.Date(fundat_wk1_2_3$Date, format = "%d.%m.%Y"), "%Y-%m-%d")
+fundat_wk1_2_3$date <- as.Date(fundat_wk1_2_3$date)
 
 # Check and clean the site names, Norwegian language read-in issue.
-unique(fundat_wk2_3$Site)
-fundat_wk2_3$siteID <- recode(fundat_wk2_3$Site,
+unique(fundat_wk1_2_3$Site)
+fundat_wk1_2_3$siteID <- recode(fundat_wk1_2_3$Site,
                         'Gudmedalen' = "Gudmedalen",
                         'Låvisdalen' = "Lavisdalen",
                         'Rambæra' = "Rambera",
@@ -128,7 +135,7 @@ fundat_wk2_3$siteID <- recode(fundat_wk2_3$Site,
 
 
 # Turn Site names into Site Codes to merge with block ID's later on
-fundat_wk2_3$Site_Code<- recode(fundat_wk2_3$siteID,
+fundat_wk1_2_3$Site_Code<- recode(fundat_wk1_2_3$siteID,
                           'Gudmedalen' = "Gud",
                           'Lavisdalen' = "Lav",
                           'Rambera' = "Ram",
@@ -143,27 +150,27 @@ fundat_wk2_3$Site_Code<- recode(fundat_wk2_3$siteID,
                           'Veskre' = "Ves")
 
 # Create new blockID with concatenated Site_Code and Block number
-fundat_wk2_3$blockID <- paste0(fundat_wk2_3$Site_Code,
-                               fundat_wk2_3$Block)
-unique(fundat_wk2_3$blockID)
+fundat_wk1_2_3$blockID <- paste0(fundat_wk1_2_3$Site_Code,
+                               fundat_wk1_2_3$Block)
+unique(fundat_wk1_2_3$blockID)
 
 # Create plotID
-fundat_wk2_3$plotID <- paste0(fundat_wk2_3$blockID,
-                              fundat_wk2_3$Plot)
-unique(fundat_wk2_3$plotID)
+fundat_wk1_2_3$plotID <- paste0(fundat_wk1_2_3$blockID,
+                              fundat_wk1_2_3$Plot)
+unique(fundat_wk1_2_3$plotID)
 
 # Rename plot as Treatment
-fundat_wk2_3$treatment <- fundat_wk2_3$Plot
+fundat_wk1_2_3$treatment <- fundat_wk1_2_3$Plot
 
 # For each plot we took two reflectance values, perpindicular to each other to account for the different radius for the greenseeker sensor area, and the 25cm plot size. Average these.
-fundat_wk2_3$m_ndvi_after <- (fundat_wk2_3$After.1+ fundat_wk2_3$After.2)/2 # average the two values
+fundat_wk1_2_3$m_ndvi_after <- (fundat_wk1_2_3$After.1+ fundat_wk1_2_3$After.2)/2 # average the two values
 
 # The Before cutting data
-fundat_wk2_3$m_ndvi_before <- (fundat_wk2_3$Before.1+
-                                 fundat_wk2_3$Before.1)/2 # average the two values
+fundat_wk1_2_3$m_ndvi_before <- (fundat_wk1_2_3$Before.1+
+                                 fundat_wk1_2_3$Before.1)/2 # average the two values
 
 # Transform to long format so pre- and post-cut data can be allocated
-fundat_wk2_3 <- fundat_wk2_3 %>%
+fundat_wk1_2_3 <- fundat_wk1_2_3 %>%
   pivot_longer(
                cols = c("m_ndvi_before", "m_ndvi_after"),
                names_to = c("pre_post_cut"),
@@ -171,25 +178,32 @@ fundat_wk2_3 <- fundat_wk2_3 %>%
 
 
 # Rename column for cutting
-fundat_wk2_3$pre_post_cut <- recode(fundat_wk2_3$pre_post_cut,
+fundat_wk1_2_3$pre_post_cut <- recode(fundat_wk1_2_3$pre_post_cut,
                               'm_ndvi_before' = "pre_cut",
                               'm_ndvi_after' = "post_cut")
 
 # Change the weather and date columns as well to pivot longer, atm
 # It is duplicated across both before and after cutting
 
-fundat_wk2_3 <- fundat_wk2_3 %>%
+fundat_wk1_2_3 <- fundat_wk1_2_3 %>%
   mutate(weather = ifelse(pre_post_cut == 'pre_cut', Weather.before, Weather.after))
-fundat_wk2_3 <- fundat_wk2_3 %>%
+fundat_wk1_2_3 <- fundat_wk1_2_3 %>%
   mutate(time = ifelse(pre_post_cut == 'pre_cut', Before.time, After.time))
 
-# Add notes column if necessary later on
-fundat_wk2_3$notes <- NA
+# Change Notes to notes
+fundat_wk1_2_3$notes <- fundat_wk1_2_3$Notes
 
 # Only select relevant columns
-NDVI_2021 <- fundat_wk2_3 %>%
+NDVI_2021 <- fundat_wk1_2_3 %>%
   select(date, time, siteID, blockID, plotID, treatment, pre_post_cut, m_ndvi,
           weather, notes)
 
 # Write file
 write_csv(NDVI_2021, "./data/NDVI_2021.csv")
+
+
+###########
+# Combine 2019 and 2021 together
+
+NDVI_FunCaB <- bind_rows(NDVI_2019, NDVI_2021)
+write_csv(NDVI_FunCaB, "./data/NDVI_2019_2021.csv")
