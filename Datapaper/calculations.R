@@ -75,7 +75,7 @@ soilmoisture %>%
 
 
 #community
-community <- read_csv(file = "data/community/FunCaB_clean_composition_21-11-03.csv")
+community <- read_csv(file = "data/community/FunCaB_clean_composition_2015-2018.csv")
 
 # nr of species
 community %>%
@@ -105,6 +105,12 @@ community %>%
   summarise(mean = mean(n)) %>%
   arrange(functionalGroup, mean) %>% print(n = Inf)
 
+
+community %>%
+  filter(species %in% c("NID.gram", "NID.herb", "NID.seedling", NA_character_)) %>% count(species)
+
+community %>%
+  filter(is.na(species))
 
 CO2_final_1517 <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
