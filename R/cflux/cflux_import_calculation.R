@@ -129,10 +129,11 @@ CO2data_2017 <- rbind(CO2_Li1400_2017, CO2_SQ_2017) %>%
                              TRUE ~ weather),
          comment = case_when(flag == "low_battery" ~ "low_battery",
                              flag == "check_PAR" ~ "check_PAR",
-                             flag == "light_rain" ~ "light_rain",
                              TRUE ~ comment),
-         comment = if_else(comment %in% c("to", "and", "-->", "&Breezy", "with", "windy"), NA_character_, comment),
-         flag = if_else(flag %in% c("sun", "Clouds", "breezy"), NA_character_, flag)) %>%
+         flag = case_when(comment == "x" ~ "x",
+                          TRUE ~ flag),
+         comment = if_else(comment %in% c("to", "and", "-->", "&Breezy", "with", "windy", "x"), NA_character_, comment),
+         flag = if_else(flag %in% c("sun", "Clouds", "breezy", "light_rain", "check_PAR", "low_battery"), NA_character_, flag)) %>%
   # Correct PAR values for measurements when PAR sensor was broken with estimated value based on recorded PAR value in metadata: chamber 1 dates 03.07-06.07
   # if cover = "L" & PAR > 200 then use PAR_est value, if cover D and high PAR, correct to estimated value
   mutate(PAR = if_else(chamber == "1" & site == "ALR" | chamber == "1" & site == "FAU", PAR_est, PAR)) %>%
@@ -190,7 +191,7 @@ soilmoisture <- read_csv("data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
 
 CO2data <- CO2data %>%
   left_join(soilmoisture %>%
-              select(-weather),
+              select(-weather,  -recorder),
             by = c("date", "siteID", "blockID", "plotID", "treatment", "turfID")) %>%
   distinct(n, .keep_all = TRUE) %>%
   select(-n)
@@ -222,7 +223,7 @@ CO2_final_1517 <- crossing(
 
   CO2_clean %>%
     filter(measurement == "dark") %>%
-    select(-siteID, -blockID, -treatment, -measurement, -year) %>%
+    select(-siteID, -blockID, -treatment, -measurement, -year, -soilmoisture, -weather, -flag, -comment, -vegHeight) %>%
     # need to rename all dark measurements
     rename_with(~ paste0(.x, "_Reco")) %>%
     rename(Reco = nee_Reco)
@@ -242,7 +243,7 @@ CO2_final_1517 <- crossing(
   mutate(gpp = nee - Reco) %>%
   # get rid off positive GPP values
   filter(gpp < 0) %>%
-  relocate(gpp, .after = nee)
+  select(year:soiltemp, soilmoisture, tempK, vegHeight, nee, gpp, rsqd, time, chamber, starttime_Reco:soiltemp_Reco, tempK_Reco, Reco:chamber_Reco, delta, removal:comment)
 
 write_csv(CO2_final_1517, file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
