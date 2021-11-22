@@ -94,8 +94,8 @@ reflectance <- read_csv("data/reflectance/FunCaB_clean_reflectance_2019_2021.csv
 
 reflectance_dic <- make_data_dictionary(data = reflectance,
                                   description_table = description_table,
-                                  table_ID = NA_character_) %>%
-  slice(-3) %>%
+                                  table_ID = "reflectance") %>%
+  slice(-12) %>%
   mutate(`Variable range or levels` = if_else(`Variable name` == "time", "08:00 - 19:55", `Variable range or levels`))
 
 
