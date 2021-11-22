@@ -57,7 +57,7 @@ NDVI_2019 <- fundat %>%
          ndvi = (Value1 + Value2)/2,
          # Add column to specify when reflectance was taken relative to cutting
          pre_post_cut = "post_cut") %>%
-  select(date = Date, time = Time, siteID, blockID, plotID, treatment = Treatment, ndvi, notes, turfID = TTC_ID)
+  select(date = Date, time = Time, siteID, blockID, plotID, treatment = Treatment, pre_post_cut, ndvi, notes, turfID = TTC_ID)
 
 unique(NDVI_2019$siteID)
 unique(NDVI_2019$blockID)
