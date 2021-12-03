@@ -357,7 +357,7 @@ composition3 <- composition2 %>%
          total_bryophytes = coalesce(total_bryophytes.new, total_bryophytes),
          vegetation_height = coalesce(vegetation_height.new, vegetation_height),
          moss_height = coalesce(moss_height.new, moss_height)) %>%
-  select(-total_bryophytes.new, -vegetation_height.new, -moss_height.new, -total_forbs.new, -total_graminoids.new, -TTtreat)
+  select(-total_bryophytes.new, -vegetation_height.new, -moss_height.new, -total_forbs.new, -total_graminoids.new)
 
 composition3 <- composition3 %>%
   full_join(FGBs) %>%
@@ -445,7 +445,7 @@ composition4 <- composition4 %>%
 
 # prettify
 comp2 <- composition4 %>%
-  distinct(year, siteID, blockID, treatment, turfID, total_graminoids, total_forbs, total_bryophytes, vegetation_height, moss_height, litter, species, cover, functional_group, sumcover, recorder) %>%
+  distinct(year, siteID, blockID, treatment, turfID, total_graminoids, total_forbs, total_bryophytes, vegetation_height, moss_height, litter, species, cover, functional_group, sumcover, recorder, TTtreat) %>%
   # recode site names
   mutate(siteID = recode(siteID,
                          "Ulvhaugen" = "Ulvehaugen",
@@ -455,7 +455,7 @@ comp2 <- composition4 %>%
          blockID = paste0(substr(siteID, 1, 3), blockID)) %>%
   # remove mossCov that should not be there
   mutate(total_bryophytes = if_else(year != 2015 & treatment %in% c("FGB", "FB", "GB", "B"), NA_real_, total_bryophytes)) %>%
-  select(year, siteID:turfID, total_graminoids:litter, species, cover, functional_group, sumcover, recorder)
+  select(year, siteID, blockID, plotID = turfID, treatment, total_graminoids:litter, species, cover, functional_group, sumcover, recorder, turfID = TTtreat)
 
 
 
