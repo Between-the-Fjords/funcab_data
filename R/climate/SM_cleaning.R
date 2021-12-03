@@ -53,12 +53,6 @@ SM2017 <- SM2017_raw %>%
          !grepl("TT4", turfID),
          !grepl("RTC", turfID),
          !grepl("P", turfID)) %>%
-  mutate_at(vars(Measurement1, Measurement2, Measurement3, Measurement4), as.numeric) %>%
-  rowwise() %>%
-  mutate(soilmoisture = mean(c(Measurement1, Measurement2, Measurement3, Measurement4), na.rm = TRUE)) %>%
-  mutate(Treatment = if_else(is.na(Treatment) & grepl("TTC", turfID), "C", Treatment)) %>%
-  filter(!is.na(soilmoisture),
-         !is.na(Treatment)) %>%
   mutate(Site = recode(Site, "ULV" = "Ulvehaugen",
                        "LAV" = "Lavisdalen",
                        "GUD" = "Gudmedalen",
@@ -74,7 +68,17 @@ SM2017 <- SM2017_raw %>%
          block = coalesce(SCBlock...5, SCBlock...6),
          blockID = paste0(substr(Site, 1, 3), block),
          plotID = paste0(blockID, Treatment)) %>%
+  # fix turfID
+  filter(turfID != "Ves 539 TTC 262") %>% # seedclim plot
+  mutate(turfID = str_remove(turfID, "\\s*=.*$")) %>%
+  mutate(across(c(Measurement1, Measurement2, Measurement3, Measurement4), as.numeric)) %>%
+  rowwise() %>%
+  mutate(soilmoisture = mean(c(Measurement1, Measurement2, Measurement3, Measurement4), na.rm = TRUE)) %>%
+  mutate(Treatment = if_else(is.na(Treatment) & grepl("TTC", turfID), "C", Treatment)) %>%
+  filter(!is.na(soilmoisture),
+         !is.na(Treatment)) %>%
   select(date = Date, siteID = Site, blockID, plotID, treatment = Treatment, soilmoisture, weather = Weather, recorder = Recorder, turfID)
+
 
 
 
