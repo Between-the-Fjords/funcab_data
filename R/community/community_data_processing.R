@@ -375,6 +375,14 @@ composition3 %>% group_by(turfID, year, species) %>%
   filter(n > 1)
 # should be empty
 
+# sum cover from duplicates
+composition3 <- composition3 %>%
+  group_by(turfID, year, species) %>%
+  mutate(n = n_distinct(cover)) %>%
+  tidylog::mutate(cover = case_when(n() > 1 ~ sum(cover),
+                           TRUE ~ cover)) %>%
+  distinct()
+
 
 ####------- compute functional group nomenclature -------####
 # functional groups
@@ -451,12 +459,31 @@ comp2 <- composition4 %>%
                          "Ulvhaugen" = "Ulvehaugen",
                          "Skjellingahaugen" = "Skjelingahaugen",
                          "Ovstedal" = "Ovstedalen"),
+         # fix species
+         species = recode(species,
+                          "Sax.aiz." = "Sax.aiz",
+                          "Hyp.sp." = "Hyp.sp",
+                          "Arenaria" = "Are.sp",
+                          "Pilosella" = "Pil.sp",
+                          "Porub" = "NID herb",
+                          "CAR.KEY" = "Car.sp",
+                          "Cre.tre" = "NID.herb",
+                          "Crepis" = "Cre.sp",
+                          "Juniper" = "Juni.sp",
+                          "Maianthemum" = "Mai.sp",
+                          "Myosotis.str" = "Myo.sp",
+                          "Pedicularis" = "Ped.sp",
+                          "Pri.mula" = "Pri.sp"),
          # some blockID are only numbers
          blockID = paste0(substr(siteID, 1, 3), blockID)) %>%
+  # fix missing functional group
+  mutate(functional_group = case_when(species %in% c("Cre.sp", "Cre.tec", "Hyp.sp", "Mai.sp", "Myo.sp", "NID herb", "Ped.sp", "Pri.sp", "Ran.pyg", "Ran.sp", "Sax.aiz") ~ "forb",
+                                      species %in% c("Aco.sp", "Car.atro", "Car.dem", "Car.sp") ~ "graminoid",
+                                      species %in% c("Juni.sp", "Sal.rep") ~ "shrub",
+                                      TRUE ~ functional_group)) %>%
   # remove mossCov that should not be there
   mutate(total_bryophytes = if_else(year != 2015 & treatment %in% c("FGB", "FB", "GB", "B"), NA_real_, total_bryophytes)) %>%
   select(year, siteID, blockID, plotID = turfID, treatment, total_graminoids:litter, species, cover, functional_group, sumcover, recorder, turfID = TTtreat)
-
 
 
 # save secondary/derived data
