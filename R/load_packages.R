@@ -12,3 +12,6 @@ library(usethis)
 
 # Stuff
 pn <- . %>% print(n = Inf)
+
+# osf node
+node <- "4c5v2"
