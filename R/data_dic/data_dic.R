@@ -53,7 +53,7 @@ soilmoisture_dic <- make_data_dictionary(data = soilmoisture,
 
 ### 3 COMMUNITY DATA
 
-community <- read_csv("data/community/FunCaB_clean_composition_2015-2018.csv")
+community <- read_csv("data/community/FunCaB_clean_composition_2015-2019.csv")
 
 
 community_dic <- make_data_dictionary(data = community,
