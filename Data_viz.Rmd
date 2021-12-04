@@ -56,8 +56,9 @@ Total biomass removed in all years was `total_biomass`g
 ```{r biomass}
 
 biomass_plot <-  biomass %>% 
+  filter(removed_fg %in% c("F", "B", "G")) %>% 
   left_join(meta, by = c("siteID")) %>% 
-   mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB"))) %>% 
+   mutate(treatment = factor(treatment, levels = c("XC", "B", "F", "G", "FB", "GB", "GF", "FGB"))) %>% 
   ggplot(aes(x = treatment, y = biomass, fill = removed_fg)) +
   geom_col() +
   scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
