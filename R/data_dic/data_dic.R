@@ -54,7 +54,8 @@ community <- read_csv("data/community/FunCaB_clean_composition_2015-2019.csv")
 
 community_dic <- make_data_dictionary(data = community,
                                       description_table = description_table,
-                                      table_ID = NA_character_)
+                                      table_ID = NA_character_) %>%
+  mutate(`Variable range or levels` = if_else(`Variable name` == "species", "Ach.mil - Vio.tri or NA", `Variable range or levels`)) %>% View()
 
 
 #************************************************************************
@@ -86,7 +87,9 @@ reflectance <- read_csv("data/reflectance/FunCaB_clean_reflectance_2019_2021.csv
 reflectance_dic <- make_data_dictionary(data = reflectance,
                                   description_table = description_table,
                                   table_ID = "reflectance") %>%
-  mutate(`Variable range or levels` = if_else(`Variable name` == "time", "08:00 - 19:55", `Variable range or levels`))
+  mutate(`Variable range or levels` = if_else(`Variable name` == "time", "08:00 - 19:55", `Variable range or levels`),
+         `Variable type` = if_else(`Variable name` == "time", "time", `Variable type`)) %>%
+  mutate(`Variable range or levels` = if_else(`Variable name` == "notes", NA_character_, `Variable range or levels`))
 
 
 
