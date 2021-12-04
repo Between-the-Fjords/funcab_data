@@ -55,7 +55,7 @@ community <- read_csv("data/community/FunCaB_clean_composition_2015-2019.csv")
 community_dic <- make_data_dictionary(data = community,
                                       description_table = description_table,
                                       table_ID = NA_character_) %>%
-  mutate(`Variable range or levels` = if_else(`Variable name` == "species", "Ach.mil - Vio.tri or NA", `Variable range or levels`)) %>% View()
+  mutate(`Variable range or levels` = if_else(`Variable name` == "species", "Ach.mil - Vio.tri or NA", `Variable range or levels`))
 
 
 #************************************************************************
@@ -98,9 +98,9 @@ reflectance_dic <- make_data_dictionary(data = reflectance,
 ##merge all dics together to one xlsx, with each parameter as a single sheet
 
 write_xlsx(list(biomass_removal = biomass_dic,
-                plant_community = community_dic,
                 soil_temperature = soil_temperature_dic,
                 soil_moisture = soilmoisture_dic,
+                plant_community = community_dic,
                 cflux = cflux_dic,
                 reflectance = reflectance_dic),
            path = "R/data_dic/data_dictionary.xlsx")
