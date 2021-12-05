@@ -12,8 +12,6 @@ source("R/load_packages.R")
 
 library(DBI)
 library(RSQLite)
-library(dbplyr)
-library(googlesheets4)
 
 # Download raw data
 get_file(node = node,
@@ -431,6 +429,10 @@ composition4 <- composition4 %>%
       turfID == 'Gud12C' & year == 2015 ~ 70,
       turfID == 'Fau2C' & year == 2015 ~ 65,
       turfID == 'Vik2C' & year == 2015 ~ 60,
+      # missing forb covers
+      turfID == 'Ulv4G' & year == 2018 ~ 68,
+      turfID == 'Ulv4G' & year == 2019 ~ 90,
+      turfID == 'Ves3GB' & year == 2019 ~ 60,
       TRUE ~ total_forbs),
     total_graminoids = case_when(
       turfID == 'Gud12C' & year == 2015 ~ 22,
@@ -481,11 +483,13 @@ comp2 <- composition4 %>%
                                       species %in% c("Aco.sp", "Car.atro", "Car.dem", "Car.sp") ~ "graminoid",
                                       species %in% c("Juni.sp", "Sal.rep") ~ "shrub",
                                       TRUE ~ functional_group)) %>%
-  # remove mossCov that should not be there
-  mutate(total_bryophytes = if_else(year != 2015 & treatment %in% c("FGB", "FB", "GB", "B"), NA_real_, total_bryophytes)) %>%
+  # remove total_bryophytes that should not be there
+  mutate(total_bryophytes = if_else(year != 2015 & treatment %in% c("FGB", "FB", "GB", "B"), NA_real_, total_bryophytes),
+         # same for total_forbs and graminoids
+         total_forbs = if_else(year != 2015 & treatment %in% c("FGB", "FB", "GF", "F"), NA_real_, total_forbs),
+         total_graminoids = if_else(year != 2015 & treatment %in% c("FGB", "GB", "GF", "G"), NA_real_, total_graminoids)) %>%
   select(year, siteID, blockID, plotID = turfID, treatment, total_graminoids:litter, species, cover, functional_group, sumcover, recorder, turfID = TTtreat)
 
 
 # save secondary/derived data
 write_csv(comp2, file = "data/community/FunCaB_clean_composition_2015-2019.csv")
-
