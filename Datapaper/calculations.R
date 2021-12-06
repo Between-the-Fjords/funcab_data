@@ -65,7 +65,7 @@ dailyTemperature %>%
 
 
 #soimoisture
-soilmoisture <- read_csv("data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
+soilmoisture <- read_csv("data/climate/FunCaB_clean_soilMoisture_2015-2019.csv")
 
 # 2018 missing plotID
 soilmoisture %>%

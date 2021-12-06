@@ -6,8 +6,10 @@ source("R/load_packages.R")
 # use soil moisture differences!
 # read in soil moisture data FUNCAB point measurements
 SM201516_raw <- read_excel("data/climate/raw_soilmoisture/soilMoisture_2015-2016.xlsx")
-SM2018_raw <- read_excel("data/climate/raw_soilmoisture/Soilmoisture2018.xlsx")
 SM2017_raw <- read_excel(path = "data/climate/raw_soilmoisture/Soilmoisture2017.xlsx")
+SM2018_raw <- read_excel("data/climate/raw_soilmoisture/Soilmoisture2018.xlsx")
+SM2019_raw <- read_csv("data/climate/raw_soilmoisture/funcab_2019 - Soil_moisture.csv")
+
 
 source("R/community/dictionaries.R")
 
@@ -39,7 +41,8 @@ SM201516 <- SM201516_raw %>%
   mutate(siteID = recode(siteID,
                          "Ulvhaugen" = "Ulvehaugen",
                          "Skjellingahaugen" = "Skjelingahaugen",
-                         "Ovstedal" = "Ovstedalen")) %>%
+                         "Ovstedal" = "Ovstedalen"),
+         turfID = recode(turfID, "251TTCd" = "251 TTCd")) %>%
   select(date, siteID, blockID, plotID = FCturfID, treatment, soilmoisture = SM, weather, recorder, turfID)
 
 
@@ -70,7 +73,22 @@ SM2017 <- SM2017_raw %>%
          plotID = paste0(blockID, Treatment)) %>%
   # fix turfID
   filter(turfID != "Ves 539 TTC 262") %>% # seedclim plot
-  mutate(turfID = str_remove(turfID, "\\s*=.*$")) %>%
+  mutate(turfID = str_remove(turfID, "\\s*=.*$"),
+         turfID = recode(turfID,
+                         "TTC 134" = "134 TTC",
+                         "TTC 140" = "140 TTC",
+                         "TTC 141" = "141 TTC",
+                         "TTC 146" = "146 TTC",
+                         "TTC 263" = "263 TTC",
+                         "TTC 281" = "281 TTC",
+                         "TTC 270" = "270 TTC",
+                         "TTC 271" = "271 TTC",
+                         "TTC 280" = "280 TTC",
+                         "TT 264" = "264 TTC",
+                         "TTC" = NA_character_,
+                         "C" = NA_character_,
+                         "TCC" = NA_character_,
+                         "TTC C" = NA_character_)) %>%
   mutate(across(c(Measurement1, Measurement2, Measurement3, Measurement4), as.numeric)) %>%
   rowwise() %>%
   mutate(soilmoisture = mean(c(Measurement1, Measurement2, Measurement3, Measurement4), na.rm = TRUE)) %>%
@@ -78,8 +96,6 @@ SM2017 <- SM2017_raw %>%
   filter(!is.na(soilmoisture),
          !is.na(Treatment)) %>%
   select(date = Date, siteID = Site, blockID, plotID, treatment = Treatment, soilmoisture, weather = Weather, recorder = Recorder, turfID)
-
-
 
 
 ### 2018 data
@@ -129,11 +145,33 @@ SM2018 <- SM2018_raw %>%
   select(date = Date, siteID, blockID, plotID, treatment = Treatment, soilmoisture = SM, weather = Weather,  recorder = Recorder, turfID)
 
 
+### 2019 data
+SM2019 <- SM2019_raw %>%
+  # remove RTC and TT1, TT2
+  filter(!is.na(Treatment)) %>%
+  mutate(date = dmy(date),
+         site = recode(site,
+                         "Ulvhaugen" = "Ulvehaugen",
+                         "Skjellingahaugen" = "Skjelingahaugen",
+                         "Ovstedal" = "Ovstedalen"),
+         blockID = paste0(substr(site, 1, 3), blockID),
+         plotID = turfID,
+         turfID = if_else(!is.na(Tttreat), paste(Tttreat, "TTC", sep = " "), Tttreat)) %>%
+  group_by(date, site, blockID, plotID, Treatment, recorder, turfID) %>%
+  summarise(soil_moisture = mean(soil_moisture)) %>%
+  select(date, siteID = site, blockID, plotID, treatment = Treatment, soilmoisture = soil_moisture, recorder, turfID)
+
+
+# combine data
 soilmoisture <- bind_rows(SM201516, SM2017, SM2018) %>%
   # remove plotID from seedclim turfID
   mutate(turfID = if_else(!str_detect(turfID, "TT"), NA_character_, turfID),
          date = ymd(date),
-         turfID = if_else(turfID %in% c("C", "B", "G", "F", "GF", "GB", "FB", "FGB"), NA_character_, turfID)) %>%
+         turfID = if_else(turfID %in% c("C", "B", "G", "F", "GF", "GB", "FB", "FGB"), NA_character_, turfID),
+         turfID = recode(turfID, "217 TTCD" = "217 TTCd",
+                         "225 TTCD" = "225 TTCd"),
+         plotID = str_replace(plotID, "NA$", "C")) %>%
+  bind_rows(SM2019) %>%
   filter(!is.na(soilmoisture))
 
-write_csv(soilmoisture, file = "data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
+write_csv(soilmoisture, file = "data/climate/FunCaB_clean_soilMoisture_2015-2019.csv")
