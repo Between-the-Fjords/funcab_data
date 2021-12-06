@@ -39,7 +39,7 @@ soil_temperature_dic <- make_data_dictionary(data = soil_temperature,
 
 
 # Soilmoisture
-soilmoisture <- read_csv("data/climate/FunCaB_clean_soilMoisture_2015-2018.csv")
+soilmoisture <- read_csv("data/climate/FunCaB_clean_soilMoisture_2015-2019.csv")
 
 soilmoisture_dic <- make_data_dictionary(data = soilmoisture,
                                          description_table = description_table,
