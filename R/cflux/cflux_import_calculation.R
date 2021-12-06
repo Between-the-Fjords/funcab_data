@@ -180,7 +180,13 @@ CO2data <- bind_rows(overviewsitesdata_2015,
          turfID = if_else(str_detect(turfID, "TTC"), turfID, NA_character_),
          treatment = str_replace(treatment, "TTC", "C"),
          plotID = str_replace(plotID, "TTC", "C"),
-         chamber = if_else(date == ymd("2016-06-28") & site == "Vikesland", 1L, chamber)) %>%
+         chamber = if_else(date == ymd("2016-06-28") & site == "Vikesland", 1L, chamber),
+         weather = if_else(weather == "hayz" & comment == "clouds", "hazy clouds", weather),
+         weather = if_else(weather == "more" & comment == "clouds", "more clouds", weather),
+         weather = if_else(weather == "hayz" & comment == "cloud", "hazy cloud", weather),
+         weather = if_else(weather == "sunny" & comment == "cloud", "sunny cloud", weather)) %>%
+  mutate(flag = if_else(flag %in% c("pre", "1010", "x", ""), NA_character_, flag),
+         comment = if_else(comment %in% c("", "sun", "rain", "clouds", "cloud"), NA_character_, comment)) %>%
   select(year, date, siteID = site, blockID = block, plotID, treatment, measurement = cover, starttime, stoptime, cover, time, PAR, temp, soiltemp = soilT, vegHeight = vegbiomass, nee, rsqd, n, chamber, removal, weather, flag, comment, turfID)
 
 
