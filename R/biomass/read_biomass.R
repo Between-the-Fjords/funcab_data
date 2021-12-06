@@ -119,6 +119,13 @@ biomass <- biomass_raw %>%
   filter(!is.na(biomass)) %>%
   select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
 
+# dates for 2 round in 2016
+date16 <- biomass %>%
+  filter(year == 2016,
+         round == "2") %>%
+  distinct(siteID, date) %>%
+  group_by(siteID) %>%
+  slice(1)
 
 ### BIOMASS FROM EXTRA PLOTS ###
 
@@ -172,7 +179,9 @@ biomax <- biomax_raw %>%
          functional_group != "forbs") %>%
   # get forbs from species level data
   bind_rows(forbs) %>%
-  select(year, siteID, blockID, plotID, treatment, removed_fg, functional_group, biomass)
+  # add collection data
+  left_join(date16, by = "siteID") %>%
+  select(year, date, siteID, blockID, plotID, treatment, removed_fg, functional_group, biomass)
 
 biomass <- biomass %>%
   bind_rows(biomax)
@@ -189,7 +198,32 @@ write_csv(biomass, file = "data/biomass/FunCaB_clean_biomass_2015-2021.csv")
 
 
 
-biomax_sp_wide %>%
+tibble(site = c("A", "B", "C"),
+       biomass = c(2, 4.5, 6),
+       sp.A = c("x", NA_character_, NA_character_),
+       sp.B = c(NA_character_, NA_character_, NA_character_),
+       sp.C = c(NA_character_, NA_character_, NA_character_))  %>%
+  pivot_longer(c(-site, -biomass)) %>%
+  group_by(site)  %>%
+  mutate(unknown = all(is.na(value))) %>%
+  pivot_wider(names_from = "name", values_from = "value") %>%
+  mutate(unknown_spp = if_else(unknown, "x", NA_character_)) %>%
+  select(-unknown)
+
+missing_sp <- biomax_sp_wide %>%
+  pivot_longer(-c(siteID:biomass, treatment, blockID), names_to = "species", values_to = "value") %>%
+  group_by(year, siteID, blockID, plotID, treatment, functional_group) %>%
+  mutate(unknown = all(is.na(value))) %>%
+  distinct(siteID, blockID, plotID, treatment, biomass)
+  filter(unknown == "TRUE", plotID == "Ulv1XC")
+
+write_csv(missing_sp, "missing_sp.csv")
+
+  pivot_wider(names_from = "species", values_from = "value") |>
+  mutate(unknown_spp = if_else(unknown, "x", NA_character_)) |>
+  select(-unknown)
+
+
   mutate(unknown_sp = if_else(is.na(remaining_biomass:anagallis), "x", NA_character_))
   pivot_longer(cols = remaining_biomass:anagallis, names_to = "species", values_to = "precense") %>%
   # some plots have biomass, but no species => unknonw
