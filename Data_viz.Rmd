@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 source("R/load_packages.R")
 
 biomass <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv")
-community <- read_csv("data/community/FunCaB_clean_composition_21-11-03.csv")
+community <- read_csv("data/community/FunCaB_clean_composition_2015-2019.csv")
 CO2_final_1517 <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
 
@@ -58,7 +58,7 @@ Total biomass removed in all years was `total_biomass`g
 biomass_plot <-  biomass %>% 
   filter(removed_fg %in% c("F", "B", "G")) %>% 
   left_join(meta, by = c("siteID")) %>% 
-   mutate(treatment = factor(treatment, levels = c("XC", "B", "F", "G", "FB", "GB", "GF", "FGB"))) %>% 
+   mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB", "XC"))) %>% 
   ggplot(aes(x = treatment, y = biomass, fill = removed_fg)) +
   geom_col() +
   scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
@@ -68,6 +68,8 @@ biomass_plot <-  biomass %>%
   theme(legend.position="top")
 
 biomass_plot
+
+#ggsave("biomass_plot.jpeg", biomass_plot, dpi = 300, height = 8, width = 10)
 
 ```
 
@@ -118,17 +120,17 @@ soilmoisture %>%
 ``` {r community}
 
 comm_data <- community %>%
-  select(year, siteID:mossCov, -turfID) %>%
+  select(year, siteID:total_bryophytes, -turfID) %>%
   filter(treatment %in% c("C", "FB", "GB", "GF"),
          year != 2016) %>%
   #filter(blockID == "Alr5") %>%
   distinct() %>%
-  mutate(graminoidCov = if_else(year == 2015 & treatment %in% c("GB", "GF"), NA_real_, graminoidCov),
-         forbCov = if_else(year == 2015 & treatment %in% c("FB", "GF"), NA_real_, forbCov),
-         mossCov = if_else(year == 2015 & treatment %in% c("FB", "GB"), NA_real_, mossCov)) %>%
+  mutate(total_graminoids = if_else(year == 2015 & treatment %in% c("GB", "GF"), NA_real_, total_graminoids),
+         total_forbs = if_else(year == 2015 & treatment %in% c("FB", "GF"), NA_real_, total_forbs),
+         total_bryophytes = if_else(year == 2015 & treatment %in% c("FB", "GB"), NA_real_, total_bryophytes)) %>%
   group_by(year, siteID, treatment) %>%
-  summarise_at(c("graminoidCov", "forbCov", "mossCov"), mean, na.rm = TRUE) %>%
-  pivot_longer(cols = c(graminoidCov, forbCov, mossCov), names_to = "fg", values_to = "fg_cover") %>%
+  summarise_at(c("total_graminoids", "total_forbs", "total_bryophytes"), mean, na.rm = TRUE) %>%
+  pivot_longer(cols = c(total_graminoids, total_forbs, total_bryophytes), names_to = "fg", values_to = "fg_cover") %>%
   pivot_wider(names_from = treatment, values_from = fg_cover) %>%
   mutate(Forbs = GB - C,
          Graminoids = FB - C,
@@ -141,17 +143,19 @@ comm_data <- community %>%
 community_plot <- comm_data %>%
   left_join(meta %>% 
               distinct(siteID, biogeographic_zone,prep_level), by = "siteID") %>% 
-  mutate(biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal"))) %>% 
+  mutate(biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal")),
+         year = as.Date(ISOdate(year, 1, 1))) %>% 
   ggplot(aes(x = year, y = Cover, colour = FunctionalGroup)) +
   geom_line() +
   geom_hline(yintercept = 0, colour = "grey") +
   scale_colour_manual(name = "Functional group", values = c("limegreen", "purple", "orange")) +
+  scale_x_date(date_labels="%y") +
   facet_grid(biogeographic_zone ~ prep_level) +
   theme_set(theme_bw(base_size = 18))
 
 community_plot
 
-
+#ggsave("community_plot.jpeg", community_plot, dpi = 300, height = 8, width = 12)
 
 ```
 
