@@ -467,7 +467,7 @@ comp2 <- composition4 %>%
                           "Hyp.sp." = "Hyp.sp",
                           "Arenaria" = "Are.sp",
                           "Pilosella" = "Pil.sp",
-                          "Porub" = "NID herb",
+                          "Porub" = "NID.herb",
                           "CAR.KEY" = "Car.sp",
                           "Cre.tre" = "NID.herb",
                           "Crepis" = "Cre.sp",
@@ -479,9 +479,8 @@ comp2 <- composition4 %>%
          # some blockID are only numbers
          blockID = paste0(substr(siteID, 1, 3), blockID)) %>%
   # fix missing functional group
-  mutate(functional_group = case_when(species %in% c("Cre.sp", "Cre.tec", "Hyp.sp", "Mai.sp", "Myo.sp", "NID herb", "Ped.sp", "Pri.sp", "Ran.pyg", "Ran.sp", "Sax.aiz") ~ "forb",
+  mutate(functional_group = case_when(species %in% c("Cre.sp", "Cre.tec", "Hyp.sp", "Mai.sp", "Myo.sp", "NID.herb", "Ped.sp", "Pri.sp", "Ran.pyg", "Ran.sp", "Sax.aiz", "Juni.sp", "Sal.rep") ~ "forb",
                                       species %in% c("Aco.sp", "Car.atro", "Car.dem", "Car.sp") ~ "graminoid",
-                                      species %in% c("Juni.sp", "Sal.rep") ~ "shrub",
                                       TRUE ~ functional_group)) %>%
   # remove total_bryophytes that should not be there
   mutate(total_bryophytes = if_else(year != 2015 & treatment %in% c("FGB", "FB", "GB", "B"), NA_real_, total_bryophytes),
