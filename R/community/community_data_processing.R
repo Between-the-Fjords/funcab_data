@@ -7,7 +7,7 @@
 #### edited: 03/12/2021                                      ##~#
 ###############################################################~#
 
-# load required packages
+# load libraries
 source("R/load_packages.R")
 
 library(DBI)
