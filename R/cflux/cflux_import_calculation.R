@@ -26,18 +26,16 @@ source("R/cflux/functions/TTC_dictionary.R")
 #devtools::install_github("Between-the-Fjords/dataDownloader")
 #library(dataDownloader)
 
-#node <- "4c5v2"
-
 # 5 Carbon fluxes
-# get_file(node = node,
-#          file = "xxx.zip",
-#          remote_path = "5_Carbon_fluxes")
+get_file(node = node,
+         file = "xxx.zip",
+         remote_path = "5_Carbon_fluxes")
 
 # Clean Soil moisture data
-# get_file(node = node,
-#          file = "FunCaB_clean_soilMoisture_2015-2018.csv",
-#          path = "data/climate",
-#          remote_path = "2_Soil_microclimate/Soil Moisture")
+get_file(node = node,
+         file = "FunCaB_clean_soilMoisture_2015-2018.csv",
+         path = "data/climate",
+         remote_path = "2_Soil_microclimate/Soil Moisture")
 
 #================================================================================
 # importing single datafiles, process and set new start and end times.
@@ -206,7 +204,6 @@ CO2data <- CO2data %>%
 # light = nee
 # dark = Reco
 
-
 # seperate L and D measurements and merge them in new file with new column GPP, selecting data with r2>=.8
 CO2_clean <- CO2data %>%
   filter(rsqd >= 0.8 | measurement == "light" & rsqd <= 0.2) %>%
@@ -246,5 +243,4 @@ CO2_final_1517 <- crossing(
   select(year:soiltemp, soilmoisture, tempK, vegHeight, nee, gpp, rsqd, time, chamber, starttime_Reco:soiltemp_Reco, tempK_Reco, Reco:chamber_Reco, delta, removal:comment)
 
 write_csv(CO2_final_1517, file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
-
 
