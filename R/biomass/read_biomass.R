@@ -231,14 +231,13 @@ biomass_sp <- biomax_sp_wide %>%
                           "Remaining.biomass" = "NID.herb"
 
          )) %>%
-  # sum biomass for species that merged or not available (Ves, Ovs)
+  mutate(species = if_else(species == "Heo.sp" & blockID == "Ves4", "Leo.sp", species),
+         species = if_else(species == "Heo.sp" & blockID == "Ram1", "Leo.sp", species)) %>%
+  # sum biomass for species that merged or not available (Ves, Ovs, Ram)
   group_by(year, siteID, blockID, plotID, treatment, functional_group, species, sorted_by) %>%
   summarise(biomass = sum(biomass)) %>%
   relocate(sorted_by, .after = biomass) %>%
   ungroup()
-
-biomass_sp %>% filter(species == "Heo.sp")
-
 
 write_csv(biomass_sp, file = "data/biomass/FunCaB_clean_species_biomass_2016.csv")
 
