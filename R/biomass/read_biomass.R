@@ -6,17 +6,22 @@ source("R/load_packages.R")
 library(janitor)
 
 #Download data from OSF
-# run the code from L10-L17 if you need to download the data from OSF
 
 # install.packages("remotes")
 # remotes::install_github("Between-the-Fjords/dataDownloader")
-# library(dataDownloader)
+library(dataDownloader)
 
-# get_file(node = "4c5v2",
-#          file = "FunCaB_raw_biomass_2021-11-02.xlsx",
-#          path = "data/biomass",
-#          remote_path = "Vegetation/Functional Group Biomass Removals")
+# download biomass
+get_file(node = "4c5v2",
+         file = "FunCaB_raw_biomass_2021-11-02.xlsx",
+         path = "data/biomass",
+         remote_path = "1_Biomass_removal")
 
+# download biomass extra plots and species-level biomass
+get_file(node = "4c5v2",
+         file = "FunCaB_raw_extra_biomass_2016.xlsx",
+         path = "data/biomass",
+         remote_path = "1_Biomass_removal")
 
 
 path <- "data/biomass/FunCaB_raw_biomass_2021-11-02.xlsx"

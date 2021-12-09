@@ -4,7 +4,21 @@
 
 #libraries
 source("R/load_packages.R")
-#library(quantreg)
+
+
+#Download data from OSF
+
+# install.packages("remotes")
+# remotes::install_github("Between-the-Fjords/dataDownloader")
+library(dataDownloader)
+
+get_file(node = node,
+         file = "FunCaB_raw_soil_temperature_2015-2016.zip",
+         path = "data/climate",
+         remote_path = "2_Soil_microclimate/Soil Temperature")
+
+# file needs to be unzipt
+
 
 # dictionary script
 source("R/community/dictionaries.R")
