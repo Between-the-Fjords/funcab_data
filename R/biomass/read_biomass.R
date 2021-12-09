@@ -3,6 +3,7 @@
 #############################################################
 
 source("R/load_packages.R")
+library(janitor)
 
 #Download data from OSF
 # run the code from L10-L17 if you need to download the data from OSF
@@ -118,8 +119,128 @@ biomass <- biomass_raw %>%
   filter(!is.na(biomass)) %>%
   select(year, date, round, siteID = site, blockID = block, plotID, treatment, removed_fg, biomass, name, remark)
 
+# dates for 2 round in 2016
+date16 <- biomass %>%
+  filter(year == 2016,
+         round == "2") %>%
+  distinct(siteID, date) %>%
+  group_by(siteID) %>%
+  slice(1)
+
+### BIOMASS FROM EXTRA PLOTS ###
+
+# Species level data
+
+biomax_sp_raw <- read_excel("data/biomass/FunCaB_raw_extra_biomass_2016.xlsx", sheet = "forbs")
+
+biomax_sp_wide <- biomax_sp_raw %>%
+  clean_names() %>%
+  rename(siteID = site_id, plotID = plot_id, biomass = dry_weight) %>%
+  mutate(treatment = "XC",
+         siteID = recode(siteID,
+                         "Skjellinghaugen" = "Skjelingahaugen",
+                         "Ovstedal" = "Ovstedalen",
+                         "Ulvhaugen" = "Ulvehaugen"),
+         treatment = "XC",
+         blockID = str_remove(plotID, "XC"),
+         blockID = paste0(substr(siteID, 1, 3), blockID),
+         plotID = paste0(blockID, treatment)) %>%
+  filter(plotID != "Ves5XC") %>%
+  mutate(functional_group = "forb")
+
+# get forb data
+forbs <- biomax_sp_wide %>%
+  group_by(year, siteID, blockID, plotID, treatment, functional_group) %>%
+  summarise(biomass = sum(biomass)) %>%
+  mutate(removed_fg = "F")
+
+# other plant functional groups
+biomax_raw <- read_excel("data/biomass/FunCaB_raw_extra_biomass_2016.xlsx",
+                         sheet = "all other functional groups")
+
+biomax <- biomax_raw %>%
+  rename(functional_group = `functional group`, biomass = `dry weight`, comment = `...9`) %>%
+  mutate(treatment = "XC",
+         siteID = recode(siteID,
+                         "Oustedal" = "Ovstedalen",
+                         "Ovstedal" = "Ovstedalen"),
+         blockID = str_remove(blockID, "XC"),
+         blockID = paste0(substr(siteID, 1, 3), blockID),
+         plotID = paste0(blockID, treatment),
+         removed_fg = recode(functional_group, "graminoids" = "G",
+                             "forbs" = "F",
+                             "bryophytes" = "B",
+                             "litter" = "L",
+                             "lichens" = "LI",
+                             "cryptograms" = "C",
+                             "pteridophytes" = "P")) %>%
+  # remove extra extra plot
+  filter(blockID != "Ves5",
+         # need to remove forbs because not complete
+         functional_group != "forbs") %>%
+  # get forbs from species level data
+  bind_rows(forbs) %>%
+  # add collection data
+  left_join(date16, by = "siteID") %>%
+  select(year, date, siteID, blockID, plotID, treatment, removed_fg, functional_group, biomass)
+
+biomass <- biomass %>%
+  bind_rows(biomax)
 
 write_csv(biomass, file = "data/biomass/FunCaB_clean_biomass_2015-2021.csv")
+#
+# ggplot(biomax, aes(x = siteID, y = biomass, fill = functional_group)) +
+#   geom_col() +
+#   #scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
+#   labs(x = "Removed functional group", y = "Biomass in g") +
+#   theme_bw() +
+#   theme(legend.position="top")
+
+
+
+
+
+biomass_sp <- biomax_sp_wide %>%
+  pivot_longer(-c(siteID:biomass, treatment, blockID), names_to = "species", values_to = "value") %>%
+  filter(value == "x") %>%
+  # fix species names
+  mutate(species = str_to_title(species),
+         species = str_replace(species, "_", "."),
+         species = if_else(species %in% c("Remaining_biomass", "Not_selaginella"), "NID.herb", species),
+         species = recode(species,
+                          "Aci.mill" = "Ach.mil",
+                          "Alch.sp" = "Alc.sp",
+                          "Anagallis" = "Ana.sp",
+                          "Bart.alp" = "Bar.alp",
+                          "Bart.sp" = "Bar.sp",
+                          "Dwarf.shrub" = "NID.herb",
+                          "Emp" = "Emp.sp",
+                          "Euph.sp" = "Eup.sp",
+                          "Frag.ves" = "Fra.ves",
+                          "Hyp.mac" = "Hype.mac",
+                          "Pyrola.sp" = "Pyr.sp",
+                          "Rhin.min" = "Rhi.min",
+                          "Rhin.sp" = "Rhi.sp",
+                          "Rubus" = "Rub.sp",
+                          "Rum.ac_la" = "Rum.acl",
+                          "Salix.sp" = "Sal.sp",
+                          "Saus.alp" = "Sau.sp",
+                          "Tarax" = "Tar.sp",
+                          "NID.shrub" = "NID.herb",
+                          "Not.selaginella" = "NID.herb",
+                          "Remaining.biomass" = "NID.herb"
+
+         )) %>%
+  # sum biomass for species that merged or not available (Ves, Ovs)
+  group_by(year, siteID, blockID, plotID, treatment, functional_group, species, sorted_by) %>%
+  summarise(biomass = sum(biomass)) %>%
+  relocate(sorted_by, .after = biomass) %>%
+  ungroup()
+
+biomass_sp %>% filter(species == "Heo.sp")
+
+
+write_csv(biomass_sp, file = "data/biomass/FunCaB_clean_species_biomass_2016.csv")
 
 ### DATA VALIDATION
 # find duplicates

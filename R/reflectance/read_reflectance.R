@@ -12,10 +12,10 @@ source("R/load_packages.R")
 # remotes::install_github("Between-the-Fjords/dataDownloader")
 # library(dataDownloader)
 
-# get_file(node = "4c5v2",
-#          file = "FunCaB_raw_reflectance_2019-2021.zip",
-#          path = "data/reflectance",
-#          remote_path = "6_Reflectance/Reflectance")
+get_file(node = node,
+         file = "FunCaB_raw_reflectance_2019-2021.zip",
+         path = "data/reflectance",
+         remote_path = "6_Reflectance")
 
 
 # Read in 2019 reflectance data
@@ -56,7 +56,7 @@ NDVI_2019 <- fundat %>%
          # For each plot we took two reflectance values, perpindicular to each other to account for the different radius for the greenseeker sensor area, and the 25cm plot size. Average thse two values
          ndvi = (Value1 + Value2)/2,
          # Add column to specify when reflectance was taken relative to cutting
-         pre_post_cut = "post_cut") %>%
+         pre_post_cut = "post") %>%
   select(date = Date, time = Time, siteID, blockID, plotID, treatment = Treatment, pre_post_cut, ndvi, notes, turfID = TTC_ID)
 
 unique(NDVI_2019$siteID)
@@ -99,7 +99,9 @@ NDVI_2021 <- bind_rows(w1 = read_delim("data/reflectance/NDVI_Wk27.csv", delim =
   select(date = Date, siteID, blockID, plotID, treatment = Plot, notes = Notes, pre_ndvi, post_ndvi, pre_time = "Before time", post_time = "After time", pre_weather = `Weather before`, post_weather = `Weather after`) %>%
   pivot_longer(cols = c(pre_ndvi, post_ndvi, pre_time, post_time, pre_weather, post_weather),
                names_to = c("pre_post_cut", ".value"),
-               names_pattern = "(.*)_(.*)")
+               names_pattern = "(.*)_(.*)") %>%
+  # remove one TT1 measurement
+  filter(treatment != "TT1")
 
 
 

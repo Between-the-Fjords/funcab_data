@@ -27,8 +27,8 @@ theme_set(theme_bw(base_size = 12))
 source("R/data_dic/data_dic.R")
 
 biomass <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv")
-community <- read_csv("data/community/FunCaB_clean_composition_2015-2018.csv")
-#cflux <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
+community <- read_csv("data/community/FunCaB_clean_composition_2015-2019.csv")
+cflux <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
 
 meta <- biomass %>% 
@@ -64,8 +64,11 @@ meta <- biomass %>%
 
 ```
 
+# FunCaB - The role of functional group interactions in mediating climate change impacts on the Carbon dynamics and biodiversity of alpine ecosystems
+
+
 This is the git repository for the FunCaB project and base for the data paper:
-Vandvik et al. (2022). Data descriptor: The role of functional group interactions in mediating climate change impacts on the Carbon dynamics and biodiversity of alpine ecosystems.
+Vandvik et al. (2022). Data descriptor: The role of Functional group interactions in mediating climate change impacts on the Carbon dynamics and Biodiversity of alpine ecosystems (FunCaB).
 
 
 
@@ -73,29 +76,50 @@ Vandvik et al. (2022). Data descriptor: The role of functional group interaction
 
 Removal experiments allow disentangling of direct effects of climate from indirect effects, resulting from changes in interactions among species or functional groups with climate.
 Across the Vestland Climate Grid (VCG), twelve sites in a climate grid spanning 4°C in growing season temperature and 2000 mm in mean annual precipitation in Western Norway, we conducted a fully factorial plant functional group removal experiment (graminoids, forbs, bryophytes).
-Over six years, we recorded biomass, soil microclimate, plant community composition, seedling recruitment, ecosystem carbon fluxes, and reflectance in 384 experimental treatment and control plots.
-The datasets consists of 5215 biomass records, 1,084,970 soil temperature records, 4,412 soil moisture records, 14,044 plant records covering 191 taxa,  3,696  carbon fluxes measurements, and XXX reflectance measurements.
-The data can be combined with other data collected within the VCG on longer-term climate data and plant population, community, ecosystem, and functional trait data. 
+Over six years, we recorded the biomass removed, soil microclimate, plant community composition and structure, seedling recruitment, ecosystem carbon fluxes, and reflectance in 384 experimental treatment and control plots.
+The dataset consists of 5,412 biomass records, 1,084,970 soil temperature records, 4,412 soil moisture records, 17,184 plant records covering 206 taxa, XXX seedling records, 3,696  carbon fluxes measurements, and 1,244 reflectance measurements.
+The data can be combined with other data collected within the VCG on longer-term climate data and plant population, community, ecosystem, and functional trait data.  
 
 
 ## Datasets
 
 ```{r datasets}
 
-tibble(Number = c("i", "ii", "", "iii", "iv", "v", "vi"),
-       Variable = c("Biomass removal", "Soil microclimate", "", "Plant community composition", "Seedling recruitment", "Ecosystem carbon fluxes", "Reflectance"),
-       Period = c("2015 - 2021", "2015 - 2018", "2015 - 2016", "2015 - 2019", "2018 - 2019", "2015 - 2017", "2019 - 2021"),
-       Filename = c("FunCaB_clean_biomass_2015-2021.csv", "FunCaB_clean_soilMoisture_2015-2018.csv", "FunCaB_clean_soiltemperature_2015-2016.csv", "FunCaB_clean_composition_2015-2018.csv", "FunCaB...", "FunCaB_clean_Cflux_2015-2017.csv", "FunCaB...")) %>% 
+tibble(Number = c("i", "ii", "iii", "iv", "v", "vi", "vii", "viii"),
+       Variable = c("Biomass removal", "Forb species biopmass", "Soil temperature", "Soil moisture", "Plant community composition", "Seedling recruitment", "Ecosystem carbon fluxes", "Reflectance"),
+       Period = c("2015 - 2021", "2016", "2015 - 2016", "2015 - 2018", "2015 - 2019", "2018 - 2019", "2015 - 2017", "2019, 2021"),
+       Filename = c("FunCaB_clean_biomass_2015-2021.csv",
+                    "FunCaB_clean_species_biomass_2016.csv",
+                    "FunCaB_clean_soiltemperature_2015-2016.csv",
+                    "FunCaB_clean_soilMoisture_2015-2018.csv",
+                    "FunCaB_clean_composition_2015-2018.csv", 
+                    "FunCaB_clean_recruitment_2018-2019", 
+                    "FunCaB_clean_Cflux_2015-2017.csv", 
+                    "FunCaB_clean_reflectance_2019_2021")) %>% 
   kbl()
 ```
 
 
 
-**Project description**, **data dictionaries**, and the overview of all **data sets** are in the data paper (REF).
+**Project description**, **data dictionaries**, and the overview of all **data sets** are in the data paper (Vandvik et al. 2022).
 
 The **raw** and **clean data** from the project are stored and available on **OSF**: https://osf.io/4c5v2/
 
 All **R code** to clean and curate the data is on **GitHub repository**: https://github.com/Between-the-Fjords/funcab_data
+
+
+### Data structure
+
+Data structure for the FunCaB biomass removal and forb species biomass (datasets i, ii), soil temperature and moisture (datasets iii, iv) plant community composition (dataset v), seedling recruitment (dataset vi), ecosystem carbon fluxes (dataset vii) and reflectance (dataset viii) is shown below in Figure 1 (data tables = boxes).
+Names of individual data tables are given in the grey title area, and variables within tables in the internal lists.
+Lines link species as a variable across tables, note that this is just an example, all bold variables are in common between tables and can be used as keys to join them (described in hatched boxes, including an example value for each variable on the right).
+Keys can also be used to link to/from data from other projects in the same system (for other VCG project keys, see top right box). Other datasets* refer to extensive dataset on plant community composition, cover, biomass, fitness, and reproduction available from previous projects in the VCG.
+
+```{r data-structure}
+
+knitr::include_graphics("Datapaper/FunCaB_database.jpg")
+
+```
 
 
 
@@ -114,25 +138,24 @@ Note that the turfID contains information about the control plots from the VCG.
 | siteID  | Unique siteID | Vikesland |
 | blockID  | Unique blockID as a combination of siteID and block number | Arh3  |
 | plotID  | Unique plotID as a combination of siteID, block and treatment | Arh3FGB  |
-| treatment  | Treatment of functional group removal indicating which groups have been removed; F = forbs, G = graminoids, B = Bryophytes | C, B, F, G, FB, GB, GF, FGB |
+| treatment  | Treatment of functional group removal indicating which groups have been removed; F = forbs, G = graminoids, B = bryophytes, C = controls, XC = extra controls | XC, C, B, F, G, FB, GB, GF, FGB |
 | turfID  | Unique turfID corresponding to the Vestland Climate Grid control plots | Arh3FGB  |
 | species  | Vascular plant taxon names follow for Norway (Lid J & Lid, 2010). The full taxa is written using genus and species with a blank. | Rancunculus acris|
 | responses  | response variable | cover, biomass, Reco, etc. |
 
 
 
-## Data dictionaries
+## Data and data dictionaries
 
 ### Biomass removal
-
-### Biomass
 
 
 ```{r biomass}
 
 biomass_plot <-  biomass %>% 
+  filter(removed_fg %in% c("F", "B", "G")) %>% 
   left_join(meta, by = c("siteID")) %>% 
-   mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB"))) %>% 
+   mutate(treatment = factor(treatment, levels = c("B", "F", "G", "FB", "GB", "GF", "FGB", "XC"))) %>% 
   ggplot(aes(x = treatment, y = biomass, fill = removed_fg)) +
   geom_col() +
   scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
@@ -167,17 +190,17 @@ biomass_plot
 ``` {r community}
 
 comm_data <- community %>%
-  select(year, siteID:mossCov, -turfID) %>%
+  select(year, siteID:total_bryophytes, -turfID) %>%
   filter(treatment %in% c("C", "FB", "GB", "GF"),
          year != 2016) %>%
   #filter(blockID == "Alr5") %>%
   distinct() %>%
-  mutate(graminoidCov = if_else(year == 2015 & treatment %in% c("GB", "GF"), NA_real_, graminoidCov),
-         forbCov = if_else(year == 2015 & treatment %in% c("FB", "GF"), NA_real_, forbCov),
-         mossCov = if_else(year == 2015 & treatment %in% c("FB", "GB"), NA_real_, mossCov)) %>%
+  mutate(total_graminoids = if_else(year == 2015 & treatment %in% c("GB", "GF"), NA_real_, total_graminoids),
+         total_forbs = if_else(year == 2015 & treatment %in% c("FB", "GF"), NA_real_, total_forbs),
+         total_bryophytes = if_else(year == 2015 & treatment %in% c("FB", "GB"), NA_real_, total_bryophytes)) %>%
   group_by(year, siteID, treatment) %>%
-  summarise_at(c("graminoidCov", "forbCov", "mossCov"), mean, na.rm = TRUE) %>%
-  pivot_longer(cols = c(graminoidCov, forbCov, mossCov), names_to = "fg", values_to = "fg_cover") %>%
+  summarise_at(c("total_graminoids", "total_forbs", "total_bryophytes"), mean, na.rm = TRUE) %>%
+  pivot_longer(cols = c(total_graminoids, total_forbs, total_bryophytes), names_to = "fg", values_to = "fg_cover") %>%
   pivot_wider(names_from = treatment, values_from = fg_cover) %>%
   mutate(Forbs = GB - C,
          Graminoids = FB - C,
@@ -188,12 +211,15 @@ comm_data <- community %>%
   mutate(FunctionalGroup = factor(FunctionalGroup, levels = c("Graminoids", "Forbs", "Bryophytes")))
 
 community_plot <- comm_data %>%
-  left_join(meta, by = "siteID") %>% 
-  mutate(biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal"))) %>% 
+  left_join(meta %>% 
+              distinct(siteID, biogeographic_zone,prep_level), by = "siteID") %>% 
+  mutate(biogeographic_zone = factor(biogeographic_zone, levels = c("alpine", "sub.alpine", "boreal")),
+         year = as.Date(ISOdate(year, 1, 1))) %>% 
   ggplot(aes(x = year, y = Cover, colour = FunctionalGroup)) +
   geom_line() +
   geom_hline(yintercept = 0, colour = "grey") +
   scale_colour_manual(name = "Functional group", values = c("limegreen", "purple", "orange")) +
+  scale_x_date(date_labels="%y") +
   facet_grid(biogeographic_zone ~ prep_level) +
   theme_set(theme_bw(base_size = 18))
 
@@ -229,4 +255,11 @@ cflux %>%
 
 ```{r cflux-dic}
  knitr::kable(cflux_dic)
+```
+
+
+### Reflectance
+
+```{r reflectance-dic}
+ knitr::kable(reflectance_dic)
 ```

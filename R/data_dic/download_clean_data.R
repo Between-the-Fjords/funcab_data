@@ -24,7 +24,7 @@ get_file(node = node,
 
 # 3 Plant composition
 get_file(node = node,
-         file = "FunCaB_clean_composition_2015-2018.csv",
+         file = "FunCaB_clean_composition_2015-2019.csv",
          path = "data/composition",
          remote_path = "3_Plant_composition")
 
@@ -39,6 +39,6 @@ get_file(node = node,
          remote_path = "5_Carbon_fluxes")
 
 # 6 Reflectance
-# get_file(node = node,
-#          file = "FunCaB_clean_reflectance_2020-2021.csv",
-#          remote_path = "6_Reflectance")
+get_file(node = node,
+         file = "FunCaB_clean_reflectance_2019_2021.csv",
+         remote_path = "6_Reflectance")

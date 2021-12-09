@@ -1,8 +1,10 @@
 
+# FunCaB - The role of functional group interactions in mediating climate change impacts on the Carbon dynamics and biodiversity of alpine ecosystems
+
 This is the git repository for the FunCaB project and base for the data
-paper: Vandvik et al. (2022). Data descriptor: The role of functional
+paper: Vandvik et al. (2022). Data descriptor: The role of Functional
 group interactions in mediating climate change impacts on the Carbon
-dynamics and biodiversity of alpine ecosystems.
+dynamics and Biodiversity of alpine ecosystems (FunCaB).
 
 ## Summary
 
@@ -13,14 +15,15 @@ Grid (VCG), twelve sites in a climate grid spanning 4°C in growing
 season temperature and 2000 mm in mean annual precipitation in Western
 Norway, we conducted a fully factorial plant functional group removal
 experiment (graminoids, forbs, bryophytes). Over six years, we recorded
-biomass, soil microclimate, plant community composition, seedling
-recruitment, ecosystem carbon fluxes, and reflectance in 384
-experimental treatment and control plots. The datasets consists of 5215
-biomass records, 1,084,970 soil temperature records, 4,412 soil moisture
-records, 14,044 plant records covering 191 taxa, 3,696 carbon fluxes
-measurements, and XXX reflectance measurements. The data can be combined
-with other data collected within the VCG on longer-term climate data and
-plant population, community, ecosystem, and functional trait data.
+the biomass removed, soil microclimate, plant community composition and
+structure, seedling recruitment, ecosystem carbon fluxes, and
+reflectance in 384 experimental treatment and control plots. The dataset
+consists of 5,412 biomass records, 1,084,970 soil temperature records,
+4,412 soil moisture records, 17,184 plant records covering 206 taxa, XXX
+seedling records, 3,696 carbon fluxes measurements, and 1,244
+reflectance measurements. The data can be combined with other data
+collected within the VCG on longer-term climate data and plant
+population, community, ecosystem, and functional trait data.
 
 ## Datasets
 
@@ -61,19 +64,21 @@ FunCaB_clean_biomass_2015-2021.csv
 ii
 </td>
 <td style="text-align:left;">
-Soil microclimate
+Forb species biopmass
 </td>
 <td style="text-align:left;">
-2015 - 2018
+2016
 </td>
 <td style="text-align:left;">
-FunCaB_clean_soilMoisture_2015-2018.csv
+FunCaB_clean_species_biomass_2016.csv
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
+iii
 </td>
 <td style="text-align:left;">
+Soil temperature
 </td>
 <td style="text-align:left;">
 2015 - 2016
@@ -84,7 +89,21 @@ FunCaB_clean_soiltemperature_2015-2016.csv
 </tr>
 <tr>
 <td style="text-align:left;">
-iii
+iv
+</td>
+<td style="text-align:left;">
+Soil moisture
+</td>
+<td style="text-align:left;">
+2015 - 2018
+</td>
+<td style="text-align:left;">
+FunCaB_clean_soilMoisture_2015-2018.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+v
 </td>
 <td style="text-align:left;">
 Plant community composition
@@ -98,7 +117,7 @@ FunCaB_clean_composition_2015-2018.csv
 </tr>
 <tr>
 <td style="text-align:left;">
-iv
+vi
 </td>
 <td style="text-align:left;">
 Seedling recruitment
@@ -107,12 +126,12 @@ Seedling recruitment
 2018 - 2019
 </td>
 <td style="text-align:left;">
-FunCaB…
+FunCaB_clean_recruitment_2018-2019
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-v
+vii
 </td>
 <td style="text-align:left;">
 Ecosystem carbon fluxes
@@ -126,29 +145,48 @@ FunCaB_clean_Cflux_2015-2017.csv
 </tr>
 <tr>
 <td style="text-align:left;">
-vi
+viii
 </td>
 <td style="text-align:left;">
 Reflectance
 </td>
 <td style="text-align:left;">
-2019 - 2021
+2019, 2021
 </td>
 <td style="text-align:left;">
-FunCaB…
+FunCaB_clean_reflectance_2019_2021
 </td>
 </tr>
 </tbody>
 </table>
 
 **Project description**, **data dictionaries**, and the overview of all
-**data sets** are in the data paper (REF).
+**data sets** are in the data paper (Vandvik et al. 2022).
 
 The **raw** and **clean data** from the project are stored and available
 on **OSF**: <https://osf.io/4c5v2/>
 
 All **R code** to clean and curate the data is on **GitHub repository**:
 <https://github.com/Between-the-Fjords/funcab_data>
+
+### Data structure
+
+Data structure for the FunCaB biomass removal and forb species biomass
+(datasets i, ii), soil temperature and moisture (datasets iii, iv) plant
+community composition (dataset v), seedling recruitment (dataset vi),
+ecosystem carbon fluxes (dataset vii) and reflectance (dataset viii) is
+shown below in Figure 1 (data tables = boxes). Names of individual data
+tables are given in the grey title area, and variables within tables in
+the internal lists. Lines link species as a variable across tables, note
+that this is just an example, all bold variables are in common between
+tables and can be used as keys to join them (described in hatched boxes,
+including an example value for each variable on the right). Keys can
+also be used to link to/from data from other projects in the same system
+(for other VCG project keys, see top right box). Other datasets\* refer
+to extensive dataset on plant community composition, cover, biomass,
+fitness, and reproduction available from previous projects in the VCG.
+
+![](Datapaper/FunCaB_database.jpg)<!-- -->
 
 ### Naming conventions across datasets
 
@@ -158,25 +196,23 @@ the Vestland Climate Grid (VCG) and can be used to join these datasets.
 Note that the turfID contains information about the control plots from
 the VCG.
 
-| Data or file | Description of naming convention                                                                                                 | Example                            |
-|:-------------|:---------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------|
-| File names   | Project_status_Dataset_Year.extension                                                                                            | FunCaB_clean_biomass_2015-2021.csv |
-| year         | Year of observation                                                                                                              | 2015                               |
-| date         | Date of observation                                                                                                              | yyyy-mm–dd                         |
-| date_time    | Date and time of observation                                                                                                     | yyyy-mm-dd hh-mm-ss                |
-| siteID       | Unique siteID                                                                                                                    | Vikesland                          |
-| blockID      | Unique blockID as a combination of siteID and block number                                                                       | Arh3                               |
-| plotID       | Unique plotID as a combination of siteID, block and treatment                                                                    | Arh3FGB                            |
-| treatment    | Treatment of functional group removal indicating which groups have been removed; F = forbs, G = graminoids, B = Bryophytes       | C, B, F, G, FB, GB, GF, FGB        |
-| turfID       | Unique turfID corresponding to the Vestland Climate Grid control plots                                                           | Arh3FGB                            |
-| species      | Vascular plant taxon names follow for Norway (Lid J & Lid, 2010). The full taxa is written using genus and species with a blank. | Rancunculus acris                  |
-| responses    | response variable                                                                                                                | cover, biomass, Reco, etc.         |
+| Data or file | Description of naming convention                                                                                                                              | Example                            |
+|:-------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------|
+| File names   | Project_status_Dataset_Year.extension                                                                                                                         | FunCaB_clean_biomass_2015-2021.csv |
+| year         | Year of observation                                                                                                                                           | 2015                               |
+| date         | Date of observation                                                                                                                                           | yyyy-mm–dd                         |
+| date_time    | Date and time of observation                                                                                                                                  | yyyy-mm-dd hh-mm-ss                |
+| siteID       | Unique siteID                                                                                                                                                 | Vikesland                          |
+| blockID      | Unique blockID as a combination of siteID and block number                                                                                                    | Arh3                               |
+| plotID       | Unique plotID as a combination of siteID, block and treatment                                                                                                 | Arh3FGB                            |
+| treatment    | Treatment of functional group removal indicating which groups have been removed; F = forbs, G = graminoids, B = bryophytes, C = controls, XC = extra controls | XC, C, B, F, G, FB, GB, GF, FGB    |
+| turfID       | Unique turfID corresponding to the Vestland Climate Grid control plots                                                                                        | Arh3FGB                            |
+| species      | Vascular plant taxon names follow for Norway (Lid J & Lid, 2010). The full taxa is written using genus and species with a blank.                              | Rancunculus acris                  |
+| responses    | response variable                                                                                                                                             | cover, biomass, Reco, etc.         |
 
-## Data dictionaries
+## Data and data dictionaries
 
 ### Biomass removal
-
-### Biomass
 
 ![](README_files/figure-gfm/biomass-1.png)<!-- -->
 
@@ -196,7 +232,7 @@ Variable type
 Variable range or levels
 </th>
 <th style="text-align:left;">
-Units/treatment level
+Units
 </th>
 <th style="text-align:left;">
 How measured
@@ -218,7 +254,7 @@ numeric
 2015 - 2021
 </td>
 <td style="text-align:left;">
-2016
+yyyy
 </td>
 <td style="text-align:left;">
 defined
@@ -258,7 +294,7 @@ numeric
 1 - 2
 </td>
 <td style="text-align:left;">
-numeric value
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -278,7 +314,7 @@ categorical
 Alrust - Vikesland
 </td>
 <td style="text-align:left;">
-Alrust
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -298,7 +334,7 @@ categorical
 Alr1 - Vik5
 </td>
 <td style="text-align:left;">
-Alr3
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -318,7 +354,7 @@ categorical
 Alr1B - Vik5GF
 </td>
 <td style="text-align:left;">
-Alr1FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -329,19 +365,17 @@ defined
 treatment
 </td>
 <td style="text-align:left;">
-Composition of functional groups in the plot with FGB = Forbs,
-Graminoids, Bryophytes; FG = Forbs,Graminoids; FB = Forbs, Bryophytes;
-GB = Graminoids, Bryophytes; G = Graminoids, F = Forbs, B = Bryophytes,
-C = Control, XC = Additional control
+Plant functional groups removed, where F = forbs, G = graminoids, B =
+bryophytes and C = control, and XC = extra control
 </td>
 <td style="text-align:left;">
 categorical
 </td>
 <td style="text-align:left;">
-B - GF
+B - XC
 </td>
 <td style="text-align:left;">
-FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -352,17 +386,18 @@ defined
 removed_fg
 </td>
 <td style="text-align:left;">
-Removed functional group with sampling: F = Forbs, G = Graminoids, B =
-Bryophytes
+Removed functional group, where F = forbs, B = bryophytes, G =
+graminoids, L = litterm P = pteridophytes, LI = lichens, and C =
+cryptograms
 </td>
 <td style="text-align:left;">
 categorical
 </td>
 <td style="text-align:left;">
-B - G
+B - P
 </td>
 <td style="text-align:left;">
-F
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -419,13 +454,34 @@ Remarks
 categorical
 </td>
 <td style="text-align:left;">
-Bag: 05.08.21 - treatment says GF not FG
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+functional_group
+</td>
+<td style="text-align:left;">
+Removed functional group, including forbs, bryophytes, graminoids,
+litterm pteridophytes, lichens, and cryptograms
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+bryophytes - pteridophytes
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
-NA
+defined
 </td>
 </tr>
 </tbody>
@@ -449,7 +505,7 @@ Variable type
 Variable range or levels
 </th>
 <th style="text-align:left;">
-Units/treatment level
+Units
 </th>
 <th style="text-align:left;">
 How measured
@@ -471,7 +527,7 @@ numeric
 2016 - 2016
 </td>
 <td style="text-align:left;">
-2016
+yyyy
 </td>
 <td style="text-align:left;">
 defined
@@ -488,7 +544,7 @@ Date and time of sampling
 date_time
 </td>
 <td style="text-align:left;">
-2015-07-12 17:58:01 - 2016-06-27 23:05:01
+2015-07-12 11:20:01 - 2016-07-05 23:58:01
 </td>
 <td style="text-align:left;">
 yyyy-mm-dd hh:mm:ss
@@ -511,7 +567,7 @@ categorical
 Alrust - Vikesland
 </td>
 <td style="text-align:left;">
-Alrust
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -531,7 +587,7 @@ categorical
 Alr1 - Vik5
 </td>
 <td style="text-align:left;">
-Alr3
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -551,7 +607,7 @@ categorical
 Alr1B - Vik5GF
 </td>
 <td style="text-align:left;">
-Alr1FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -571,7 +627,7 @@ categorical
 003E3B5C41_2016 - F83E3E2A41_2016
 </td>
 <td style="text-align:left;">
-3BC3A141
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -582,10 +638,8 @@ defined
 treatment
 </td>
 <td style="text-align:left;">
-Composition of functional groups in the plot with FGB = Forbs,
-Graminoids, Bryophytes; FG = Forbs,Graminoids; FB = Forbs, Bryophytes;
-GB = Graminoids, Bryophytes; G = Graminoids, F = Forbs, B = Bryophytes,
-C = Control, XC = Additional control
+Plant functional groups removed, where F = forbs, G = graminoids, B =
+bryophytes and C = control, and XC = extra control
 </td>
 <td style="text-align:left;">
 categorical
@@ -594,10 +648,30 @@ categorical
 B - GF
 </td>
 <td style="text-align:left;">
-FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+soiltemperature
+</td>
+<td style="text-align:left;">
+Soil temperature measurement per plot
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+-8.75 - 32.826
+</td>
+<td style="text-align:left;">
+°C
+</td>
+<td style="text-align:left;">
+recorded
 </td>
 </tr>
 <tr>
@@ -611,7 +685,7 @@ Additional comments
 categorical
 </td>
 <td style="text-align:left;">
-According to tag on the logger - wrong number: 8B0000003E391041
+NA
 </td>
 <td style="text-align:left;">
 NA
@@ -634,7 +708,7 @@ categorical
 101 TTC - 73 TTC
 </td>
 <td style="text-align:left;">
-31 TTC
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -658,7 +732,7 @@ Variable type
 Variable range or levels
 </th>
 <th style="text-align:left;">
-Units/treatment level
+Units
 </th>
 <th style="text-align:left;">
 How measured
@@ -700,7 +774,7 @@ categorical
 Alrust - Vikesland
 </td>
 <td style="text-align:left;">
-Alrust
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -720,7 +794,7 @@ categorical
 Alr - Vik5
 </td>
 <td style="text-align:left;">
-Alr3
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -737,10 +811,10 @@ Unique plot ID is a combination of site, block and treatment
 categorical
 </td>
 <td style="text-align:left;">
-Alr1B - Vik5GF
+Alr1B - Vik5NA
 </td>
 <td style="text-align:left;">
-Alr1FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -751,10 +825,8 @@ defined
 treatment
 </td>
 <td style="text-align:left;">
-Composition of functional groups in the plot with FGB = Forbs,
-Graminoids, Bryophytes; FG = Forbs,Graminoids; FB = Forbs, Bryophytes;
-GB = Graminoids, Bryophytes; G = Graminoids, F = Forbs, B = Bryophytes,
-C = Control, XC = Additional control
+Plant functional groups removed, where F = forbs, G = graminoids, B =
+bryophytes and C = control, and XC = extra control
 </td>
 <td style="text-align:left;">
 categorical
@@ -763,7 +835,7 @@ categorical
 B - GF
 </td>
 <td style="text-align:left;">
-FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -774,28 +846,7 @@ defined
 soilmoisture
 </td>
 <td style="text-align:left;">
-Plotlevel soil moisture
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 100
-</td>
-<td style="text-align:left;">
-percentage
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-soilmoisture
-</td>
-<td style="text-align:left;">
-Soilmoisture measurement associated with light measurement from
-soilmoisture dataset
+Soil moisture measurement per plot
 </td>
 <td style="text-align:left;">
 numeric
@@ -824,7 +875,7 @@ categorical
 Blue sky - windy, cloudy
 </td>
 <td style="text-align:left;">
-cloudy
+NA
 </td>
 <td style="text-align:left;">
 recorded
@@ -861,10 +912,10 @@ Unique turf ID from SeedClim transplant experiment
 categorical
 </td>
 <td style="text-align:left;">
-101 TTC - Ves 539 TTC 262
+101 TTC - TTC C
 </td>
 <td style="text-align:left;">
-31 TTC
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -893,7 +944,7 @@ Variable type
 Variable range or levels
 </th>
 <th style="text-align:left;">
-Units/treatment level
+Units
 </th>
 <th style="text-align:left;">
 How measured
@@ -912,10 +963,10 @@ Year of sampling
 numeric
 </td>
 <td style="text-align:left;">
-2015 - 2018
+2015 - 2019
 </td>
 <td style="text-align:left;">
-2016
+yyyy
 </td>
 <td style="text-align:left;">
 defined
@@ -935,7 +986,7 @@ categorical
 Alrust - Vikesland
 </td>
 <td style="text-align:left;">
-Alrust
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -952,10 +1003,30 @@ Unique block ID a combination of site and block
 categorical
 </td>
 <td style="text-align:left;">
-Alr1 - Vik5
+Alr1 - VikVik5
 </td>
 <td style="text-align:left;">
-Alr3
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+plotID
+</td>
+<td style="text-align:left;">
+Unique plot ID is a combination of site, block and treatment
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Alr1B - Vik5GF
+</td>
+<td style="text-align:left;">
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -966,10 +1037,8 @@ defined
 treatment
 </td>
 <td style="text-align:left;">
-Composition of functional groups in the plot with FGB = Forbs,
-Graminoids, Bryophytes; FG = Forbs,Graminoids; FB = Forbs, Bryophytes;
-GB = Graminoids, Bryophytes; G = Graminoids, F = Forbs, B = Bryophytes,
-C = Control, XC = Additional control
+Plant functional groups removed, where F = forbs, G = graminoids, B =
+bryophytes and C = control, and XC = extra control
 </td>
 <td style="text-align:left;">
 categorical
@@ -978,7 +1047,7 @@ categorical
 B - XC
 </td>
 <td style="text-align:left;">
-FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -986,27 +1055,7 @@ defined
 </tr>
 <tr>
 <td style="text-align:left;">
-turfID
-</td>
-<td style="text-align:left;">
-Unique turf ID from SeedClim transplant experiment
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-Alr1B - Vik5GF
-</td>
-<td style="text-align:left;">
-31 TTC
-</td>
-<td style="text-align:left;">
-defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-graminoidCov
+total_graminoids
 </td>
 <td style="text-align:left;">
 Cover of graminoids
@@ -1015,7 +1064,7 @@ Cover of graminoids
 numeric
 </td>
 <td style="text-align:left;">
-0 - 100
+5 - 100
 </td>
 <td style="text-align:left;">
 percentage
@@ -1026,7 +1075,7 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
-forbCov
+total_forbs
 </td>
 <td style="text-align:left;">
 Cover of forbs
@@ -1035,7 +1084,7 @@ Cover of forbs
 numeric
 </td>
 <td style="text-align:left;">
-0 - 100
+3 - 100
 </td>
 <td style="text-align:left;">
 percentage
@@ -1046,7 +1095,7 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
-mossCov
+total_bryophytes
 </td>
 <td style="text-align:left;">
 Cover of bryophytes
@@ -1066,7 +1115,7 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
-vegetationHeight
+vegetation_height
 </td>
 <td style="text-align:left;">
 Height of vegetation
@@ -1075,7 +1124,7 @@ Height of vegetation
 numeric
 </td>
 <td style="text-align:left;">
-0 - 267.5
+0 - 350
 </td>
 <td style="text-align:left;">
 mm
@@ -1086,7 +1135,7 @@ measured
 </tr>
 <tr>
 <td style="text-align:left;">
-mossHeight
+moss_height
 </td>
 <td style="text-align:left;">
 Height of bryophytes
@@ -1135,10 +1184,10 @@ Species abbreviation
 categorical
 </td>
 <td style="text-align:left;">
-Ach.mil - Vio.tri
+Ach.mil - Vio.tri or NA
 </td>
 <td style="text-align:left;">
-Ach.mil
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -1166,6 +1215,27 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
+functional_group
+</td>
+<td style="text-align:left;">
+Removed functional group, including forbs, bryophytes, graminoids,
+litterm pteridophytes, lichens, and cryptograms
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+forb - graminoid
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 sumcover
 </td>
 <td style="text-align:left;">
@@ -1175,13 +1245,53 @@ Total sum of species cover
 numeric
 </td>
 <td style="text-align:left;">
-1 - 267
+1 - 176
 </td>
 <td style="text-align:left;">
 percentage
 </td>
 <td style="text-align:left;">
 recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+recorder
+</td>
+<td style="text-align:left;">
+Data collector
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Aud - W
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+turfID
+</td>
+<td style="text-align:left;">
+Unique turf ID from SeedClim transplant experiment
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+101 TTC - 73 TTC
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
 </td>
 </tr>
 </tbody>
@@ -1207,7 +1317,7 @@ Variable type
 Variable range or levels
 </th>
 <th style="text-align:left;">
-Units/treatment level
+Units
 </th>
 <th style="text-align:left;">
 How measured
@@ -1229,7 +1339,7 @@ numeric
 2015 - 2017
 </td>
 <td style="text-align:left;">
-2016
+yyyy
 </td>
 <td style="text-align:left;">
 defined
@@ -1269,7 +1379,7 @@ categorical
 Alrust - Vikesland
 </td>
 <td style="text-align:left;">
-Alrust
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -1289,7 +1399,7 @@ categorical
 Alr1 - Vik5
 </td>
 <td style="text-align:left;">
-Alr3
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -1309,7 +1419,7 @@ categorical
 Alr1B - Vik5RTC
 </td>
 <td style="text-align:left;">
-Alr1FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -1320,10 +1430,8 @@ defined
 treatment
 </td>
 <td style="text-align:left;">
-Composition of functional groups in the plot with FGB = Forbs,
-Graminoids, Bryophytes; FG = Forbs,Graminoids; FB = Forbs, Bryophytes;
-GB = Graminoids, Bryophytes; G = Graminoids, F = Forbs, B = Bryophytes,
-C = Control, XC = Additional control
+Plant functional groups removed, where F = forbs, G = graminoids, B =
+bryophytes and C = control, and XC = extra control
 </td>
 <td style="text-align:left;">
 categorical
@@ -1332,7 +1440,7 @@ categorical
 B - XC
 </td>
 <td style="text-align:left;">
-FGB
+NA
 </td>
 <td style="text-align:left;">
 defined
@@ -1346,30 +1454,10 @@ starttime
 Start time of light measurement
 </td>
 <td style="text-align:left;">
-NA
+date_time
 </td>
 <td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-yyyy-mm-dd hh:mm:ss
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-starttime
-</td>
-<td style="text-align:left;">
-Start time of light measurement
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
+2015-06-30 08:10:30 - 2017-08-01 14:17:10
 </td>
 <td style="text-align:left;">
 yyyy-mm-dd hh:mm:ss
@@ -1386,53 +1474,13 @@ stoptime
 End time of light measurement
 </td>
 <td style="text-align:left;">
-NA
+date_time
 </td>
 <td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-yyyy-mm-dd hh:mm:ss
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stoptime
-</td>
-<td style="text-align:left;">
-End time of light measurement
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
+2015-06-30 08:12:30 - 2017-08-01 14:19:10
 </td>
 <td style="text-align:left;">
 yyyy-mm-dd hh:mm:ss
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-time
-</td>
-<td style="text-align:left;">
-Time in seconds for light measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 195
-</td>
-<td style="text-align:left;">
-second
 </td>
 <td style="text-align:left;">
 recorded
@@ -1443,13 +1491,13 @@ recorded
 PAR
 </td>
 <td style="text-align:left;">
-PAR value of light measurment
+PAR value of light measurement
 </td>
 <td style="text-align:left;">
 numeric
 </td>
 <td style="text-align:left;">
-4.658932 - 2555
+4.659 - 2555
 </td>
 <td style="text-align:left;">
 µmol m-2 s-1
@@ -1463,7 +1511,7 @@ recorded
 soiltemp
 </td>
 <td style="text-align:left;">
-Soiltemperature value of light measurement
+Soil temperature value of light measurement
 </td>
 <td style="text-align:left;">
 numeric
@@ -1480,10 +1528,50 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
+soilmoisture
+</td>
+<td style="text-align:left;">
+Soil moisture measurement per plot
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0 - 76.775
+</td>
+<td style="text-align:left;">
+m3 water/m3 soil
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tempK
+</td>
+<td style="text-align:left;">
+Air temperature in the chamber during light measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+279.225 - 312.784
+</td>
+<td style="text-align:left;">
+Kelvin
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 vegHeight
 </td>
 <td style="text-align:left;">
-Vegetation height of plot from plant community data set
+Vegetation height
 </td>
 <td style="text-align:left;">
 numeric
@@ -1509,13 +1597,33 @@ Net ecosystem exchange
 numeric
 </td>
 <td style="text-align:left;">
--15.3924718105141 - 17.8854744852414
+-15.392 - 17.885
 </td>
 <td style="text-align:left;">
 µmol mol-1 s-1 CO2
 </td>
 <td style="text-align:left;">
-recorded
+calculated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+gpp
+</td>
+<td style="text-align:left;">
+Gross primary production calculated from nee - Reco
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+-24.342 - -0.004
+</td>
+<td style="text-align:left;">
+µmol mol-1 s-1 CO2
+</td>
+<td style="text-align:left;">
+calculated
 </td>
 </tr>
 <tr>
@@ -1530,7 +1638,7 @@ versus time
 numeric
 </td>
 <td style="text-align:left;">
-2.77252522336278e-07 - 1
+0 - 1
 </td>
 <td style="text-align:left;">
 NA
@@ -1553,191 +1661,10 @@ numeric
 1 - 2
 </td>
 <td style="text-align:left;">
-numeric value
+NA
 </td>
 <td style="text-align:left;">
 defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-removal
-</td>
-<td style="text-align:left;">
-Pre (2015) or post (> 2015) removal treatment
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-post - pre
-</td>
-<td style="text-align:left;">
-pre or post
-</td>
-<td style="text-align:left;">
-defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-weather
-</td>
-<td style="text-align:left;">
-Weather conditions during data collection
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-cloud - Windy
-</td>
-<td style="text-align:left;">
-cloudy
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-flag
-</td>
-<td style="text-align:left;">
-Flag for data quality
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-1010 - sun
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-comment
-</td>
-<td style="text-align:left;">
-Comment on measurment
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-–> - x
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-turfID
-</td>
-<td style="text-align:left;">
-Unique turf ID from SeedClim transplant experiment
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-101 TTC - 99 TTC
-</td>
-<td style="text-align:left;">
-31 TTC
-</td>
-<td style="text-align:left;">
-defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-soilmoisture
-</td>
-<td style="text-align:left;">
-Plotlevel soil moisture
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 76.775
-</td>
-<td style="text-align:left;">
-percentage
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-soilmoisture
-</td>
-<td style="text-align:left;">
-Soilmoisture measurement associated with light measurement from
-soilmoisture dataset
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 76.775
-</td>
-<td style="text-align:left;">
-m3 water/m3 soil
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-recorder
-</td>
-<td style="text-align:left;">
-Data collector
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-Alba - Vojta
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-tempK
-</td>
-<td style="text-align:left;">
-Air temperature in the chamber during light measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-279.225 - 312.783579166667
-</td>
-<td style="text-align:left;">
-Kelvin
-</td>
-<td style="text-align:left;">
-recorded
 </td>
 </tr>
 <tr>
@@ -1748,30 +1675,10 @@ starttime_Reco
 Start time of dark measurement
 </td>
 <td style="text-align:left;">
-NA
+date_time
 </td>
 <td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-yyyy-mm-dd hh:mm:ss
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-starttime_Reco
-</td>
-<td style="text-align:left;">
-Start time of dark measurement
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
+2015-06-30 08:14:30 - 2017-08-01 14:19:55
 </td>
 <td style="text-align:left;">
 yyyy-mm-dd hh:mm:ss
@@ -1788,30 +1695,10 @@ stoptime_Reco
 End time of dark measurement
 </td>
 <td style="text-align:left;">
-NA
+date_time
 </td>
 <td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-yyyy-mm-dd hh:mm:ss
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stoptime_Reco
-</td>
-<td style="text-align:left;">
-End time of dark measurement
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
+2015-06-30 08:16:00 - 2017-08-01 14:21:55
 </td>
 <td style="text-align:left;">
 yyyy-mm-dd hh:mm:ss
@@ -1845,13 +1732,13 @@ recorded
 PAR_Reco
 </td>
 <td style="text-align:left;">
-PAR value of dark measurment
+PAR value of dark measurement
 </td>
 <td style="text-align:left;">
 numeric
 </td>
 <td style="text-align:left;">
-0 - 140.131404958678
+0 - 140.131
 </td>
 <td style="text-align:left;">
 µmol m-2 s-1
@@ -1865,7 +1752,7 @@ recorded
 soiltemp_Reco
 </td>
 <td style="text-align:left;">
-Soiltemperature value of dark measurement
+Soil temperature value of dark measurement
 </td>
 <td style="text-align:left;">
 numeric
@@ -1882,22 +1769,22 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
-vegHeight_Reco
+tempK_Reco
 </td>
 <td style="text-align:left;">
-Vegetation height of plot from plant community data set
+Air temperature in the chamber during dark measurement
 </td>
 <td style="text-align:left;">
 numeric
 </td>
 <td style="text-align:left;">
-0.01 - 27
+279.225 - 311.977
 </td>
 <td style="text-align:left;">
-mm
+Kelvin
 </td>
 <td style="text-align:left;">
-measured
+recorded
 </td>
 </tr>
 <tr>
@@ -1911,7 +1798,7 @@ Ecosystem respiration
 numeric
 </td>
 <td style="text-align:left;">
-0.549348643554148 - 30.3544492014396
+0.549 - 30.354
 </td>
 <td style="text-align:left;">
 µmol mol-1 s-1 CO2
@@ -1932,10 +1819,10 @@ versus time
 numeric
 </td>
 <td style="text-align:left;">
-0.800233433653397 - 1
+0.8 - 1
 </td>
 <td style="text-align:left;">
-NA
+0-1
 </td>
 <td style="text-align:left;">
 calculated
@@ -1963,167 +1850,6 @@ defined
 </tr>
 <tr>
 <td style="text-align:left;">
-removal_Reco
-</td>
-<td style="text-align:left;">
-Pre (2015) or post (> 2015) removal treatment
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-post - pre
-</td>
-<td style="text-align:left;">
-pre or post
-</td>
-<td style="text-align:left;">
-defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-weather_Reco
-</td>
-<td style="text-align:left;">
-Weather conditions during light measurement
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-clouds - Windy
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-flag_Reco
-</td>
-<td style="text-align:left;">
-Flag for data quality
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-1010 - pre
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-comment_Reco
-</td>
-<td style="text-align:left;">
-Comment on measurment
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-&Breezy - x
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-turfID_Reco
-</td>
-<td style="text-align:left;">
-Unique turf ID from SeedClim transplant experiment
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-101 TTC - 99 TTC
-</td>
-<td style="text-align:left;">
-31 TTC
-</td>
-<td style="text-align:left;">
-defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-soilmoisture_Reco
-</td>
-<td style="text-align:left;">
-Soilmoisture measurement associated with dark measurement from
-soilmoisture dataset
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 76.775
-</td>
-<td style="text-align:left;">
-m3 water/m3 soil
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-recorder_Reco
-</td>
-<td style="text-align:left;">
-Recorder
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-Alba - Vojta
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-tempK_Reco
-</td>
-<td style="text-align:left;">
-Air temperature in the chamber during dark measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-279.225 - 311.97665
-</td>
-<td style="text-align:left;">
-Kelvin
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 delta
 </td>
 <td style="text-align:left;">
@@ -2144,22 +1870,23 @@ calculated
 </tr>
 <tr>
 <td style="text-align:left;">
-gpp
+removal
 </td>
 <td style="text-align:left;">
-Gross primary production calculated from nee - Reco
+Pre (2015) or post (> 2015) removal treatment. Pre removal is related to
+the start of the experiment.
 </td>
 <td style="text-align:left;">
-numeric
+categorical
 </td>
 <td style="text-align:left;">
--24.3421116941431 - -0.00417718292151026
+post - pre
 </td>
 <td style="text-align:left;">
-µmol mol-1 s-1 CO2
+NA
 </td>
 <td style="text-align:left;">
-calculated
+defined
 </td>
 </tr>
 <tr>
@@ -2167,7 +1894,7 @@ calculated
 weather
 </td>
 <td style="text-align:left;">
-Weather conditions during light measurement
+Weather conditions during data collection
 </td>
 <td style="text-align:left;">
 categorical
@@ -2184,22 +1911,333 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
-recorder
+flag
 </td>
 <td style="text-align:left;">
-Recorder
+Flag for data quality (x or DROP)
 </td>
 <td style="text-align:left;">
 categorical
 </td>
 <td style="text-align:left;">
-Alba - Vojta
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+comment
+</td>
+<td style="text-align:left;">
+Comment on measurement
+</td>
+<td style="text-align:left;">
+categorical
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
 NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time
+</td>
+<td style="text-align:left;">
+Time in seconds for light measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0 - 195
+</td>
+<td style="text-align:left;">
+second
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+</tbody>
+</table>
+
+### Reflectance
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable name
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+Variable type
+</th>
+<th style="text-align:left;">
+Variable range or levels
+</th>
+<th style="text-align:left;">
+Units
+</th>
+<th style="text-align:left;">
+How measured
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+date
+</td>
+<td style="text-align:left;">
+Date of sampling
+</td>
+<td style="text-align:left;">
+date
+</td>
+<td style="text-align:left;">
+2019-07-19 - 2021-07-30
+</td>
+<td style="text-align:left;">
+yyyy-mm-dd
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+siteID
+</td>
+<td style="text-align:left;">
+Unique site ID
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Alrust - Vikesland
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+blockID
+</td>
+<td style="text-align:left;">
+Unique block ID a combination of site and block
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Alr1 - Vik5
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+plotID
+</td>
+<td style="text-align:left;">
+Unique plot ID is a combination of site, block and treatment
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Alr1B - Vik5GF
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatment
+</td>
+<td style="text-align:left;">
+Plant functional groups removed, where F = forbs, G = graminoids, B =
+bryophytes and C = control, and XC = extra control
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+B - TTC
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pre_post_cut
+</td>
+<td style="text-align:left;">
+Measurement was taken before or after the cut
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+post - pre
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ndvi
+</td>
+<td style="text-align:left;">
+NDVI value
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0.315 - 4.265
+</td>
+<td style="text-align:left;">
+percentage
+</td>
+<td style="text-align:left;">
+measured
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+notes
+</td>
+<td style="text-align:left;">
+Notes
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+turfID
+</td>
+<td style="text-align:left;">
+Unique turf ID from SeedClim transplant experiment
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+TTC 101 - TTC 69
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+weather
+</td>
+<td style="text-align:left;">
+Weather conditions during data collection
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Cloudy - Sunny
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time
+</td>
+<td style="text-align:left;">
+Time of sampling
+</td>
+<td style="text-align:left;">
+time
+</td>
+<td style="text-align:left;">
+08:00 - 19:55
+</td>
+<td style="text-align:left;">
+hh:mm
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatment
+</td>
+<td style="text-align:left;">
+Plant functional groups removed, where F = forbs, G = graminoids, and B
+= bryophytes and C = control
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+B - TTC
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
 </td>
 </tr>
 </tbody>

@@ -26,18 +26,16 @@ source("R/cflux/functions/TTC_dictionary.R")
 #devtools::install_github("Between-the-Fjords/dataDownloader")
 #library(dataDownloader)
 
-#node <- "4c5v2"
-
 # 5 Carbon fluxes
-# get_file(node = node,
-#          file = "xxx.zip",
-#          remote_path = "5_Carbon_fluxes")
+get_file(node = node,
+         file = "xxx.zip",
+         remote_path = "5_Carbon_fluxes")
 
 # Clean Soil moisture data
-# get_file(node = node,
-#          file = "FunCaB_clean_soilMoisture_2015-2018.csv",
-#          path = "data/climate",
-#          remote_path = "2_Soil_microclimate/Soil Moisture")
+get_file(node = node,
+         file = "FunCaB_clean_soilMoisture_2015-2018.csv",
+         path = "data/climate",
+         remote_path = "2_Soil_microclimate/Soil Moisture")
 
 #================================================================================
 # importing single datafiles, process and set new start and end times.
@@ -182,7 +180,13 @@ CO2data <- bind_rows(overviewsitesdata_2015,
          turfID = if_else(str_detect(turfID, "TTC"), turfID, NA_character_),
          treatment = str_replace(treatment, "TTC", "C"),
          plotID = str_replace(plotID, "TTC", "C"),
-         chamber = if_else(date == ymd("2016-06-28") & site == "Vikesland", 1L, chamber)) %>%
+         chamber = if_else(date == ymd("2016-06-28") & site == "Vikesland", 1L, chamber),
+         weather = if_else(weather == "hayz" & comment == "clouds", "hazy clouds", weather),
+         weather = if_else(weather == "more" & comment == "clouds", "more clouds", weather),
+         weather = if_else(weather == "hayz" & comment == "cloud", "hazy cloud", weather),
+         weather = if_else(weather == "sunny" & comment == "cloud", "sunny cloud", weather)) %>%
+  mutate(flag = if_else(flag %in% c("pre", "1010", "x", ""), NA_character_, flag),
+         comment = if_else(comment %in% c("", "sun", "rain", "clouds", "cloud"), NA_character_, comment)) %>%
   select(year, date, siteID = site, blockID = block, plotID, treatment, measurement = cover, starttime, stoptime, cover, time, PAR, temp, soiltemp = soilT, vegHeight = vegbiomass, nee, rsqd, n, chamber, removal, weather, flag, comment, turfID)
 
 
@@ -205,7 +209,6 @@ CO2data <- CO2data %>%
 
 # light = nee
 # dark = Reco
-
 
 # seperate L and D measurements and merge them in new file with new column GPP, selecting data with r2>=.8
 CO2_clean <- CO2data %>%
@@ -246,5 +249,4 @@ CO2_final_1517 <- crossing(
   select(year:soiltemp, soilmoisture, tempK, vegHeight, nee, gpp, rsqd, time, chamber, starttime_Reco:soiltemp_Reco, tempK_Reco, Reco:chamber_Reco, delta, removal:comment)
 
 write_csv(CO2_final_1517, file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
-
 
