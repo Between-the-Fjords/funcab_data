@@ -477,7 +477,7 @@ comp2 <- composition4 %>%
                           "Pedicularis" = "Ped.sp",
                           "Pri.mula" = "Pri.sp"),
          # some blockID are only numbers
-         blockID = paste0(substr(siteID, 1, 3), blockID)) %>%
+         blockID = if_else(str_detect(blockID, "^[:digit:]+$"), paste0(substr(siteID, 1, 3), blockID), blockID)) %>%
   # fix missing functional group
   mutate(functional_group = case_when(species %in% c("Cre.sp", "Cre.tec", "Hyp.sp", "Mai.sp", "Myo.sp", "NID.herb", "Ped.sp", "Pri.sp", "Ran.pyg", "Ran.sp", "Sax.aiz", "Juni.sp", "Sal.rep") ~ "forb",
                                       species %in% c("Aco.sp", "Car.atro", "Car.dem", "Car.sp") ~ "graminoid",
