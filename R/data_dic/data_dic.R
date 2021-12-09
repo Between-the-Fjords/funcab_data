@@ -115,6 +115,7 @@ reflectance_dic <- make_data_dictionary(data = reflectance,
 ##merge all dics together to one xlsx, with each parameter as a single sheet
 
 write_xlsx(list(biomass_removal = biomass_dic,
+                biomass_sp = biomass_sp_dic,
                 soil_temperature = soil_temperature_dic,
                 soil_moisture = soilmoisture_dic,
                 plant_community = community_dic,
