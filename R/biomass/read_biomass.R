@@ -145,7 +145,8 @@ biomax_sp_wide <- biomax_sp_raw %>%
          blockID = str_remove(plotID, "XC"),
          blockID = paste0(substr(siteID, 1, 3), blockID),
          plotID = paste0(blockID, treatment)) %>%
-  filter(plotID != "Ves5XC")
+  filter(plotID != "Ves5XC") %>%
+  mutate(functional_group = "forb")
 
 # get forb data
 forbs <- biomax_sp_wide %>%
@@ -198,83 +199,48 @@ write_csv(biomass, file = "data/biomass/FunCaB_clean_biomass_2015-2021.csv")
 
 
 
-tibble(site = c("A", "B", "C"),
-       biomass = c(2, 4.5, 6),
-       sp.A = c("x", NA_character_, NA_character_),
-       sp.B = c(NA_character_, NA_character_, NA_character_),
-       sp.C = c(NA_character_, NA_character_, NA_character_))  %>%
-  pivot_longer(c(-site, -biomass)) %>%
-  group_by(site)  %>%
-  mutate(unknown = all(is.na(value))) %>%
-  pivot_wider(names_from = "name", values_from = "value") %>%
-  mutate(unknown_spp = if_else(unknown, "x", NA_character_)) %>%
-  select(-unknown)
 
-missing_sp <- biomax_sp_wide %>%
+biomass_sp <- biomax_sp_wide %>%
   pivot_longer(-c(siteID:biomass, treatment, blockID), names_to = "species", values_to = "value") %>%
-  group_by(year, siteID, blockID, plotID, treatment, functional_group) %>%
-  mutate(unknown = all(is.na(value))) %>%
-  distinct(siteID, blockID, plotID, treatment, biomass)
-  filter(unknown == "TRUE", plotID == "Ulv1XC")
-
-write_csv(missing_sp, "missing_sp.csv")
-
-  pivot_wider(names_from = "species", values_from = "value") |>
-  mutate(unknown_spp = if_else(unknown, "x", NA_character_)) |>
-  select(-unknown)
-
-
-  mutate(unknown_sp = if_else(is.na(remaining_biomass:anagallis), "x", NA_character_))
-  pivot_longer(cols = remaining_biomass:anagallis, names_to = "species", values_to = "precense") %>%
-  # some plots have biomass, but no species => unknonw
-  filter(precense == "x"|species == "remaining_biomass") %>%
-  filter(siteID == "Veskre", blockID == "Ves3") %>% as.data.frame()
-  group_by(year, siteID, blockID, plotID, treatment, functional_group) %>%
-  mutate(n = n(),
-         species = if_else(species == "remaining_biomass" & is.na(precense), "unknown_sp", species)) %>%
-
-  filter(precense == "x") %>%
-
-
-
-  distinct(siteID, plotID) %>% group_by(siteID) %>% count()
+  filter(value == "x") %>%
+  # fix species names
   mutate(species = str_to_title(species),
          species = str_replace(species, "_", "."),
          species = if_else(species %in% c("Remaining_biomass", "Not_selaginella"), "NID.herb", species),
          species = recode(species,
-                          "Aci_mill" = "Ach_mil",
-                          "Alch_sp" = "Alc_sp",
+                          "Aci.mill" = "Ach.mil",
+                          "Alch.sp" = "Alc.sp",
                           "Anagallis" = "Ana.sp",
                           "Bart.alp" = "Bar.alp",
                           "Bart.sp" = "Bar.sp",
-                          "Dwarf.shrub" = "NID.shrub",
+                          "Dwarf.shrub" = "NID.herb",
                           "Emp" = "Emp.sp",
                           "Euph.sp" = "Eup.sp",
                           "Frag.ves" = "Fra.ves",
+                          "Hyp.mac" = "Hype.mac",
                           "Pyrola.sp" = "Pyr.sp",
                           "Rhin.min" = "Rhi.min",
                           "Rhin.sp" = "Rhi.sp",
                           "Rubus" = "Rub.sp",
+                          "Rum.ac_la" = "Rum.acl",
                           "Salix.sp" = "Sal.sp",
                           "Saus.alp" = "Sau.sp",
-                          "Tarax" = "Tar.sp"
-                          ),
-         functional_group = if_else(species %in% c("Vac.myr", "Vac.uli", "Vac.vit", "Sal.sp", "Rub.sp", "Emp.sp", "NIS.shrub"), "shrub", functional_group)
-         ) %>%
-  select(year, siteID, blockID, plotID, treatment, functional_group, species, biomass)
+                          "Tarax" = "Tar.sp",
+                          "NID.shrub" = "NID.herb",
+                          "Not.selaginella" = "NID.herb",
+                          "Remaining.biomass" = "NID.herb"
 
-biomax_sp %>% distinct(plotID)
-  group_by(siteID, blockID) %>%
-  mutate(total = sum(biomass)) %>%
-  group_by(siteID, blockID, functional_group) %>%
-  summarise(percent = sum(biomass)/total) %>% filter(functional_group == "shrub") %>% ungroup() %>% summarise(mean(percent))
+         )) %>%
+  # sum biomass for species that merged or not available (Ves, Ovs)
+  group_by(year, siteID, blockID, plotID, treatment, functional_group, species, sorted_by) %>%
+  summarise(biomass = sum(biomass)) %>%
+  relocate(sorted_by, .after = biomass) %>%
+  ungroup()
 
-# problems no species
-# Hogsete block 2 and 3
-# Lavisdalen block 3
-# Ovstedalen block  3
-# Skjellinghaugen block 1, 2, and 4
-# Ulvehaugen block 2
+biomass_sp %>% filter(species == "Heo.sp")
+
+
+write_csv(biomass_sp, file = "data/biomass/FunCaB_clean_species_biomass_2016.csv")
 
 ### DATA VALIDATION
 # find duplicates
