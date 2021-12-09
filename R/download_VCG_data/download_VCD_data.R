@@ -44,3 +44,29 @@ get_file(node = "npfa9",
          remote_path = "8_Environmental_data")
 
 
+
+#### LITTER AND TEABAG DATA ####
+
+# download litter data from OSF
+get_file(node = "npfa9",
+         file = "Decomposition_litter_2016_clean.csv",
+         path = "data/decomposition",
+         remote_path = "7_Ecosystem_data")
+
+# download teabag data from OSF
+get_file(node = "npfa9",
+         file = "Decomposition_teabag_2014_clean.csv",
+         path = "data/decomposition",
+         remote_path = "7_Ecosystem_data")
+
+
+
+#### TRAIT DATA ####
+
+# download trait data from OSF
+get_file(node = "npfa9",
+         file = "SeedClim_Trait_data_2012_2016.csv",
+         path = "data/traits",
+         remote_path = "5_Trait_data")
+
+
