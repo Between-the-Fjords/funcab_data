@@ -3,6 +3,20 @@
 source("R/load_packages.R")
 
 
+#Download data from OSF
+
+# install.packages("remotes")
+# remotes::install_github("Between-the-Fjords/dataDownloader")
+library(dataDownloader)
+
+get_file(node = node,
+         file = "FunCaB_raw_soilMoisture_2015-2019.zip",
+         path = "data/climate",
+         remote_path = "2_Soil_microclimate/Soil Temperature")
+
+# file needs to be unzipt
+
+
 # use soil moisture differences!
 # read in soil moisture data FUNCAB point measurements
 SM201516_raw <- read_excel("data/climate/raw_soilmoisture/soilMoisture_2015-2016.xlsx")

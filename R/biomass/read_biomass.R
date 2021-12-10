@@ -6,17 +6,22 @@ source("R/load_packages.R")
 library(janitor)
 
 #Download data from OSF
-# run the code from L10-L17 if you need to download the data from OSF
 
 # install.packages("remotes")
 # remotes::install_github("Between-the-Fjords/dataDownloader")
-# library(dataDownloader)
+library(dataDownloader)
 
-# get_file(node = "4c5v2",
-#          file = "FunCaB_raw_biomass_2021-11-02.xlsx",
-#          path = "data/biomass",
-#          remote_path = "Vegetation/Functional Group Biomass Removals")
+# download biomass
+get_file(node = "4c5v2",
+         file = "FunCaB_raw_biomass_2021-11-02.xlsx",
+         path = "data/biomass",
+         remote_path = "1_Biomass_removal")
 
+# download biomass extra plots and species-level biomass
+get_file(node = "4c5v2",
+         file = "FunCaB_raw_extra_biomass_2016.xlsx",
+         path = "data/biomass",
+         remote_path = "1_Biomass_removal")
 
 
 path <- "data/biomass/FunCaB_raw_biomass_2021-11-02.xlsx"
@@ -231,14 +236,13 @@ biomass_sp <- biomax_sp_wide %>%
                           "Remaining.biomass" = "NID.herb"
 
          )) %>%
-  # sum biomass for species that merged or not available (Ves, Ovs)
+  mutate(species = if_else(species == "Heo.sp" & blockID == "Ves4", "Leo.sp", species),
+         species = if_else(species == "Heo.sp" & blockID == "Ram1", "Leo.sp", species)) %>%
+  # sum biomass for species that merged or not available (Ves, Ovs, Ram)
   group_by(year, siteID, blockID, plotID, treatment, functional_group, species, sorted_by) %>%
   summarise(biomass = sum(biomass)) %>%
   relocate(sorted_by, .after = biomass) %>%
   ungroup()
-
-biomass_sp %>% filter(species == "Heo.sp")
-
 
 write_csv(biomass_sp, file = "data/biomass/FunCaB_clean_species_biomass_2016.csv")
 

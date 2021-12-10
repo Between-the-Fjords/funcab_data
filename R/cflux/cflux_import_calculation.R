@@ -28,12 +28,12 @@ source("R/cflux/functions/TTC_dictionary.R")
 
 # 5 Carbon fluxes
 get_file(node = node,
-         file = "xxx.zip",
+         file = "CO2.zip",
          remote_path = "5_Carbon_fluxes")
 
 # Clean Soil moisture data
 get_file(node = node,
-         file = "FunCaB_clean_soilMoisture_2015-2018.csv",
+         file = "FunCaB_clean_soilMoisture_2015-2019.csv",
          path = "data/climate",
          remote_path = "2_Soil_microclimate/Soil Moisture")
 

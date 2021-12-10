@@ -29,7 +29,7 @@ missing_family <- tribble(
   "Cam.sp", "Campanula sp.", "Campanulaceae", "forb",
   "Hyp.sp", "Hypericum sp.", "Hypericaceae", "forb",
   "Dac.mac", "Dactylorhiza maculata", "Orchidaceae", "forb",
-  "Mai.sp", "Maianthemum sp", "Asparagaceae", "forb",
+  "Mai.sp", "Maianthemum sp.", "Asparagaceae", "forb",
   "Gal.sp", "Galium sp.", "Rubiaceae", "forb",
   "Myo.sp", "Myosotis sp.", "Boraginaceae", "forb",
   "Ped.sp", "Pedicularis sp.", "Orobanchaceae", "forb",
@@ -81,7 +81,16 @@ taxon_table <- bind_rows(
   left_join(full_taxon, by = "species") %>%
   left_join(missing_family, by = c("species", "functional_group")) %>%
   mutate(species_name = if_else(is.na(species_name), species_name_new, species_name),
-         family = if_else(is.na(family), family_new, family)) %>%
+         family = if_else(is.na(family), family_new, family),
+         # fixing database issues
+         species_name = if_else(species_name == "Dianthus lanceolata!?!", "Dianthus lanceolata", species_name),
+         species_name = if_else(species_name == "Crepis paludosa?", "Crepis paludosa", species_name),
+         species_name = if_else(species_name == "Cerastium sp", "Cerastium sp.", species_name),
+         species_name = if_else(species_name == "Trifolium sp", "Trifolium sp.", species_name),
+         species_name = if_else(species_name == "Gentiana sp", "Gentiana sp.", species_name),
+         species_name = if_else(species_name == "Alchemilla sp", "Alchemilla sp.", species_name),
+         species_name = if_else(species_name == "Not Holcus??", "Holcus lanatus", species_name),
+         family = if_else(family == "Caryophyllaceae?", "Caryophyllaceae", family)) %>%
   mutate(x = "x") %>%
   pivot_wider(names_from = dataset, values_from = x) %>%
   select(functional_group, family, species_name, species, biomass, community, seedlings) %>%

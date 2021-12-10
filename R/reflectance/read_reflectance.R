@@ -17,6 +17,9 @@ get_file(node = node,
          path = "data/reflectance",
          remote_path = "6_Reflectance")
 
+# file needs to be unziped
+
+
 
 # Read in 2019 reflectance data
 # Because of Norwegian characters, use UTF-8 encoding

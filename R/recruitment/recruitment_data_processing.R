@@ -122,7 +122,8 @@ recruitment2 <- recruitment1 %>%
   rename(turfID = TTtreat) %>%
   select(-Tttreat) %>%
   mutate(blockID = paste0(substr(siteID, 1, 3), blockID),
-         functional_group = "forb")
+         functional_group = "forb") %>%
+  rename(comment = Comment, collecter = observer)
 
 write_csv(recruitment2, file = "data/recruitment/FunCaB_clean_recruitment_2018-2019.csv")
 
