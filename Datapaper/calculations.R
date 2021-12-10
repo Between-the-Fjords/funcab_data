@@ -1,8 +1,8 @@
 # Calculations for each datset
 
-# Biomass
-
-biomass <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv")
+# Biomass without extra plots
+biomass <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv") %>%
+  filter(treatment != "XC")
 
 dim(biomass)
 
@@ -21,13 +21,81 @@ dim(biomass)
 
 
 # extra plots
+biomax <- read_csv("data/biomass/FunCaB_clean_biomass_2015-2021.csv") %>%
+  filter(treatment == "XC")
+
+biomax %>%
+  summarize(sum(biomass))
+
 # per square meter
-biomass %>%
-  filter(treatment == "XC") %>%
+biomax %>%
   group_by(removed_fg) %>%
   summarise(sum = sum(biomass),
             per_sqm = sum(biomass) * 16)
 
+# species level biomass
+biomass_sp <- read_csv("data/biomass/FunCaB_clean_species_biomass_2016.csv")
+
+dim(biomass_sp)
+
+biomass_sp %>%
+  filter(species != "NID.herb") %>%
+  distinct(species) %>% pn
+
+# most common species
+biomass_sp %>%
+  group_by(species) %>%
+  summarise(sum = sum(biomass)) %>%
+  arrange(sum) %>%
+  pn
+
+# most common in alpine vs lowland
+biomass_sp %>%
+  mutate(biogeographic_zone = recode(siteID,
+                                     Ulvehaugen = "alpine",
+                                     Lavisdalen = "alpine",
+                                     Gudmedalen = "alpine",
+                                     Skjelingahaugen = "alpine",
+                                     Alrust = "sub.alpine",
+                                     Hogsete = "sub.alpine",
+                                     Rambera = "sub.alpine",
+                                     Veskre = "sub.alpine",
+                                     Fauske = "boreal",
+                                     Vikesland = "boreal",
+                                     Arhelleren = "boreal",
+                                     Ovstedalen = "boreal")) %>%
+  group_by(biogeographic_zone, species) %>%
+  summarise(sum = sum(biomass)) %>%
+            # n(),
+            # se = sd(biomass)/sqrt(n()) %>%
+  arrange(biogeographic_zone, sum) %>%
+  pn
+
+biomass_sp %>%
+  mutate(prep_level = recode(siteID,
+                             Ulvehaugen = 1,
+                             Lavisdalen = 2,
+                             Gudmedalen = 3,
+                             Skjelingahaugen = 4,
+                             Alrust = 1,
+                             Hogsete = 2,
+                             Rambera = 3,
+                             Veskre = 4,
+                             Fauske = 1,
+                             Vikesland = 2,
+                             Arhelleren = 3,
+                             Ovstedalen = 4)) %>%
+  group_by(prep_level, species) %>%
+  summarise(sum = sum(biomass)) %>%
+  # n(),
+  # se = sd(biomass)/sqrt(n()) %>%
+  arrange(prep_level, sum) %>%
+  pn
+
+biomass_sp %>%
+  group_by(siteID, blockID) %>%
+  summarise(n = n()) %>%
+  filter(n == 1)
 
 
 # Microclimate
@@ -130,15 +198,68 @@ community %>% distinct(species, functional_group) %>%
   arrange(functional_group) %>%
   filter(str_detect(species, "\\.sp")) %>% pn
 
+community %>%
+  group_by(functional_group, species) %>%
+  filter(cover > 50) %>%
+  group_by(functional_group, species) %>%
+  summarise(mean = mean(cover)) %>%
+  arrange(functional_group, mean) %>% pn
+
+
+# seedlings
+
+recruitment <- read_csv("data/recruitment/FunCaB_clean_recruitment_2018-2019.csv")
+
+dim(recruitment)
+
+recruitment %>%
+  filter(species != "NID.seedling") %>%
+  count(species)
+
+recruitment %>% distinct(species)
+
+recruitment %>%
+  mutate(id = if_else(species == "NID.seedling", "no", "yes")) %>%
+  group_by(id) %>%
+  summarise(n = n(),
+            percentage = n/16656*100)
+
+# count per treatment
+recruitment %>%
+  group_by(treatment) %>%
+  count() %>%
+  arrange(n)
+
+# seedling density
+recruitment %>%
+  group_by(treatment, plotID) %>%
+  summarise(mean = mean(n())) %>%
+  mutate(sqm = mean * 16) %>%
+  group_by(treatment) %>%
+  summarise(sqm = mean(sqm)) %>%
+  arrange(sqm)
+
+# seedling per year
+recruitment %>% group_by(year, round) %>% count()
+
+recruitment %>%
+  distinct(year, date, round) %>%
+  arrange(year, round) %>% pn
+
+
 
 # Cflux
 CO2_final_1517 <- read_csv(file = "data/cflux/FunCaB_clean_Cflux_2015-2017.csv")
 
 dim(CO2_final_1517)
 
+CO2_final_1517 %>% distinct(treatment)
+
 CO2_final_1517 %>% group_by(year) %>% count()
 
 CO2_final_1517 %>% group_by(year, plotID) %>% summarise(n = n()) %>% ungroup() %>% group_by(year) %>%  summarize(median(n), min(n), max(n))
+
+CO2_final_1517 %>% group_by(year, plotID, treatment) %>% summarise(n = n()) %>% ungroup() %>% group_by(year, treatment) %>%  summarize(median(n), min(n), max(n))
 
 # Light measurements
 CO2_final_1517 %>%
