@@ -62,14 +62,15 @@ biomass_plot <-  biomass %>%
   ggplot(aes(x = treatment, y = biomass, fill = removed_fg)) +
   geom_col() +
   scale_fill_manual(name = "Functional group", values = c("orange", "purple", "limegreen")) +
-  labs(x = "Removed functional group", y = "Biomass in g") +
+  labs(x = "Removal treatment", y = "Removed functional group biomass in g") +
   facet_grid(year ~ climate) +
   theme_bw() +
-  theme(legend.position="top")
+  theme(legend.position="top",
+        axis.text.x  = element_text(angle=90, vjust=0.5))
 
 biomass_plot
 
-#ggsave("biomass_plot.jpeg", biomass_plot, dpi = 300, height = 8, width = 10)
+#ggsave("biomass_plot.jpeg", biomass_plot, dpi = 300, height = 8, width = 14)
 
 ```
 
@@ -151,7 +152,8 @@ community_plot <- comm_data %>%
   scale_colour_manual(name = "Functional group", values = c("limegreen", "purple", "orange")) +
   scale_x_date(date_labels="%y") +
   facet_grid(biogeographic_zone ~ prep_level) +
-  theme_set(theme_bw(base_size = 18))
+  theme_set(theme_bw(base_size = 18)) +
+  theme(legend.position="top")
 
 community_plot
 
