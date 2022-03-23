@@ -387,8 +387,8 @@ removed_fg
 </td>
 <td style="text-align:left;">
 Removed functional group, where F = forbs, B = bryophytes, G =
-graminoids, L = litterm P = pteridophytes, LI = lichens, and C =
-cryptograms
+graminoids. For extra  controls also L = litter, P = pteridophytes, LI =
+lichens, and C = cryptograms
 </td>
 <td style="text-align:left;">
 categorical
@@ -408,7 +408,7 @@ defined
 biomass
 </td>
 <td style="text-align:left;">
-Dry weight of removed functional group
+Dry weight of removed functional_group
 </td>
 <td style="text-align:left;">
 numeric
@@ -468,8 +468,8 @@ NA
 functional_group
 </td>
 <td style="text-align:left;">
-Removed functional group, including forbs, bryophytes, graminoids,
-litterm pteridophytes, lichens, and cryptograms
+Removed functional group, including forbs, bryophytes, graminoids. For
+extra  controls also  litter, pteridophytes, lichens, and cryptograms
 </td>
 <td style="text-align:left;">
 categorical
@@ -751,7 +751,7 @@ Date of sampling
 date
 </td>
 <td style="text-align:left;">
-2015-06-02 - 2018-08-29
+2015-06-02 - 2019-08-09
 </td>
 <td style="text-align:left;">
 yyyy-mm-dd
@@ -811,7 +811,7 @@ Unique plot ID is a combination of site, block and treatment
 categorical
 </td>
 <td style="text-align:left;">
-Alr1B - Vik5NA
+Alr1B - Vik5GF
 </td>
 <td style="text-align:left;">
 NA
@@ -855,7 +855,7 @@ numeric
 0 - 100
 </td>
 <td style="text-align:left;">
-m3 water/m3 soil
+% water content or volume water per volume soil in m3 m-3
 </td>
 <td style="text-align:left;">
 recorded
@@ -912,7 +912,7 @@ Unique turf ID from SeedClim transplant experiment
 categorical
 </td>
 <td style="text-align:left;">
-101 TTC - TTC C
+101 TTC - TTC 251
 </td>
 <td style="text-align:left;">
 NA
@@ -1003,7 +1003,7 @@ Unique block ID a combination of site and block
 categorical
 </td>
 <td style="text-align:left;">
-Alr1 - VikVik5
+Alr1 - Vik5
 </td>
 <td style="text-align:left;">
 NA
@@ -1218,8 +1218,8 @@ recorded
 functional_group
 </td>
 <td style="text-align:left;">
-Removed functional group, including forbs, bryophytes, graminoids,
-litterm pteridophytes, lichens, and cryptograms
+Removed functional group, including forbs, bryophytes, graminoids. For
+extra  controls also  litter, pteridophytes, lichens, and cryptograms
 </td>
 <td style="text-align:left;">
 categorical
@@ -1540,7 +1540,7 @@ numeric
 0 - 76.775
 </td>
 <td style="text-align:left;">
-m3 water/m3 soil
+% water content or volume water per volume soil in m3 m-3
 </td>
 <td style="text-align:left;">
 recorded
@@ -1600,7 +1600,7 @@ numeric
 -15.392 - 17.885
 </td>
 <td style="text-align:left;">
-µmol mol-1 s-1 CO2
+µmol m-2 s-1
 </td>
 <td style="text-align:left;">
 calculated
@@ -1620,7 +1620,7 @@ numeric
 -24.342 - -0.004
 </td>
 <td style="text-align:left;">
-µmol mol-1 s-1 CO2
+µmol m-2 s-1
 </td>
 <td style="text-align:left;">
 calculated
@@ -1801,7 +1801,7 @@ numeric
 0.549 - 30.354
 </td>
 <td style="text-align:left;">
-µmol mol-1 s-1 CO2
+µmol m-2 s-1
 </td>
 <td style="text-align:left;">
 recorded
@@ -1873,8 +1873,8 @@ calculated
 removal
 </td>
 <td style="text-align:left;">
-Pre (2015) or post (> 2015) removal treatment. Pre removal is related to
-the start of the experiment.
+Pre (2015) or post (\> 2015) removal treatment. Pre removal is related
+to the start of the experiment.
 </td>
 <td style="text-align:left;">
 categorical
