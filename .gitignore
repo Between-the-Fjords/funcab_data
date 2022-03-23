@@ -80,5 +80,6 @@ vignettes/*.pdf
 .my.cnf
 !.tex
 *.md
+!README.md
 
 *.DS_Store
