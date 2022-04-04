@@ -79,7 +79,9 @@ recruitment <- read_csv("data/recruitment/FunCaB_clean_recruitment_2018-2019.csv
 
 recruitment_dic <- make_data_dictionary(data = recruitment,
                                       description_table = description_table,
-                                      table_ID = "recruitment")
+                                      table_ID = "recruitment") |>
+  # remove duplicate round variable!
+  slice(-8)
 
 
 
