@@ -487,8 +487,13 @@ comp2 <- composition4 %>%
          # same for total_forbs and graminoids
          total_forbs = if_else(year != 2015 & treatment %in% c("FGB", "FB", "GF", "F"), NA_real_, total_forbs),
          total_graminoids = if_else(year != 2015 & treatment %in% c("FGB", "GB", "GF", "G"), NA_real_, total_graminoids)) %>%
-  select(year, siteID, blockID, plotID = turfID, treatment, total_graminoids:litter, species, cover, functional_group, sumcover, recorder, turfID = TTtreat)
-
+  # add column for pre/post removal
+  mutate(removal = if_else(year == 2015, "pre", "post")) %>%
+  # fix duplicates
+  mutate(turfID = if_else(year == 2017 & turfID == "Arh2GF" & total_bryophytes == 80, "Arh1GF", turfID)) |>
+  filter(!(turfID == "Arh3FGB" & year == 2017 & recorder == "FJ")) |>
+  filter(!(turfID == "Vik4FGB" & year == 2019 & recorder == "Aud/JH")) |>
+  select(year, siteID, blockID, plotID = turfID, removal, treatment, total_graminoids:litter, species, cover, functional_group, sumcover, recorder, turfID = TTtreat)
 
 # save secondary/derived data
 write_csv(comp2, file = "data/community/FunCaB_clean_composition_2015-2019.csv")
