@@ -12,7 +12,7 @@ library(dataDownloader)
 get_file(node = node,
          file = "FunCaB_raw_soilMoisture_2015-2019.zip",
          path = "data/climate",
-         remote_path = "2_Soil_microclimate/Soil Temperature")
+         remote_path = "2_Soil_microclimate/Soil Moisture")
 
 # file needs to be unzipt
 
