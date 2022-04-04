@@ -21,7 +21,7 @@ get_file(node = node,
 
 
 # read in raw seedling data
-dat <- read_delim("data/recruitment/funcab_2019 - FUNCAB_recruitment2019.csv")
+dat <- read_delim("data/recruitment/FunCaB_raw_recruitment_2018-2019.csv")
 
 # fix site names
 dat <- dat %>%
@@ -123,7 +123,11 @@ recruitment2 <- recruitment1 %>%
   select(-Tttreat) %>%
   mutate(blockID = paste0(substr(siteID, 1, 3), blockID),
          functional_group = "forb") %>%
-  rename(comment = Comment, collecter = observer)
+  rename(comment = Comment, collecter = observer) |>
+  # fix comment and coordinates
+  mutate(y = if_else(y == "205/105", "205", y),
+         y = as.numeric(y),
+         comment = if_else(x > 250 | y > 250, "coordinate outside plot", comment))
 
 write_csv(recruitment2, file = "data/recruitment/FunCaB_clean_recruitment_2018-2019.csv")
 
