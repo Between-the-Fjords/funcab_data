@@ -34,7 +34,7 @@ get_file(node = node,
 # 5 Plant composition
 get_file(node = node,
          file = "FunCaB_clean_composition_2015-2019.csv",
-         path = "data/composition",
+         path = "data/community/",
          remote_path = "3_Plant_composition")
 
 # taxon table
