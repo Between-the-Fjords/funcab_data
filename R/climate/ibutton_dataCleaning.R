@@ -208,6 +208,8 @@ iButtonData <- iButtonData %>%
                        "Skjellingahaugen" = "Skjelingahaugen",
                        "Ovstedal" = "Ovstedalen"),
          Block = paste0(substr(siteID, 1, 3), Block)) %>%
+  # fix year
+  mutate(Year = year(Date)) |>
   select(year = Year, date_time = Date, siteID, blockID = Block, plotID = turfID, iButtonID = ID, treatment = Treatment, soiltemperature = Value, comments = Comments, turfID = TTtreat)
 
 
