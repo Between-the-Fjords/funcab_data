@@ -2,9 +2,9 @@
 # FunCaB - The role of functional group interactions in mediating climate change impacts on the Carbon dynamics and biodiversity of alpine ecosystems
 
 This is the git repository for the FunCaB project and base for the data
-paper: Vandvik et al. (2022). Data descriptor: The role of Functional
-group interactions in mediating climate change impacts on the Carbon
-dynamics and Biodiversity of alpine ecosystems (FunCaB).
+paper: Vandvik et al. 2022 *Scientific Data*. Data descriptor: The role
+of Functional group interactions in mediating climate change impacts on
+the Carbon dynamics and Biodiversity of alpine ecosystems (FunCaB).
 
 ## Summary
 
@@ -38,7 +38,18 @@ open repositories.
 
 ![](Datapaper/rep_workflow_FunCaB.png)<!-- -->
 
+**Project description**, **data dictionaries**, and the overview of all
+**data sets** are in the data paper (Vandvik et al. 2022).
+
+The **raw** and **clean data** from the project are stored and available
+on **OSF**: <https://osf.io/4c5v2/>
+
+All **R code** to clean and curate the data is on **GitHub repository**:
+<https://github.com/Between-the-Fjords/funcab_data>
+
 ## Datasets
+
+The following datasets are available:
 
 <table>
 <thead>
@@ -173,15 +184,6 @@ FunCaB_clean_reflectance_2019_2021
 </tbody>
 </table>
 
-**Project description**, **data dictionaries**, and the overview of all
-**data sets** are in the data paper (Vandvik et al. 2022).
-
-The **raw** and **clean data** from the project are stored and available
-on **OSF**: <https://osf.io/4c5v2/>
-
-All **R code** to clean and curate the data is on **GitHub repository**:
-<https://github.com/Between-the-Fjords/funcab_data>
-
 ### Data structure
 
 Data structure for the FunCaB biomass removal and forb species biomass
@@ -307,7 +309,7 @@ numeric
 1 - 2
 </td>
 <td style="text-align:left;">
-NA
+count
 </td>
 <td style="text-align:left;">
 defined
@@ -551,7 +553,7 @@ defined
 date_time
 </td>
 <td style="text-align:left;">
-Date and time of sampling
+Date and time of sampling (UTC)
 </td>
 <td style="text-align:left;">
 date_time
@@ -868,7 +870,7 @@ numeric
 0 - 100
 </td>
 <td style="text-align:left;">
-% water content or volume water per volume soil in m3 m-3
+(m3 water \* m-3 soil)/100
 </td>
 <td style="text-align:left;">
 recorded
@@ -1485,7 +1487,7 @@ defined
 starttime
 </td>
 <td style="text-align:left;">
-Start time of light measurement
+Start time of light measurement (UTC)
 </td>
 <td style="text-align:left;">
 date_time
@@ -1505,7 +1507,7 @@ recorded
 stoptime
 </td>
 <td style="text-align:left;">
-End time of light measurement
+End time of light measurement (UTC)
 </td>
 <td style="text-align:left;">
 date_time
@@ -1776,7 +1778,7 @@ numeric
 0 - 76.775
 </td>
 <td style="text-align:left;">
-% water content or volume water per volume soil in m3 m-3
+(m3 water \* m-3 soil)/100
 </td>
 <td style="text-align:left;">
 recorded
@@ -1867,7 +1869,7 @@ recorded
 time_Reco
 </td>
 <td style="text-align:left;">
-Time in seconds for dark measurement
+Time in seconds for dark measurement (UTC)
 </td>
 <td style="text-align:left;">
 numeric
@@ -1887,7 +1889,7 @@ recorded
 PAR_Reco
 </td>
 <td style="text-align:left;">
-PAR value of dark measurement
+PAR value of dark measurement (UTC)
 </td>
 <td style="text-align:left;">
 numeric
@@ -2298,7 +2300,7 @@ recorded
 time
 </td>
 <td style="text-align:left;">
-Time of sampling
+Time of sampling (UTC)
 </td>
 <td style="text-align:left;">
 time

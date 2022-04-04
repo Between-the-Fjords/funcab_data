@@ -68,7 +68,7 @@ meta <- biomass %>%
 
 
 This is the git repository for the FunCaB project and base for the data paper:
-Vandvik et al. (2022). Data descriptor: The role of Functional group interactions in mediating climate change impacts on the Carbon dynamics and Biodiversity of alpine ecosystems (FunCaB).
+Vandvik et al. 2022 _Scientific Data_. Data descriptor: The role of Functional group interactions in mediating climate change impacts on the Carbon dynamics and Biodiversity of alpine ecosystems (FunCaB).
 
 
 
