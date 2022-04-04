@@ -8,22 +8,35 @@ dynamics and Biodiversity of alpine ecosystems (FunCaB).
 
 ## Summary
 
-Removal experiments allow disentangling of direct effects of climate
-from indirect effects, resulting from changes in interactions among
-species or functional groups with climate. Across the Vestland Climate
-Grid (VCG), twelve sites in a climate grid spanning 4°C in growing
-season temperature and 2000 mm in mean annual precipitation in Western
-Norway, we conducted a fully factorial plant functional group removal
-experiment (graminoids, forbs, bryophytes). Over six years, we recorded
-the biomass removed, soil microclimate, plant community composition and
-structure, seedling recruitment, ecosystem carbon fluxes, and
-reflectance in 384 experimental treatment and control plots. The dataset
-consists of 5,412 biomass records, 1,084,970 soil temperature records,
-4,412 soil moisture records, 17,184 plant records covering 206 taxa, XXX
-seedling records, 3,696 carbon fluxes measurements, and 1,244
-reflectance measurements. The data can be combined with other data
-collected within the VCG on longer-term climate data and plant
-population, community, ecosystem, and functional trait data.
+Plant removal experiments allow assessment of the role of biotic
+interactions among species or functional groups in community assembly
+and ecosystem functioning. When replicated along climate gradients, they
+can assess changes in interactions among species or functional groups
+with climate. Across twelve sites in the Vestland Climate Grid (VCG)
+spanning 4°C in growing season temperature and 2000 mm in mean annual
+precipitation across boreal and alpine regions of Western Norway, we
+conducted a fully factorial plant functional group removal experiment
+(graminoids, forbs, bryophytes). Over six years, we recorded biomass
+removed, soil microclimate, plant community composition and structure,
+seedling recruitment, ecosystem carbon fluxes, and reflectance in 384
+experimental and control plots. The dataset consists of 5,412 biomass
+records, 360 species-level biomass records, 1,084,970 soil temperature
+records, 4,771 soil moisture records, 17,184 plant records covering 206
+taxa, 16,656 seedling records, 3,696 ecosystem carbon flux measurements,
+and 1,244 reflectance measurements. The data can be combined with
+longer-term climate data and plant population, community, ecosystem, and
+functional trait data collected within the VCG.
+
+## Data management and workflows
+
+We adopt best-practice approaches for open and reproducible research
+planning, execution, reporting, and management throughout the project.
+Specifically, we use community-approved standards for experimental
+design and data collection, and clean and manage the data using a fully
+scripted and reproducible data workflow, with data and code deposited at
+open repositories.
+
+![](Datapaper/rep_workflow_FunCaB.png)<!-- -->
 
 ## Datasets
 
@@ -214,7 +227,7 @@ the VCG.
 
 ### Biomass removal
 
-![](README_files/figure-gfm/biomass-1.png)<!-- -->
+<img src="Datapaper/biomass_plot_rotated.jpeg" width="100%" />
 
 <table>
 <thead>
@@ -524,7 +537,7 @@ Year of sampling
 numeric
 </td>
 <td style="text-align:left;">
-2016 - 2016
+2015 - 2016
 </td>
 <td style="text-align:left;">
 yyyy
@@ -1034,6 +1047,27 @@ defined
 </tr>
 <tr>
 <td style="text-align:left;">
+removal
+</td>
+<td style="text-align:left;">
+Pre (2015) or post (\> 2015) removal treatment. Pre removal is related
+to the start of the experiment.
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+post - pre
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 treatment
 </td>
 <td style="text-align:left;">
@@ -1528,46 +1562,6 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
-soilmoisture
-</td>
-<td style="text-align:left;">
-Soil moisture measurement per plot
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 76.775
-</td>
-<td style="text-align:left;">
-% water content or volume water per volume soil in m3 m-3
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-tempK
-</td>
-<td style="text-align:left;">
-Air temperature in the chamber during light measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-279.225 - 312.784
-</td>
-<td style="text-align:left;">
-Kelvin
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 vegHeight
 </td>
 <td style="text-align:left;">
@@ -1665,6 +1659,167 @@ NA
 </td>
 <td style="text-align:left;">
 defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+removal
+</td>
+<td style="text-align:left;">
+Pre (2015) or post (\> 2015) removal treatment. Pre removal is related
+to the start of the experiment.
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+post - pre
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+weather
+</td>
+<td style="text-align:left;">
+Weather conditions during data collection
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+cloud - Windy
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+flag
+</td>
+<td style="text-align:left;">
+Flag for data quality (x or DROP)
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+comment
+</td>
+<td style="text-align:left;">
+Comment on measurement
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+turfID
+</td>
+<td style="text-align:left;">
+Unique turf ID from SeedClim transplant experiment
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+101 TTC - 99 TTC
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+soilmoisture
+</td>
+<td style="text-align:left;">
+Soil moisture measurement per plot
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0 - 76.775
+</td>
+<td style="text-align:left;">
+% water content or volume water per volume soil in m3 m-3
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+recorder
+</td>
+<td style="text-align:left;">
+Data collector
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Alba - Vojta
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tempK
+</td>
+<td style="text-align:left;">
+Air temperature in the chamber during light measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+279.225 - 312.784
+</td>
+<td style="text-align:left;">
+Kelvin
+</td>
+<td style="text-align:left;">
+recorded
 </td>
 </tr>
 <tr>
@@ -1769,22 +1924,22 @@ recorded
 </tr>
 <tr>
 <td style="text-align:left;">
-tempK_Reco
+vegHeight_Reco
 </td>
 <td style="text-align:left;">
-Air temperature in the chamber during dark measurement
+Vegetation height of plot from plant community data set
 </td>
 <td style="text-align:left;">
 numeric
 </td>
 <td style="text-align:left;">
-279.225 - 311.977
+0.01 - 27
 </td>
 <td style="text-align:left;">
-Kelvin
+mm
 </td>
 <td style="text-align:left;">
-recorded
+measured
 </td>
 </tr>
 <tr>
@@ -1850,6 +2005,26 @@ defined
 </tr>
 <tr>
 <td style="text-align:left;">
+tempK_Reco
+</td>
+<td style="text-align:left;">
+Air temperature in the chamber during dark measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+279.225 - 311.977
+</td>
+<td style="text-align:left;">
+Kelvin
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 delta
 </td>
 <td style="text-align:left;">
@@ -1866,87 +2041,6 @@ second
 </td>
 <td style="text-align:left;">
 calculated
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-removal
-</td>
-<td style="text-align:left;">
-Pre (2015) or post (\> 2015) removal treatment. Pre removal is related
-to the start of the experiment.
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-post - pre
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-weather
-</td>
-<td style="text-align:left;">
-Weather conditions during data collection
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-cloud - Windy
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-flag
-</td>
-<td style="text-align:left;">
-Flag for data quality (x or DROP)
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-comment
-</td>
-<td style="text-align:left;">
-Comment on measurement
-</td>
-<td style="text-align:left;">
-categorical
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
 </td>
 </tr>
 <tr>
