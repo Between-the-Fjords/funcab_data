@@ -2,30 +2,54 @@
 # FunCaB - The role of functional group interactions in mediating climate change impacts on the Carbon dynamics and biodiversity of alpine ecosystems
 
 This is the git repository for the FunCaB project and base for the data
-paper: Vandvik et al. (2022). Data descriptor: The role of Functional
-group interactions in mediating climate change impacts on the Carbon
-dynamics and Biodiversity of alpine ecosystems (FunCaB).
+paper: Vandvik et al. 2022 *Scientific Data*. Data descriptor: The role
+of Functional group interactions in mediating climate change impacts on
+the Carbon dynamics and Biodiversity of alpine ecosystems (FunCaB).
 
 ## Summary
 
-Removal experiments allow disentangling of direct effects of climate
-from indirect effects, resulting from changes in interactions among
-species or functional groups with climate. Across the Vestland Climate
-Grid (VCG), twelve sites in a climate grid spanning 4°C in growing
-season temperature and 2000 mm in mean annual precipitation in Western
-Norway, we conducted a fully factorial plant functional group removal
-experiment (graminoids, forbs, bryophytes). Over six years, we recorded
-the biomass removed, soil microclimate, plant community composition and
-structure, seedling recruitment, ecosystem carbon fluxes, and
-reflectance in 384 experimental treatment and control plots. The dataset
-consists of 5,412 biomass records, 1,084,970 soil temperature records,
-4,412 soil moisture records, 17,184 plant records covering 206 taxa, XXX
-seedling records, 3,696 carbon fluxes measurements, and 1,244
-reflectance measurements. The data can be combined with other data
-collected within the VCG on longer-term climate data and plant
-population, community, ecosystem, and functional trait data.
+Plant removal experiments allow assessment of the role of biotic
+interactions among species or functional groups in community assembly
+and ecosystem functioning. When replicated along climate gradients, they
+can assess changes in interactions among species or functional groups
+with climate. Across twelve sites in the Vestland Climate Grid (VCG)
+spanning 4°C in growing season temperature and 2000 mm in mean annual
+precipitation across boreal and alpine regions of Western Norway, we
+conducted a fully factorial plant functional group removal experiment
+(graminoids, forbs, bryophytes). Over six years, we recorded biomass
+removed, soil microclimate, plant community composition and structure,
+seedling recruitment, ecosystem carbon fluxes, and reflectance in 384
+experimental and control plots. The dataset consists of 5,412 biomass
+records, 360 species-level biomass records, 1,084,970 soil temperature
+records, 4,771 soil moisture records, 17,184 plant records covering 206
+taxa, 16,656 seedling records, 3,696 ecosystem carbon flux measurements,
+and 1,244 reflectance measurements. The data can be combined with
+longer-term climate data and plant population, community, ecosystem, and
+functional trait data collected within the VCG.
+
+## Data management and workflows
+
+We adopt best-practice approaches for open and reproducible research
+planning, execution, reporting, and management throughout the project.
+Specifically, we use community-approved standards for experimental
+design and data collection, and clean and manage the data using a fully
+scripted and reproducible data workflow, with data and code deposited at
+open repositories.
+
+![](Datapaper/rep_workflow_FunCaB.png)<!-- -->
+
+**Project description**, **data dictionaries**, and the overview of all
+**data sets** are in the data paper (Vandvik et al. 2022).
+
+The **raw** and **clean data** from the project are stored and available
+on **OSF**: <https://osf.io/4c5v2/>
+
+All **R code** to clean and curate the data is on **GitHub repository**:
+<https://github.com/Between-the-Fjords/funcab_data>
 
 ## Datasets
+
+The following datasets are available:
 
 <table>
 <thead>
@@ -160,15 +184,6 @@ FunCaB_clean_reflectance_2019_2021
 </tbody>
 </table>
 
-**Project description**, **data dictionaries**, and the overview of all
-**data sets** are in the data paper (Vandvik et al. 2022).
-
-The **raw** and **clean data** from the project are stored and available
-on **OSF**: <https://osf.io/4c5v2/>
-
-All **R code** to clean and curate the data is on **GitHub repository**:
-<https://github.com/Between-the-Fjords/funcab_data>
-
 ### Data structure
 
 Data structure for the FunCaB biomass removal and forb species biomass
@@ -214,7 +229,7 @@ the VCG.
 
 ### Biomass removal
 
-![](README_files/figure-gfm/biomass-1.png)<!-- -->
+<img src="Datapaper/biomass_plot_rotated.jpeg" width="100%" />
 
 <table>
 <thead>
@@ -294,7 +309,7 @@ numeric
 1 - 2
 </td>
 <td style="text-align:left;">
-NA
+count
 </td>
 <td style="text-align:left;">
 defined
@@ -524,7 +539,7 @@ Year of sampling
 numeric
 </td>
 <td style="text-align:left;">
-2016 - 2016
+2015 - 2016
 </td>
 <td style="text-align:left;">
 yyyy
@@ -538,7 +553,7 @@ defined
 date_time
 </td>
 <td style="text-align:left;">
-Date and time of sampling
+Date and time of sampling (UTC)
 </td>
 <td style="text-align:left;">
 date_time
@@ -855,7 +870,7 @@ numeric
 0 - 100
 </td>
 <td style="text-align:left;">
-% water content or volume water per volume soil in m3 m-3
+(m3 water \* m-3 soil)/100
 </td>
 <td style="text-align:left;">
 recorded
@@ -1024,6 +1039,27 @@ categorical
 </td>
 <td style="text-align:left;">
 Alr1B - Vik5GF
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+removal
+</td>
+<td style="text-align:left;">
+Pre (2015) or post (\> 2015) removal treatment. Pre removal is related
+to the start of the experiment.
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+post - pre
 </td>
 <td style="text-align:left;">
 NA
@@ -1451,7 +1487,7 @@ defined
 starttime
 </td>
 <td style="text-align:left;">
-Start time of light measurement
+Start time of light measurement (UTC)
 </td>
 <td style="text-align:left;">
 date_time
@@ -1471,7 +1507,7 @@ recorded
 stoptime
 </td>
 <td style="text-align:left;">
-End time of light measurement
+End time of light measurement (UTC)
 </td>
 <td style="text-align:left;">
 date_time
@@ -1521,46 +1557,6 @@ numeric
 </td>
 <td style="text-align:left;">
 °C
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-soilmoisture
-</td>
-<td style="text-align:left;">
-Soil moisture measurement per plot
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 76.775
-</td>
-<td style="text-align:left;">
-% water content or volume water per volume soil in m3 m-3
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-tempK
-</td>
-<td style="text-align:left;">
-Air temperature in the chamber during light measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-279.225 - 312.784
-</td>
-<td style="text-align:left;">
-Kelvin
 </td>
 <td style="text-align:left;">
 recorded
@@ -1669,207 +1665,6 @@ defined
 </tr>
 <tr>
 <td style="text-align:left;">
-starttime_Reco
-</td>
-<td style="text-align:left;">
-Start time of dark measurement
-</td>
-<td style="text-align:left;">
-date_time
-</td>
-<td style="text-align:left;">
-2015-06-30 08:14:30 - 2017-08-01 14:19:55
-</td>
-<td style="text-align:left;">
-yyyy-mm-dd hh:mm:ss
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stoptime_Reco
-</td>
-<td style="text-align:left;">
-End time of dark measurement
-</td>
-<td style="text-align:left;">
-date_time
-</td>
-<td style="text-align:left;">
-2015-06-30 08:16:00 - 2017-08-01 14:21:55
-</td>
-<td style="text-align:left;">
-yyyy-mm-dd hh:mm:ss
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-time_Reco
-</td>
-<td style="text-align:left;">
-Time in seconds for dark measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-5 - 180
-</td>
-<td style="text-align:left;">
-second
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-PAR_Reco
-</td>
-<td style="text-align:left;">
-PAR value of dark measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0 - 140.131
-</td>
-<td style="text-align:left;">
-µmol m-2 s-1
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-soiltemp_Reco
-</td>
-<td style="text-align:left;">
-Soil temperature value of dark measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-3 - 23.2
-</td>
-<td style="text-align:left;">
-°C
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-tempK_Reco
-</td>
-<td style="text-align:left;">
-Air temperature in the chamber during dark measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-279.225 - 311.977
-</td>
-<td style="text-align:left;">
-Kelvin
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Reco
-</td>
-<td style="text-align:left;">
-Ecosystem respiration
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0.549 - 30.354
-</td>
-<td style="text-align:left;">
-µmol m-2 s-1
-</td>
-<td style="text-align:left;">
-recorded
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-rsqd_Reco
-</td>
-<td style="text-align:left;">
-R squared of slope of linear regression fitting the CO2 concentration
-versus time
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-0.8 - 1
-</td>
-<td style="text-align:left;">
-0-1
-</td>
-<td style="text-align:left;">
-calculated
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-chamber_Reco
-</td>
-<td style="text-align:left;">
-Carbon flux chamber
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-1 - 3
-</td>
-<td style="text-align:left;">
-numeric value
-</td>
-<td style="text-align:left;">
-defined
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-delta
-</td>
-<td style="text-align:left;">
-Time difference between dark and light measurement
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-65 - 7050
-</td>
-<td style="text-align:left;">
-second
-</td>
-<td style="text-align:left;">
-calculated
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 removal
 </td>
 <td style="text-align:left;">
@@ -1947,6 +1742,307 @@ NA
 </td>
 <td style="text-align:left;">
 NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+turfID
+</td>
+<td style="text-align:left;">
+Unique turf ID from SeedClim transplant experiment
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+101 TTC - 99 TTC
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+soilmoisture
+</td>
+<td style="text-align:left;">
+Soil moisture measurement per plot
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0 - 76.775
+</td>
+<td style="text-align:left;">
+(m3 water \* m-3 soil)/100
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+recorder
+</td>
+<td style="text-align:left;">
+Data collector
+</td>
+<td style="text-align:left;">
+categorical
+</td>
+<td style="text-align:left;">
+Alba - Vojta
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tempK
+</td>
+<td style="text-align:left;">
+Air temperature in the chamber during light measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+279.225 - 312.784
+</td>
+<td style="text-align:left;">
+Kelvin
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+starttime_Reco
+</td>
+<td style="text-align:left;">
+Start time of dark measurement
+</td>
+<td style="text-align:left;">
+date_time
+</td>
+<td style="text-align:left;">
+2015-06-30 08:14:30 - 2017-08-01 14:19:55
+</td>
+<td style="text-align:left;">
+yyyy-mm-dd hh:mm:ss
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stoptime_Reco
+</td>
+<td style="text-align:left;">
+End time of dark measurement
+</td>
+<td style="text-align:left;">
+date_time
+</td>
+<td style="text-align:left;">
+2015-06-30 08:16:00 - 2017-08-01 14:21:55
+</td>
+<td style="text-align:left;">
+yyyy-mm-dd hh:mm:ss
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time_Reco
+</td>
+<td style="text-align:left;">
+Time in seconds for dark measurement (UTC)
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+5 - 180
+</td>
+<td style="text-align:left;">
+second
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PAR_Reco
+</td>
+<td style="text-align:left;">
+PAR value of dark measurement (UTC)
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0 - 140.131
+</td>
+<td style="text-align:left;">
+µmol m-2 s-1
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+soiltemp_Reco
+</td>
+<td style="text-align:left;">
+Soil temperature value of dark measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+3 - 23.2
+</td>
+<td style="text-align:left;">
+°C
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+vegHeight_Reco
+</td>
+<td style="text-align:left;">
+Vegetation height of plot from plant community data set
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0.01 - 27
+</td>
+<td style="text-align:left;">
+mm
+</td>
+<td style="text-align:left;">
+measured
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Reco
+</td>
+<td style="text-align:left;">
+Ecosystem respiration
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0.549 - 30.354
+</td>
+<td style="text-align:left;">
+µmol m-2 s-1
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+rsqd_Reco
+</td>
+<td style="text-align:left;">
+R squared of slope of linear regression fitting the CO2 concentration
+versus time
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+0.8 - 1
+</td>
+<td style="text-align:left;">
+0-1
+</td>
+<td style="text-align:left;">
+calculated
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chamber_Reco
+</td>
+<td style="text-align:left;">
+Carbon flux chamber
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+1 - 3
+</td>
+<td style="text-align:left;">
+numeric value
+</td>
+<td style="text-align:left;">
+defined
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tempK_Reco
+</td>
+<td style="text-align:left;">
+Air temperature in the chamber during dark measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+279.225 - 311.977
+</td>
+<td style="text-align:left;">
+Kelvin
+</td>
+<td style="text-align:left;">
+recorded
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+delta
+</td>
+<td style="text-align:left;">
+Time difference between dark and light measurement
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+65 - 7050
+</td>
+<td style="text-align:left;">
+second
+</td>
+<td style="text-align:left;">
+calculated
 </td>
 </tr>
 <tr>
@@ -2204,7 +2300,7 @@ recorded
 time
 </td>
 <td style="text-align:left;">
-Time of sampling
+Time of sampling (UTC)
 </td>
 <td style="text-align:left;">
 time

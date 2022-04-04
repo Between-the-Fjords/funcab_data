@@ -190,6 +190,10 @@ community %>%
 community %>%
   filter(species %in% c("NID.gram", "NID.herb", "NID.seedling", NA_character_)) %>% count(species)
 
+# proportion unidentified observations
+299*100/17183
+# 1.740092
+
 community %>%
   filter(is.na(species))
 
