@@ -553,7 +553,7 @@ defined
 date_time
 </td>
 <td style="text-align:left;">
-Date and time of sampling (UTC)
+Date and time of sampling (UTC + 2)
 </td>
 <td style="text-align:left;">
 date_time
@@ -1487,7 +1487,7 @@ defined
 starttime
 </td>
 <td style="text-align:left;">
-Start time of light measurement (UTC)
+Start time of light measurement (UTC + 2)
 </td>
 <td style="text-align:left;">
 date_time
@@ -1507,7 +1507,7 @@ recorded
 stoptime
 </td>
 <td style="text-align:left;">
-End time of light measurement (UTC)
+End time of light measurement (UTC + 2)
 </td>
 <td style="text-align:left;">
 date_time
@@ -1869,7 +1869,7 @@ recorded
 time_Reco
 </td>
 <td style="text-align:left;">
-Time in seconds for dark measurement (UTC)
+Time in seconds for dark measurement (UTC + 2)
 </td>
 <td style="text-align:left;">
 numeric
@@ -1889,7 +1889,7 @@ recorded
 PAR_Reco
 </td>
 <td style="text-align:left;">
-PAR value of dark measurement (UTC)
+PAR value of dark measurement (UTC + 2)
 </td>
 <td style="text-align:left;">
 numeric
@@ -2300,7 +2300,7 @@ recorded
 time
 </td>
 <td style="text-align:left;">
-Time of sampling (UTC)
+Time of sampling (UTC + 2)
 </td>
 <td style="text-align:left;">
 time

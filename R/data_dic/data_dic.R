@@ -4,7 +4,7 @@
 source(file = "R/load_packages.R")
 
 # load clean data
-source("R/data_dic/download_clean_data.R")
+#source("R/data_dic/download_clean_data.R")
 
 # data dictionary function
 source("R/data_dic/make_data_dictionary.R")
