@@ -870,7 +870,7 @@ numeric
 0 - 100
 </td>
 <td style="text-align:left;">
-(m3 water \* m-3 soil)/100
+(m3 water \* m-3 soil) \*100
 </td>
 <td style="text-align:left;">
 recorded
@@ -1778,7 +1778,7 @@ numeric
 0 - 76.775
 </td>
 <td style="text-align:left;">
-(m3 water \* m-3 soil)/100
+(m3 water \* m-3 soil) \*100
 </td>
 <td style="text-align:left;">
 recorded
