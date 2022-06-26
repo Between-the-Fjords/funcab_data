@@ -189,8 +189,24 @@ biomax <- biomax_raw %>%
   left_join(date16, by = "siteID") %>%
   select(year, date, siteID, blockID, plotID, treatment, removed_fg, functional_group, biomass)
 
+
+TP_levels <- biomass |>
+  distinct(siteID) |>
+  mutate(temperature_level = case_when(siteID %in% c("Ulvehaugen", "Skjelingahaugen", "Lavisdalen", "Gudmedalen") ~ "alpine",
+                                       siteID %in% c("Alrust", "Veskre", "Rambera", "Hogsete") ~ "sub-alpine",
+                                       TRUE ~ "boreal"),
+         precipitation_level = case_when(siteID %in% c("Fauske", "Alrust", "Ulvehaugen") ~ 1,
+                                         siteID %in% c("Vikesland", "Hogsete", "Lavisdalen") ~ 2,
+                                         siteID %in% c("Arhelleren", "Rambera", "Gudmedalen") ~ 3,
+                                         TRUE ~ 4)) |>
+  arrange(temperature_level, precipitation_level)
+
+
+
 biomass <- biomass %>%
-  bind_rows(biomax)
+  bind_rows(biomax) |>
+  left_join(TP_levels, by = "siteID") |>
+  select(year:siteID, temperature_level, precipitation_level, blockID:functional_group)
 
 write_csv(biomass, file = "data/biomass/FunCaB_clean_biomass_2015-2021.csv")
 #
