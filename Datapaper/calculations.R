@@ -31,7 +31,10 @@ biomax %>%
 biomax %>%
   group_by(removed_fg) %>%
   summarise(sum = sum(biomass),
-            per_sqm = sum(biomass) * 16)
+            # convert to m2 * 48 plots
+            per_sqm = sum(biomass) / (0.0625 * 48))
+
+
 
 # species level biomass
 biomass_sp <- read_csv("data/biomass/FunCaB_clean_species_biomass_2016.csv")
